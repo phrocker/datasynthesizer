@@ -28,6 +28,7 @@ public class ChatApiEndpointRequest extends ApiEndPointRequest {
         ChatRequest requestBody = ChatRequest.builder()
                 .model("gpt-3.5-turbo")
                 .user(role)
+                .maxTokens(maxTokens)
                 .messages(messages)
                 .build();
         return requestBody;

@@ -1,0 +1,1 @@
+{"id":"chatcmpl-id","object":"chat.completion","created":1678387275,"model":"gpt-3.5-turbo-0301","usage":{"prompt_tokens":14,"completion_tokens":31,"total_tokens":45},"choices":[{"message":{"role":"assistant","content":"\n\nI'm an AI language model, so I don't have feelings, but I'm here to assist you. How can I help you today?"},"finish_reason":"stop","index":0}]}

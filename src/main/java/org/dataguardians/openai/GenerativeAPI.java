@@ -11,6 +11,7 @@ import okhttp3.*;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Objects;
 
 /**
  * <p>
@@ -26,31 +27,20 @@ public  class GenerativeAPI {
     protected OkHttpClient client;
     protected final ObjectMapper objectMapper = new ObjectMapper();
 
-    public GenerativeAPI(TokenProvider authToken) {
-        this.authToken = authToken;
-        this.client = new OkHttpClient();
-    }
 
     public GenerativeAPI(TokenProvider authToken, OkHttpClient client) {
-        this.authToken = authToken;
+        Objects.requireNonNull(authToken);
+        Objects.requireNonNull(client);
         this.client = client;
+        this.authToken=authToken;
     }
 
-    public GenerativeAPI(TokenProvider authToken, Proxy proxy) {
-        this.authToken = authToken;
-        client = new OkHttpClient.Builder().proxy(proxy).build();
-    }
-
-    public GenerativeAPI(TokenProvider authToken, String proxyHost, int proxyPort) {
-        this.authToken = authToken;
-        client = new OkHttpClient.Builder().
-                proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
-                .build();
+    public GenerativeAPI(TokenProvider authToken) {
+        this(authToken, new OkHttpClient());
     }
 
 
-
-    private String buildRequestBody(final ApiEndPointRequest request) {
+     String buildRequestBody(final ApiEndPointRequest request) {
         try {
             return objectMapper.writeValueAsString(request.create());
         } catch (JsonProcessingException e) {
@@ -65,6 +55,7 @@ public  class GenerativeAPI {
      * @return ChatCompletionResponseBody
      */
     public String sample(final ApiEndPointRequest apiRequest) throws HttpException{
+        Objects.requireNonNull(apiRequest);
         RequestBody body = RequestBody.create(buildRequestBody(apiRequest), MediaType.get("application/json; charset=utf-8"));
 
         Request request = new Request.Builder()
