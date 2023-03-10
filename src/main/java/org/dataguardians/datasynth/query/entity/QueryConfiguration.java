@@ -24,6 +24,8 @@ public class QueryConfiguration {
 
     private int count;
 
+    private boolean invalidOnly;
+
     @Data
     @Builder
     public static class DataDictionaryDefinition {

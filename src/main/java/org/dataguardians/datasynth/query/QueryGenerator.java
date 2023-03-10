@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.dataguardians.datasynth.DataGenerator;
 import org.dataguardians.datasynth.GeneratorConfiguration;
 import org.dataguardians.datasynth.query.entity.QueryConfiguration;
+import org.dataguardians.datasynth.query.entity.QueryType;
 import org.dataguardians.exceptions.HttpException;
 import org.dataguardians.openai.GenerativeAPI;
 import org.dataguardians.openai.api.chat.Response;
@@ -33,14 +34,20 @@ public class QueryGenerator extends DataGenerator<List<String>> {
     @Override
     protected String generateInput(){
         String queryStr = queryConfig.getCount() > 1 ? "queries" : "query";
-        String query = "Generate " + queryConfig.getCount() +  " random " + queryConfig.getQueryType().name() + " " +  queryStr + " for the following data dictionary: ";
+        String query = "Generate " + queryConfig.getCount() +  " random ";
+        if ( queryConfig.getQueryType() == QueryType.SQL )
+            query += "select ";
+        query += queryConfig.getQueryType().name() + " " +  queryStr + " for the following data dictionary: ";
         StringBuilder queries = new StringBuilder();
         queryConfig.getDataDictionary().forEach( dd -> {
             if ( queries.length() > 0 )
                 queries.append(", ");
             queries.append( dd.getFieldName() + " of type " + dd.getType().name()  );
         });
-        query += " " + queries.toString() + ". Please don't include explanations or comments in the " + queryStr + ".";
+        query += " " + queries.toString() + ". Please don't include explanations or comments in the " + queryStr;
+        if ( queryConfig.isInvalidOnly() )
+            query += " and make them with invalid syntax structure";
+        query += ".";
         return query;
     }
 
