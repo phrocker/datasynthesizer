@@ -10,7 +10,8 @@ import org.junit.Test;
 
 public class DataGeneratorTest {
 
-    private TokenProvider provider = new ApiKey("YOUR-API-KEY");
+    private TokenProvider provider = new ApiKey(System.getenv("OPENAI_API_KEY"));
+
     @Test
     public void test() throws HttpException, JsonProcessingException {
             GenerativeAPI chatGPT = new GenerativeAPI(provider);
