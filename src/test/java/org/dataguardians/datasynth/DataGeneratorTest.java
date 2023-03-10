@@ -10,11 +10,11 @@ import org.junit.Test;
 
 public class DataGeneratorTest {
 
-    private TokenProvider provider = new ApiKey("YOUR-APK-KEY");
+    private TokenProvider provider = new ApiKey("YOUR-API-KEY");
     @Test
     public void test() throws HttpException, JsonProcessingException {
             GenerativeAPI chatGPT = new GenerativeAPI(provider);
-            DataGenerator generator = new DataGenerator(provider, chatGPT, null);
+        ShortTextGenerator generator = new ShortTextGenerator(provider, chatGPT, null);
             System.out.println(generator.generate());
         }
 }

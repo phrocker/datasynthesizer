@@ -7,12 +7,12 @@ import org.dataguardians.openai.api.chat.Response;
 import org.dataguardians.openai.endpoints.ChatApiEndpointRequest;
 import org.dataguardians.security.TokenProvider;
 
-public class DataGenerator {
+public abstract class DataGenerator<T> {
 
-    private final TokenProvider token;
-    private final GenerativeAPI api;
+    protected final TokenProvider token;
+    protected final GenerativeAPI api;
 
-    private final GeneratorConfiguration config;
+    protected final GeneratorConfiguration config;
 
     public DataGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config){
         this.token=token;
@@ -21,13 +21,12 @@ public class DataGenerator {
     }
 
 
+    protected abstract String generateInput();
 
 
-    public String generate() throws HttpException, JsonProcessingException {
-        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input("Write me a random short paragraph.").maxTokens(1024).build();
-        Response hello = api.sample(request, Response.class);
-        return hello.concatenateResponses();
-    }
+    public abstract T generate() throws HttpException, JsonProcessingException;
+
+
 
 
 

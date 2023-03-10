@@ -83,6 +83,7 @@ public  class GenerativeAPI {
     }
 
     public <T> T sample(final ApiEndPointRequest apiRequest, Class<T> clazz) throws HttpException, JsonProcessingException {
+
         return (T) objectMapper.readValue(sample(apiRequest), clazz);
     }
 
