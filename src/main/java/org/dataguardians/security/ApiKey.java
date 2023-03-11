@@ -1,18 +1,21 @@
 package org.dataguardians.security;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiKey implements TokenProvider {
 
-    private final String apiKey;
+    private String apiKey;
+    @Builder.Default
     private String principal = "user";
 
 
-    public ApiKey(String apiKey){
-        this.apiKey=apiKey;
-    }
-    public ApiKey(final String principal, final String apiKey){
-        this.principal=principal;
-        this.apiKey=apiKey;
-    }
     @Override
     public String getPrincipal() {
         return principal;
@@ -21,5 +24,15 @@ public class ApiKey implements TokenProvider {
     @Override
     public String getToken() {
         return apiKey;
+    }
+
+    public static class ApiKeyBuilder {
+
+
+        public ApiKeyBuilder fromEnv(final String apiKeyEnvName){
+            this.apiKey=System.getenv(apiKeyEnvName);
+            return this;
+        }
+
     }
 }

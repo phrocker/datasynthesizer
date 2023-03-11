@@ -31,6 +31,10 @@ public class QueryGenerator extends DataGenerator<List<String>> {
     }
 
 
+    /**
+     * Generates input for the generative AI endpoint.
+     * @return Question to be asked to the generative AI endpoint.
+     */
     @Override
     protected String generateInput(){
         String queryStr = queryConfig.getCount() > 1 ? "queries" : "query";
@@ -38,22 +42,27 @@ public class QueryGenerator extends DataGenerator<List<String>> {
         if ( queryConfig.getQueryType() == QueryType.SQL )
             query += "select ";
         query += queryConfig.getQueryType().name() + " " +  queryStr + " for the following data dictionary: ";
-        StringBuilder queries = new StringBuilder();
+        final StringBuilder queries = new StringBuilder();
         queryConfig.getDataDictionary().forEach( dd -> {
             if ( queries.length() > 0 )
                 queries.append(", ");
             queries.append( dd.getFieldName() + " of type " + dd.getType().name()  );
         });
-        query += " " + queries.toString() + ". Please don't include explanations or comments in the " + queryStr;
+        query += " " + queries + ". Please don't include explanations or comments in the " + queryStr;
         if ( queryConfig.isInvalidOnly() )
             query += " and make them with invalid syntax structure";
         query += ".";
         return query;
     }
 
-    static List<String> parseQueries(String response){
-        String lines[] = response.split("\\r?\\n");
-        List<String> queries = new ArrayList<>();
+    /**
+     * Parses queries from the response.
+     * @param response query response from the AI endpoint.
+     * @return
+     */
+    static List<String> parseQueries(final String response){
+        final String lines[] = response.split("\\r?\\n");
+        final List<String> queries = new ArrayList<>();
         for ( String line : lines ){
             // should be #. query. So we need to extract the query
             // no need for a regex.

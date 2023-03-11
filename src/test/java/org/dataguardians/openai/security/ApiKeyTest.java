@@ -7,10 +7,10 @@ public class ApiKeyTest {
 
     @Test
     public void testApiKeyCreation(){
-        ApiKey key = new ApiKey(null);
+        ApiKey key = ApiKey.builder().build();
         Assert.assertEquals("user",key.getPrincipal());
         Assert.assertNull(key.getToken());
-        key = new ApiKey("notnull",null);
+        key = ApiKey.builder().principal("notnull").build();
         Assert.assertEquals("notnull",key.getPrincipal());
         Assert.assertNull(key.getToken());
     }

@@ -27,7 +27,7 @@ public class GenerativeAITest {
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 
-    TokenProvider provider = new ApiKey("API-KEY");
+    private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
 //    @Test
     public void test() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);

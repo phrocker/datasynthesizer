@@ -19,7 +19,7 @@ import java.util.List;
 
 public class QueryGeneratorTest {
 
-    private TokenProvider provider = new ApiKey("YOUR-API-KEY");
+    private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
   //  @Test
     public void test() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
@@ -130,5 +130,19 @@ public class QueryGeneratorTest {
 
         QueryGenerator.parseQueries(resp.concatenateResponses()).forEach(responses::remove);
         assert responses.isEmpty();
+    }
+
+    @Test
+    public void testParseEmptyResponse() throws IOException, HttpException {
+
+        final String jsonText = IOUtils.toString(
+                this.getClass().getResourceAsStream("/ChatGPTResponseEmpty.json"),
+                "UTF-8"
+        );
+
+        Response resp = new ObjectMapper().readValue(jsonText, Response.class);
+
+        assert resp.concatenateResponses().isEmpty();
+        assert QueryGenerator.parseQueries(resp.concatenateResponses()).isEmpty();
     }
 }
