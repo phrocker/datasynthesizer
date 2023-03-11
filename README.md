@@ -1,4 +1,5 @@
 # DataSynthesizer
+[![Java CI with Maven](https://github.com/phrocker/datasynthesizer/actions/workflows/maven.yml/badge.svg)](https://github.com/phrocker/datasynthesizer/actions/workflows/maven.yml)
 ## Overview
 
 DataSyntheiszer is a tool that synthesizes data based on a given schema. The tool is designed to be used in the following scenarios:
