@@ -10,7 +10,7 @@ DataSyntheiszer is a tool that synthesizes data based on a given schema. The too
     * Generating synthetic data for training machine learning models
     * Generating synthetic data for data privacy
 
-## Examples
+## Open AI Examples
 
 ### OpenAI GPT-3.5 Api Key Provider
 
@@ -72,6 +72,54 @@ You can ask the endpoint anything through the input.
     Response hello = chatGPT.sample(request, Response.class);
     System.out.println(hello.concatenateResponses());
 ```
+
+## SchemaSynthesis Examples
+
+### The following example unit test will generate a text message with the 
+```java
+    final String jsonText = IOUtils.toString(
+    this.getClass().getResourceAsStream("/samplers/textMessage.json"),
+    "UTF-8"
+    );
+
+    Schema schema = Schema.builder().from(jsonText).build();
+
+    SchemaSynthesizer synthesizer = new SchemaSynthesizer(schema);
+    var record = synthesizer.generateRecords(1);
+    Assert.assertEquals(1, record.size());
+```
+This will generate the following output:
+        
+```json lines
+{"imei":"458855761073067",
+  "from_phone_number":"228-153-9629",
+  "to_phone_number":"228-159-6269",
+  "message":"\n\nThe sun was setting behind the mountains, casting a warm orange glow across the sky. There was a crispness to the air, as if winter was just around the corner. John leaned against the"}
+```
+
+Since schema generation uses JSON schemas, the /samplers/textMessage.json included below for convenience:
+
+```json lines
+[{"name":  "imei",
+  "class": "phoneid"},
+  {
+  "name": "from_phone_number",
+  "class": "phonenumber",
+  "areaCodeMin": "228",
+  "areaCodeMax": "228"
+},{
+  "name": "to_phone_number",
+  "class": "phonenumber",
+  "areaCodeMin": "228",
+  "areaCodeMax": "228"
+},
+  {
+    "name": "message",
+    "class": "chatgptshorttext"
+  }]
+```
+
+
 
 ### Thanks and Shoutouts
 
