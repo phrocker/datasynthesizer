@@ -55,6 +55,7 @@ import java.util.Set;
         @JsonSubTypes.Type(value = HeaderSampler.class, name = "header"),
         @JsonSubTypes.Type(value = IdSampler.class, name = "id"),
         @JsonSubTypes.Type(value = EquipmentIdentitySampler.class, name = "phoneid"),
+        @JsonSubTypes.Type(value = PhoneNumberSampler.class, name = "phonenumber"),
         @JsonSubTypes.Type(value = IntegerSampler.class, name = "int"),
         @JsonSubTypes.Type(value = DoubleSampler.class, name = "double"),
         @JsonSubTypes.Type(value = JoinSampler.class, name = "join"),
@@ -81,6 +82,7 @@ import java.util.Set;
         @JsonSubTypes.Type(value = EmailSampler.class, name = "email"),
         @JsonSubTypes.Type(value = EmailNameSampler.class, name = "email-name"),
         @JsonSubTypes.Type(value = UsernameSampler.class, name = "username"),
+        @JsonSubTypes.Type(value = ChatGPTShortTextSampler.class, name = "chatgptshorttext"),
 
 })
 public abstract class FieldSampler implements Sampler<JsonNode> {

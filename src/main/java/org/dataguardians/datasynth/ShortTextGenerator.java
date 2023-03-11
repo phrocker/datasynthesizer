@@ -19,6 +19,7 @@ public class ShortTextGenerator extends DataGenerator<String>{
 
     public String generate() throws HttpException, JsonProcessingException {
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).maxTokens(1024).build();
+        request.setMaxTokens(config.getMaxTokens());
         Response hello = api.sample(request, Response.class);
         return hello.concatenateResponses();
     }

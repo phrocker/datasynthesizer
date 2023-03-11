@@ -1,10 +1,17 @@
 package org.dataguardians.datasynth;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class GeneratorConfiguration {
 
-    @Getter @Setter
+    @Builder.Default
     protected int concurrentGenerations=1;
+
+    @Builder.Default
+    protected int maxTokens=4096;
 }
+

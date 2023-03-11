@@ -1,0 +1,17 @@
+[{"name":  "imei",
+  "class": "phoneid"},
+  {
+  "name": "from_phone_number",
+  "class": "phonenumber",
+  "areaCodeMin": "228",
+  "areaCodeMax": "228"
+},{
+  "name": "to_phone_number",
+  "class": "phonenumber",
+  "areaCodeMin": "228",
+  "areaCodeMax": "228"
+},
+  {
+    "name": "message",
+    "class": "chatgptshorttext"
+  }]

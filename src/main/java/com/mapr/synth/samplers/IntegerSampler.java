@@ -57,6 +57,10 @@ class IntegerSampler extends FieldSampler {
         this.max = Util.parseInteger(max);
     }
 
+    public void setMin(String min) {
+        this.min = Util.parseInteger(min);
+    }
+
     public void setMin(JsonNode min) {
         this.min = Util.parseInteger(min);
     }
