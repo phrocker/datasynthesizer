@@ -1,5 +1,6 @@
 package org.dataguardians.openai.endpoints;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +39,9 @@ public class ChatApiEndpointRequest extends ApiEndPointRequest {
 
     public static final String API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
 
+    @Builder.Default
+    private Float temperature=1.0F;
+
     @Override
     public String getEndpoint() {
         return API_ENDPOINT;
@@ -68,8 +72,10 @@ public class ChatApiEndpointRequest extends ApiEndPointRequest {
         var requestBody = ChatRequest.builder()
                 .model("gpt-3.5-turbo")
                 .user(role)
-//                .maxTokens(maxTokens)
                 .messages(messages);
+        if (temperature != 1.0F){
+            requestBody.temperature(temperature);
+        }
         if (maxTokens != 4096){
             requestBody.maxTokens(maxTokens);
         }
