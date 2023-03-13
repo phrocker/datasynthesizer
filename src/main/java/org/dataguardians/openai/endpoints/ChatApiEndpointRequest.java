@@ -20,11 +20,7 @@ import java.util.List;
  * Example usage:
  *
  * <pre>{@code
- * ChatApiEndpointRequest request = new ChatApiEndpointRequest()
- *         .setModel("davinci")
- *         .setInput("Hello, world!")
- *         .addParameter("temperature", 0.5)
- *         .addParameter("max_tokens", 10);
+ * ChatApiEndpointRequest request = new ChatApiEndpointRequest.builder().model("davinci").input("Hello, world!").build();
  *
  * ChatApiEndpoint endpoint = new ChatApiEndpoint(apiKey);
  * ChatApiResponse response = endpoint.send(request);
