@@ -25,13 +25,15 @@ public class ChatApiEndpointRequest extends ApiEndPointRequest {
         List<Message> messages = new ArrayList<>();
         String role = StringUtils.isBlank(user) ? "user" : user;
         messages.add(Message.builder().role(role).content(input).build());
-        ChatRequest requestBody = ChatRequest.builder()
+        var requestBody = ChatRequest.builder()
                 .model("gpt-3.5-turbo")
                 .user(role)
-                .maxTokens(maxTokens)
-                .messages(messages)
-                .build();
-        return requestBody;
+//                .maxTokens(maxTokens)
+                .messages(messages);
+        if (maxTokens != 4096){
+            requestBody.maxTokens(maxTokens);
+        }
+        return requestBody.build();
     }
 
 }
