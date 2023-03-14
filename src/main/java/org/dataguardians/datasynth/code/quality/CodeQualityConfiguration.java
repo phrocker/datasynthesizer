@@ -1,4 +1,4 @@
-package org.dataguardians.datasynth.query.compliance;
+package org.dataguardians.datasynth.code.quality;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,17 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.dataguardians.datasynth.rules.ComplianceConfiguration;
-import org.dataguardians.datasynth.rules.ComplianceRule;
-
-import java.util.List;
 
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueryComplianceConfiguration extends ComplianceConfiguration {
+public class CodeQualityConfiguration extends ComplianceConfiguration {
 
-
-    String query;
-
+    String codeUrl;
+    @Builder.Default
+    int maxMethodLength=-1;
 }
