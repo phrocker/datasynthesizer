@@ -1,9 +1,9 @@
-package org.dataguardians.datasynth.compliance;
+package org.dataguardians.datasynth.code.quality;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.dataguardians.datasynth.rules.ComplianceRule;
 import org.dataguardians.datasynth.query.compliance.QueryComplianceConfiguration;
 import org.dataguardians.datasynth.query.compliance.QueryComplianceScorer;
+import org.dataguardians.datasynth.rules.ComplianceRule;
 import org.dataguardians.exceptions.HttpException;
 import org.dataguardians.openai.GenerativeAPI;
 import org.dataguardians.security.ApiKey;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryComplianceTest {
+public class CodeQualityTest {
 
     private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
     //@Test
@@ -21,11 +21,13 @@ public class QueryComplianceTest {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
 
         List<ComplianceRule> rules = new ArrayList<>();
-        rules.add(ComplianceRule.builder().rule("queries must contain at least one concrete term or bounded range").build());
-        var complianceConfigBuilder = QueryComplianceConfiguration.builder().rules(rules);
-        complianceConfigBuilder =complianceConfigBuilder.query("select * from users where age > 18");
-        QueryComplianceScorer generator = new QueryComplianceScorer(provider, chatGPT, null, complianceConfigBuilder.build());
-        System.out.println(generator.generate());
+        rules.add(ComplianceRule.builder().rule("Descriptive variable names").build());
+        rules.add(ComplianceRule.builder().rule("comments must exist").build());
+        rules.add(ComplianceRule.builder().rule("Don't repeat code within a module").build());
+        var codeQuality = CodeQualityConfiguration.builder().rules(rules);
+        codeQuality = codeQuality.codeUrl("https://github.com/phrocker/datasynthesizer/blob/main/src/main/java/org/dataguardians/datasynth/SchemaSynthesizer.java");
+        CodeQualityScorer generator = new CodeQualityScorer(provider, chatGPT, null, codeQuality.build());
+        System.out.println(generator.generate());// response will be 0.8
     }
 
     @Test
