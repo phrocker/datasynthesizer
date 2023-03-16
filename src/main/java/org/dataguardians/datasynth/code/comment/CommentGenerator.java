@@ -29,7 +29,7 @@ public class CommentGenerator extends DataGenerator<String> {
     }
 
     private String generateMethodFromSignature(String className, String methodSig){
-        return "Please generate a javadoc for a method " + methodSig + " that is a class named " + className;
+        return "Please generate a javadoc for a method " + methodSig + " that is in a class named " + className + ". Please only generate the method javadoc";
 
     }
 
