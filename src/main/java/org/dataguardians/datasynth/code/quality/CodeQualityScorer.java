@@ -6,6 +6,12 @@ import org.dataguardians.datasynth.rules.ComplianceScorer;
 import org.dataguardians.openai.GenerativeAPI;
 import org.dataguardians.security.TokenProvider;
 
+/**
+ * Attempts to generate a code quality confidence score.
+ *
+ * The confidence reflects adherence to the rules generated in
+ * <code>CodeQualityConfiguration complianceConfig</code>.
+ */
 public class CodeQualityScorer  extends ComplianceScorer {
 
 
@@ -27,7 +33,7 @@ public class CodeQualityScorer  extends ComplianceScorer {
         for(var rule : codeConfig.getRules())
             queryStr += rule.getRule() +",";
 
-        queryStr +=      ". Provide a confidence score from 0 to 1 on whether the following code url is compliant with said rules: " + codeConfig.getCodeUrl() + ";  Please only provide the score. ";
+        queryStr +=      ". Provide a confidence score from 0 to 1 on whether the following code url is compliant with said rules: " + codeConfig.getCodeUrl() + ";  Please only provide the score. Ignore the license at the beginning of the file. ";
 
         System.out.println(queryStr);
         return queryStr;

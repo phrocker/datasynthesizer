@@ -64,7 +64,7 @@ public class NameSampler extends FieldSampler {
                 Preconditions.checkState(last.getAndSet(new Multinomial<>()) == null);
 
 
-                Splitter onTab = Splitter.on(CharMatcher.WHITESPACE).omitEmptyStrings()
+                Splitter onTab = Splitter.on(CharMatcher.whitespace()).omitEmptyStrings()
                         .trimResults(CharMatcher.anyOf(" \""));
                 for (String resourceName : ImmutableList.of("dist.male.first", "dist.female.first")) {
                     // noinspection UnstableApiUsage

@@ -24,6 +24,7 @@ public abstract class DataGenerator<T> {
     protected abstract String generateInput();
 
 
+
     public abstract T generate() throws HttpException, JsonProcessingException;
 
 

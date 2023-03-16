@@ -28,6 +28,7 @@ public abstract class ComplianceScorer extends DataGenerator<Double> {
     @Override
     public Double generate() throws HttpException, JsonProcessingException {
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).build();
+        request.setTemperature(0.5f);
         Response hello = api.sample(request, Response.class);
         return Double.valueOf(hello.concatenateResponses());
     }

@@ -10,6 +10,9 @@ import org.dataguardians.openai.api.chat.Response;
 import org.dataguardians.openai.endpoints.ChatApiEndpointRequest;
 import org.dataguardians.security.TokenProvider;
 
+/**
+ * Query compliance scorer with user defined rules to be provided to OpenAI
+ */
 public class QueryComplianceScorer extends ComplianceScorer {
 
 

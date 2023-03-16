@@ -14,6 +14,9 @@ import java.util.List;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Query compliance configuration object that extends the compliance configuration.
+ */
 public class QueryComplianceConfiguration extends ComplianceConfiguration {
 
 

@@ -11,6 +11,9 @@ import org.dataguardians.datasynth.rules.ComplianceConfiguration;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Code quality configuration object that extends the compliance configuration.
+ */
 public class CodeQualityConfiguration extends ComplianceConfiguration {
 
     String codeUrl;
