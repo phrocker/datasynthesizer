@@ -12,8 +12,6 @@ import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 import org.dataguardians.exceptions.HttpException;
 
-import javax.xml.stream.events.Comment;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
