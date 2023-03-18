@@ -16,19 +16,22 @@ import java.util.List;
 public class QueryComplianceTest {
 
     private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
-    //@Test
+
+    // @Test
     public void test() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
 
         List<ComplianceRule> rules = new ArrayList<>();
-        rules.add(ComplianceRule.builder().rule("queries must contain at least one concrete term or bounded range").build());
+        rules.add(ComplianceRule.builder().rule("queries must contain at least one concrete term or bounded range")
+                .build());
         var complianceConfigBuilder = QueryComplianceConfiguration.builder().rules(rules);
-        complianceConfigBuilder =complianceConfigBuilder.query("select * from users where age > 18");
-        QueryComplianceScorer generator = new QueryComplianceScorer(provider, chatGPT, null, complianceConfigBuilder.build());
+        complianceConfigBuilder = complianceConfigBuilder.query("select * from users where age > 18");
+        QueryComplianceScorer generator = new QueryComplianceScorer(provider, chatGPT, null,
+                complianceConfigBuilder.build());
         System.out.println(generator.generate());
     }
 
     @Test
-    public void testPass(){
+    public void testPass() {
     }
 }

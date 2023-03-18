@@ -113,14 +113,19 @@ public class Event implements Comparable<Event> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Event)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Event))
+            return false;
 
         Event event = (Event) o;
 
-        if (ip != event.ip) return false;
-        if (time != event.time) return false;
-        if (uid != event.uid) return false;
+        if (ip != event.ip)
+            return false;
+        if (time != event.time)
+            return false;
+        if (uid != event.uid)
+            return false;
         return op.equals(event.op);
 
     }

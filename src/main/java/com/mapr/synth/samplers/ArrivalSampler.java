@@ -35,20 +35,19 @@ import java.util.Random;
  * You can set the
  * <p>
  * <il>
- * <li><em>rate</em> - use something like 5/m to indicate 5 events per minute.  The unit is optional, seconds are the
+ * <li><em>rate</em> - use something like 5/m to indicate 5 events per minute. The unit is optional, seconds are the
  * default.</li>
  * <li><em>offset</em> - the minimum time between events, default is 0</li>
  * <li><em>format </em>- the format to use when outputting the times</li>
- * <li><em>start </em>- the time of the first event</li>
- * </il>
+ * <li><em>start </em>- the time of the first event</li> </il>
  * <p>
  * Thread safe
  */
 public class ArrivalSampler extends FieldSampler {
     private Random base;
 
-    private double meanInterval = 1000;  // interval - offset will have this mean
-    private double minInterval = 0;      // no interval can be less than this
+    private double meanInterval = 1000; // interval - offset will have this mean
+    private double minInterval = 0; // no interval can be less than this
     private FancyTimeFormatter df = new FancyTimeFormatter("yyyy-MM-dd");
 
     private double start = System.currentTimeMillis();

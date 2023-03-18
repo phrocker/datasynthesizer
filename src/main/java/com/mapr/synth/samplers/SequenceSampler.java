@@ -109,7 +109,7 @@ public class SequenceSampler extends FieldSampler {
     @Override
     public void getNames(Set<String> fields) {
         if (isFlat()) {
-            //noinspection StringEquality
+            // noinspection StringEquality
             if (this.getName() == null || this.getName() == SchemaSampler.FLAT_SEQUENCE_MARKER) {
                 if (base != null) {
                     base.getNames(fields);

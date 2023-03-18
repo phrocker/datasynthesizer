@@ -18,5 +18,5 @@ public class CodeQualityConfiguration extends ComplianceConfiguration {
 
     String codeUrl;
     @Builder.Default
-    int maxMethodLength=-1;
+    int maxMethodLength = -1;
 }

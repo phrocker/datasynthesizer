@@ -12,9 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * The CommentGeneratorMain class provides methods for generating comments.
- * This class contains a main method that takes an array of strings as an argument.
- * The main method is responsible for calling the other methods in the class to generate comments.
+ * The CommentGeneratorMain class provides methods for generating comments. This class contains a main method that takes
+ * an array of strings as an argument. The main method is responsible for calling the other methods in the class to
+ * generate comments.
  */
 public class CommentGeneratorMain {
 

@@ -19,7 +19,6 @@
 
 package com.mapr.synth;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,13 +26,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Much like SimpleDateFormat, but fancier. The fancy bit is that
- * we support single character formats Q and s for time since epoch in
- * milli-seconds and seconds respectively. Also, multiple formats
- * can be specified to allow alternative parsing formats.
+ * Much like SimpleDateFormat, but fancier. The fancy bit is that we support single character formats Q and s for time
+ * since epoch in milli-seconds and seconds respectively. Also, multiple formats can be specified to allow alternative
+ * parsing formats.
  */
 public class FancyTimeFormatter {
-    private static final String[] defaultFormats = {"yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"};
+    private static final String[] defaultFormats = { "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd" };
     private static final String isoFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     private final List<String> formats = new ArrayList<>();
@@ -56,18 +54,18 @@ public class FancyTimeFormatter {
 
     private void addFormatter(String format) {
         switch (format) {
-            case "iso":
-                this.formats.add(isoFormat);
-                formatter.add(new SimpleDateFormat(isoFormat));
-                break;
-            case "Q":
-            case "s":
-                this.formats.add("%t" + format);
-                formatter.add(null);
-                break;
-            default:
-                this.formats.add(format);
-                formatter.add(new SimpleDateFormat(format));
+        case "iso":
+            this.formats.add(isoFormat);
+            formatter.add(new SimpleDateFormat(isoFormat));
+            break;
+        case "Q":
+        case "s":
+            this.formats.add("%t" + format);
+            formatter.add(null);
+            break;
+        default:
+            this.formats.add(format);
+            formatter.add(new SimpleDateFormat(format));
         }
     }
 

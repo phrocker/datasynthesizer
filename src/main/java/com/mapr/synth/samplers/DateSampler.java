@@ -33,13 +33,12 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Sample dates that are all before a fixed epoch.  On average, the generated dates
- * should be 100 days before the epoch, but some will be closer and some much earlier.
+ * Sample dates that are all before a fixed epoch. On average, the generated dates should be 100 days before the epoch,
+ * but some will be closer and some much earlier.
  *
- * If you set the end point, this will change the epoch.  If you set the start point the
- * dates will be selected uniformly between start and end.  Start and end can be specified
- * as dates in yyyy-MM-dd default format or whatever format is specified with the format
- * option (note that options are parsed in order).
+ * If you set the end point, this will change the epoch. If you set the start point the dates will be selected uniformly
+ * between start and end. Start and end can be specified as dates in yyyy-MM-dd default format or whatever format is
+ * specified with the format option (note that options are parsed in order).
  *
  * Thread safe
  */
@@ -49,8 +48,8 @@ class DateSampler extends FieldSampler {
     private long end = EPOCH;
 
     private FancyTimeFormatter df = new FancyTimeFormatter("yyyy-MM-dd");
-    private AbstractContinousDistribution base =
-            new Exponential(1.0 / TimeUnit.MILLISECONDS.convert(100, TimeUnit.DAYS), RandomUtils.getRandom());
+    private AbstractContinousDistribution base = new Exponential(
+            1.0 / TimeUnit.MILLISECONDS.convert(100, TimeUnit.DAYS), RandomUtils.getRandom());
 
     public DateSampler() {
     }
@@ -74,9 +73,9 @@ class DateSampler extends FieldSampler {
 
     @Override
     public JsonNode sample() {
-      synchronized (this) {
-        long t = (long) Math.rint(base.nextDouble());
-        return new TextNode(df.format(new java.util.Date(end - t)));
-      }
+        synchronized (this) {
+            long t = (long) Math.rint(base.nextDouble());
+            return new TextNode(df.format(new java.util.Date(end - t)));
+        }
     }
 }

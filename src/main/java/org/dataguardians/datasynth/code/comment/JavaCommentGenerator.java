@@ -17,11 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is a comment generator for Java code. It includes methods for visiting method declarations
- * and class/interface declarations, and a method for generating the comments as a list of strings.
+ * This class is a comment generator for Java code. It includes methods for visiting method declarations and
+ * class/interface declarations, and a method for generating the comments as a list of strings.
  *
  * @author [Marc Parisi]
+ *
  * @version 1.0
+ *
  * @since [3/18/2023]
  */
 @Slf4j
@@ -39,7 +41,8 @@ public class JavaCommentGenerator {
         this(generator, fileOrDirectory, saveToFile, false);
     }
 
-    public JavaCommentGenerator(CommentGenerator generator, String fileOrDirectory, boolean saveToFile, boolean replaceComments) {
+    public JavaCommentGenerator(CommentGenerator generator, String fileOrDirectory, boolean saveToFile,
+            boolean replaceComments) {
         this.generator = generator;
         this.fileOrDirectory = fileOrDirectory;
         this.saveToFile = saveToFile;
@@ -47,15 +50,19 @@ public class JavaCommentGenerator {
     }
 
     /**
-     * Generates a list of strings using the specified configuration.
-     * This method may throw HttpException or IOException when attempting to retrieve the configuration.
+     * Generates a list of strings using the specified configuration. This method may throw HttpException or IOException
+     * when attempting to retrieve the configuration.
      *
      * @return A List of Strings generated using the specified configuration.
-     * @throws HttpException If there is a problem with the HTTP connection during configuration retrieval.
-     * @throws IOException If an IO error occurs while retrieving the configuration.
+     *
+     * @throws HttpException
+     *             If there is a problem with the HTTP connection during configuration retrieval.
+     * @throws IOException
+     *             If an IO error occurs while retrieving the configuration.
      */
     public List<String> generate() throws HttpException, IOException {
-        SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(JavaCommentGenerator.class).resolve("src/main/java"));
+        SourceRoot sourceRoot = new SourceRoot(
+                CodeGenerationUtils.mavenModuleRoot(JavaCommentGenerator.class).resolve("src/main/java"));
         // Our sample is in the root of this directory, so no package name.
         CompilationUnit cu = sourceRoot.parse("", fileOrDirectory);
         String className = cu.getPrimaryTypeName().get();
@@ -63,9 +70,8 @@ public class JavaCommentGenerator {
         final List<String> methods = new ArrayList<>();
         cu.accept(new ModifierVisitor<Void>() {
 
-
-
-            protected String tryGeneration(String className, String methodDeclr, final MethodDeclaration n) throws HttpException, IOException {
+            protected String tryGeneration(String className, String methodDeclr, final MethodDeclaration n)
+                    throws HttpException, IOException {
                 String comment = generator.generateMethodJavaDoc(className, methodDeclr);
                 n.setComment(new JavadocComment(JavaDocParser.parseJavaDocFrom(className, comment)));
                 commentsAdded.add(comment);
@@ -73,11 +79,14 @@ public class JavaCommentGenerator {
             }
 
             /**
-             * Visits a MethodDeclaration node in the Abstract Syntax Tree (AST)
-             * and generates JavaDoc comments for the method.
+             * Visits a MethodDeclaration node in the Abstract Syntax Tree (AST) and generates JavaDoc comments for the
+             * method.
              *
-             * @param n           the MethodDeclaration node in the AST to be visited
-             * @param arg         unused argument of type Void
+             * @param n
+             *            the MethodDeclaration node in the AST to be visited
+             * @param arg
+             *            unused argument of type Void
+             *
              * @return a Visitable object representing the AST node
              */
             @Override
@@ -89,14 +98,14 @@ public class JavaCommentGenerator {
                     final String methodDeclr = n.getDeclarationAsString(true, true, true);
                     try {
 
-                        comment = tryGeneration(className,methodDeclr,n );
+                        comment = tryGeneration(className, methodDeclr, n);
 
                     } catch (HttpException e) {
-                        if (e.getMessage().contains("timeout")){
+                        if (e.getMessage().contains("timeout")) {
                             try {
                                 log.info("Sleeping for 1 second and trying again");
                                 Thread.sleep(1000);
-                                comment = tryGeneration(className,methodDeclr,n);
+                                comment = tryGeneration(className, methodDeclr, n);
                             } catch (IOException | HttpException | InterruptedException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -113,18 +122,18 @@ public class JavaCommentGenerator {
         }, null);
 
         String classDoc = "";
-        try{
-            classDoc =generator.generateClassJavaDoc(className, methods);
+        try {
+            classDoc = generator.generateClassJavaDoc(className, methods);
         } catch (IOException | HttpException ex) {
-            try{
+            try {
                 log.info("Sleeping for 1 second and trying again");
                 Thread.sleep(1000);
-                classDoc =generator.generateClassJavaDoc(className, methods);
+                classDoc = generator.generateClassJavaDoc(className, methods);
             } catch (IOException | HttpException | InterruptedException dex) {
                 throw new RuntimeException(ex);
             }
         }
-        var classJavaDoc = new JavadocComment(JavaDocParser.parseClassJavaDoc(className,classDoc ));
+        var classJavaDoc = new JavadocComment(JavaDocParser.parseClassJavaDoc(className, classDoc));
         cu.accept(new ModifierVisitor<Void>() {
 
             /**

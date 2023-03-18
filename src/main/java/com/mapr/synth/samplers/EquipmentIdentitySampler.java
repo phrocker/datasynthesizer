@@ -33,16 +33,17 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
- * Samples from  Phone IMEI Numbers. Uses a bloom filter to ensure that the generated IDs are unique.
+ * Samples from Phone IMEI Numbers. Uses a bloom filter to ensure that the generated IDs are unique.
  */
 public class EquipmentIdentitySampler extends FieldSampler {
 
     private Random rand = RandomUtils.getRandom();
-    private final BloomFilter<CharSequence> bloomy = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), 20000000);
+    private final BloomFilter<CharSequence> bloomy = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()),
+            20000000);
     private boolean unique = false;
 
     public EquipmentIdentitySampler() {
-        
+
     }
 
     @Override
@@ -56,7 +57,7 @@ public class EquipmentIdentitySampler extends FieldSampler {
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setFields(String fields) {
-        
+
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -68,25 +69,23 @@ public class EquipmentIdentitySampler extends FieldSampler {
         }
     }
 
-
     @Override
     public JsonNode sample() {
 
         if (unique) {
-            
+
             return new TextNode(generateUniqueId());
-            
-        }
-        else{
+
+        } else {
             return new TextNode(generateId());
         }
     }
 
-    private String generateUniqueId(){
+    private String generateUniqueId() {
         String identifier = "";
-        do{
+        do {
             identifier = generateId();
-        }while( bloomy.mightContain(identifier));
+        } while (bloomy.mightContain(identifier));
         bloomy.put(identifier);
         return identifier;
     }
@@ -94,7 +93,7 @@ public class EquipmentIdentitySampler extends FieldSampler {
     // found at https://gist.github.com/abforce/c9a2dabdbe7fab51d7485deeddb67876
     private String generateId() {
         int pos;
-        int[] str = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[] str = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         int sum = 0;
         int final_digit;
         int t;
@@ -102,7 +101,8 @@ public class EquipmentIdentitySampler extends FieldSampler {
         int len = 15;
         String identifier = "";
 
-        String[] rbi = new String[]{"01", "10", "30", "33", "35", "44", "45", "49", "50", "51", "52", "53", "54", "86", "91", "98", "99"};
+        String[] rbi = new String[] { "01", "10", "30", "33", "35", "44", "45", "49", "50", "51", "52", "53", "54",
+                "86", "91", "98", "99" };
         String[] arr = rbi[(int) Math.floor(Math.random() * rbi.length)].split("");
         str[0] = Integer.parseInt(arr[0]);
         str[1] = Integer.parseInt(arr[1]);
@@ -134,5 +134,5 @@ public class EquipmentIdentitySampler extends FieldSampler {
 
         return identifier;
     }
-    
+
 }

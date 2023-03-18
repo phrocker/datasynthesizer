@@ -32,7 +32,7 @@ import org.apache.mahout.math.random.Multinomial;
  *
  * Thread safe
  */
-@JsonIgnoreProperties({"base"})
+@JsonIgnoreProperties({ "base" })
 public class ForeignKeySampler extends FieldSampler {
     private int size = 1000;
     private double skew = 0.5;
@@ -73,8 +73,8 @@ public class ForeignKeySampler extends FieldSampler {
 
     @Override
     public JsonNode sample() {
-      synchronized (this) {
-        return new IntNode(base.sample());
-      }
+        synchronized (this) {
+            return new IntNode(base.sample());
+        }
     }
 }

@@ -60,7 +60,6 @@ class PhoneNumberSampler extends FieldSampler {
         this.areaCodeSampler.setMin(min);
     }
 
-
     @Override
     public JsonNode sample() {
         synchronized (this) {

@@ -67,13 +67,13 @@ class DoubleSampler extends FieldSampler {
     }
 
     /**
-     * Sets the distribution to be used. The format is a list of number pairs.
-     * The first value in each pair is the value to return, the second is the
-     * (unnormalized) probability for that number. For instance [1, 50, 2, 30, 3, 1]
-     * will cause the sampler to return 1 a bit less than 60% of the time, 2 a bit
-     * less than 40% of the time and 3 just a bit over 1% of the time.
+     * Sets the distribution to be used. The format is a list of number pairs. The first value in each pair is the value
+     * to return, the second is the (unnormalized) probability for that number. For instance [1, 50, 2, 30, 3, 1] will
+     * cause the sampler to return 1 a bit less than 60% of the time, 2 a bit less than 40% of the time and 3 just a bit
+     * over 1% of the time.
      *
-     * @param dist A JSON list describing the distribution of numbers.
+     * @param dist
+     *            A JSON list describing the distribution of numbers.
      */
     public void setDist(JsonNode dist) {
         if (dist.isArray()) {
@@ -86,7 +86,9 @@ class DoubleSampler extends FieldSampler {
                 JsonNode v = i.next();
                 JsonNode p = i.next();
                 if (!v.canConvertToLong() || !p.isNumber()) {
-                    throw new IllegalArgumentException(String.format("Need distribution to be a list of value, probability pairs, got %s (%s,%s)", dist, v.getClass(), p.getClass()));
+                    throw new IllegalArgumentException(
+                            String.format("Need distribution to be a list of value, probability pairs, got %s (%s,%s)",
+                                    dist, v.getClass(), p.getClass()));
                 }
                 this.dist.add(v.asDouble(), p.asDouble());
             }
@@ -98,14 +100,13 @@ class DoubleSampler extends FieldSampler {
     }
 
     /**
-     * Sets the amount of skew.  Skew is added by taking the min of several samples.
-     * Setting power = 0 gives uniform distribution, setting it to 5 gives a very
-     * heavily skewed distribution.
+     * Sets the amount of skew. Skew is added by taking the min of several samples. Setting power = 0 gives uniform
+     * distribution, setting it to 5 gives a very heavily skewed distribution.
      * <p>
-     * If you set power to a negative number, the skew is reversed so large values
-     * are preferred.
+     * If you set power to a negative number, the skew is reversed so large values are preferred.
      *
-     * @param skew Controls how skewed the distribution is.
+     * @param skew
+     *            Controls how skewed the distribution is.
      */
     public void setSkew(int skew) {
         this.power = skew;
@@ -128,21 +129,22 @@ class DoubleSampler extends FieldSampler {
                 double r = power >= 0 ? Double.MAX_VALUE : Double.MIN_VALUE;
                 if (power >= 0) {
                     for (int i = 0; i <= power; i++) {
-                        r = Math.min(r, min +  ThreadLocalRandom.current().nextDouble(0, max-min) ); //base.nextInt(max - min));
+                        r = Math.min(r, min + ThreadLocalRandom.current().nextDouble(0, max - min)); // base.nextInt(max
+                                                                                                     // - min));
                     }
                 } else {
                     int n = -power;
                     for (int i = 0; i <= n; i++) {
-                        r = Math.max(r, min + ThreadLocalRandom.current().nextDouble(0, max-min));
+                        r = Math.max(r, min + ThreadLocalRandom.current().nextDouble(0, max - min));
                     }
                 }
                 if (format == null) {
                     return new DoubleNode(r);
                 } else {
-                    try{
+                    try {
                         return new DoubleNode(Double.valueOf(String.format(format, r)));
-                        
-                    }catch(Throwable e){
+
+                    } catch (Throwable e) {
                         return new TextNode(String.format(format, r));
                     }
                 }

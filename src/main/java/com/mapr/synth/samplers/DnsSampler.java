@@ -51,7 +51,8 @@ public class DnsSampler extends FieldSampler {
     private Set<String> retainedFields = null;
 
     // most internal parameters will be resampled on each restart
-    // in some cases, these are actually a distribution that is reparametrized on each restart and sampled each transaction
+    // in some cases, these are actually a distribution that is reparametrized on each restart and sampled each
+    // transaction
     private final Gamma dilationDistribution = new Gamma(6, 1, base);
     private double dilation;
 
@@ -65,7 +66,7 @@ public class DnsSampler extends FieldSampler {
 
     // distribution of query times
     private Exponential meanIntervalDistribution = new Exponential(1.0 / TimeUnit.MINUTES.toMillis(1), base);
-    private Exponential interval;   // interval sampled from this
+    private Exponential interval; // interval sampled from this
 
     // distribution of how much slower queries go slower when inactive
     private final Gamma idleDistribution = new Gamma(6, 1.0, base);
@@ -93,11 +94,12 @@ public class DnsSampler extends FieldSampler {
     private double nextQuery = 0;
 
     private final double sunriseTime = base.nextDouble() * Util.ONE_DAY;
-    private final double sunsetTime = sunriseTime < NIGHT_DURATION ? sunriseTime - NIGHT_DURATION + Util.ONE_DAY : sunriseTime - NIGHT_DURATION;
+    private final double sunsetTime = sunriseTime < NIGHT_DURATION ? sunriseTime - NIGHT_DURATION + Util.ONE_DAY
+            : sunriseTime - NIGHT_DURATION;
 
     private boolean isDaytime = sunriseTime > NIGHT_DURATION;
-    private final Set<String> legalFields = ImmutableSet.of(
-            "ip", "ipx", "ipV4", "domain", "revDomain", "time", "timestamp_ms", "timestamp_s");
+    private final Set<String> legalFields = ImmutableSet.of("ip", "ipx", "ipV4", "domain", "revDomain", "time",
+            "timestamp_ms", "timestamp_s");
 
     public DnsSampler() throws IOException {
         List<String> topNames = Lists.newArrayList();
@@ -126,9 +128,7 @@ public class DnsSampler extends FieldSampler {
     }
 
     enum Event {
-        SUNRISE, SUNSET,
-        ACTIVATE, DEACTIVATE,
-        QUERY, END
+        SUNRISE, SUNSET, ACTIVATE, DEACTIVATE, QUERY, END
     }
 
     /**
@@ -318,7 +318,7 @@ public class DnsSampler extends FieldSampler {
     @Override
     public void getNames(Set<String> fields) {
         if (isFlat()) {
-            //noinspection StringEquality
+            // noinspection StringEquality
             if (this.getName() == null || this.getName() == SchemaSampler.FLAT_SEQUENCE_MARKER) {
                 fields.addAll(legalFields);
                 if (retainedFields != null) {
@@ -349,7 +349,6 @@ public class DnsSampler extends FieldSampler {
         if (retainedFields != null) {
             r.retain(retainedFields);
         }
-
 
         ArrayNode queries = new ArrayNode(factory);
 

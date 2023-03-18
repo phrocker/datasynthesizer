@@ -29,19 +29,15 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Delegate to another sampler which generates an object.  The fields of this object inserted into the
- * parent of this sampler.  This is handy when working with samplers that return complex types such as
- * VIN an ZIP.  If you want, for instance, the zip-code, latitude and longitude as three variables in a
- * record, you can do this:
+ * Delegate to another sampler which generates an object. The fields of this object inserted into the parent of this
+ * sampler. This is handy when working with samplers that return complex types such as VIN an ZIP. If you want, for
+ * instance, the zip-code, latitude and longitude as three variables in a record, you can do this:
  *
- * <per>
- *     {"class":"flatten", "type":"flatten", "prefix":"", "value": {
- *         "class":"zip", "fields":["zip", "latitude", "longitude"]
- *     }}
- * </per>
+ * <per> {"class":"flatten", "type":"flatten", "prefix":"", "value": { "class":"zip", "fields":["zip", "latitude",
+ * "longitude"] }} </per>
  *
- * By default, the promoted values have names prefixed by the name of the flattener. You can set this
- * prefix to any value you like including the empty string.
+ * By default, the promoted values have names prefixed by the name of the flattener. You can set this prefix to any
+ * value you like including the empty string.
  * <p>
  * Thread safe for sampling
  */
@@ -75,7 +71,7 @@ public class FlattenSampler extends FieldSampler {
 
         if (value.isObject()) {
             ObjectNode r = new ObjectNode(nodeFactory);
-            for (Iterator<String> it = value.fieldNames(); it.hasNext(); ) {
+            for (Iterator<String> it = value.fieldNames(); it.hasNext();) {
                 String key = it.next();
                 JsonNode v = value.get(key);
                 r.set(prefix + key, v);

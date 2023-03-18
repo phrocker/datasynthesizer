@@ -8,12 +8,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public abstract class ApiEndPointRequest {
 
-    protected  String user;
+    protected String user;
 
-    protected  String input;
+    protected String input;
 
     @Builder.Default
-    protected int maxTokens=4096;
+    protected int maxTokens = 4096;
 
     public abstract String getEndpoint();
 

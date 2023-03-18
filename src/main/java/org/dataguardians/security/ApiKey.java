@@ -15,7 +15,6 @@ public class ApiKey implements TokenProvider {
     @Builder.Default
     private String principal = "user";
 
-
     @Override
     public String getPrincipal() {
         return principal;
@@ -28,9 +27,8 @@ public class ApiKey implements TokenProvider {
 
     public static class ApiKeyBuilder {
 
-
-        public ApiKeyBuilder fromEnv(final String apiKeyEnvName){
-            this.apiKey=System.getenv(apiKeyEnvName);
+        public ApiKeyBuilder fromEnv(final String apiKeyEnvName) {
+            this.apiKey = System.getenv(apiKeyEnvName);
             return this;
         }
 

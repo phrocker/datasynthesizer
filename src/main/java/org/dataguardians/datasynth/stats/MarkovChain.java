@@ -24,31 +24,27 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 /**
- * Adapted from Open source code found here:
- * https://rosettacode.org/wiki/Markov_chain_text_generator#Java
+ * Adapted from Open source code found here: https://rosettacode.org/wiki/Markov_chain_text_generator#Java
  */
 public class MarkovChain {
     private static final Random r = new Random();
 
     Map<String, List<String>> markovDict = new HashMap<>();
 
-
     private int keySize = 3;
 
-
     public MarkovChain(InputStream seedStream, InputStream... streams) throws IOException {
-        this(seedStream,3,streams);
+        this(seedStream, 3, streams);
     }
 
     public MarkovChain(InputStream seedStream, int keySize, InputStream... streams) throws IOException {
         this.keySize = keySize;
         loadDocument(seedStream);
-        for(InputStream stream : streams){
+        for (InputStream stream : streams) {
             loadDocument(stream);
         }
 
     }
-
 
     private void loadDocument(InputStream stream) throws IOException {
         final String outputString = IOUtils.toString(stream, Charset.defaultCharset());
@@ -72,8 +68,11 @@ public class MarkovChain {
 
     /**
      * Adapted from open source code.
+     *
      * @param expectedSize
+     *
      * @return
+     *
      * @throws IOException
      */
     public String produce(int expectedSize) throws IOException {
@@ -85,13 +84,15 @@ public class MarkovChain {
         while (true) {
             List<String> suffix = markovDict.get(prefix);
             if (suffix.size() == 1) {
-                if (Objects.equals(suffix.get(0), "")) return output.stream().reduce("", (a, b) -> a + " " + b);
+                if (Objects.equals(suffix.get(0), ""))
+                    return output.stream().reduce("", (a, b) -> a + " " + b);
                 output.add(suffix.get(0));
             } else {
                 rn = r.nextInt(suffix.size());
                 output.add(suffix.get(rn));
             }
-            if (output.size() >= expectedSize) return output.stream().limit(expectedSize).reduce("", (a, b) -> a + " " + b);
+            if (output.size() >= expectedSize)
+                return output.stream().limit(expectedSize).reduce("", (a, b) -> a + " " + b);
             n++;
             prefix = output.stream().skip(n).limit(keySize).reduce("", (a, b) -> a + " " + b).trim();
         }
@@ -99,8 +100,11 @@ public class MarkovChain {
 
     /**
      * Adapted from open source code.
+     *
      * @param expectedSize
+     *
      * @return
+     *
      * @throws IOException
      */
     public String produceText(int expectedSize) throws IOException {
@@ -112,21 +116,23 @@ public class MarkovChain {
         while (true) {
             List<String> suffix = markovDict.get(prefix);
             if (suffix.size() == 1) {
-                if (totalSize + output.size() +  suffix.get(0).length() > expectedSize){
+                if (totalSize + output.size() + suffix.get(0).length() > expectedSize) {
                     return output.stream().reduce("", (a, b) -> a + " " + b);
                 }
-                if (Objects.equals(suffix.get(0), "")) return output.stream().reduce("", (a, b) -> a + " " + b);
+                if (Objects.equals(suffix.get(0), ""))
+                    return output.stream().reduce("", (a, b) -> a + " " + b);
                 output.add(suffix.get(0));
                 totalSize += suffix.get(0).length();
             } else {
                 rn = r.nextInt(suffix.size());
-                if (totalSize + output.size() + suffix.get(rn).length() > expectedSize){
+                if (totalSize + output.size() + suffix.get(rn).length() > expectedSize) {
                     return output.stream().reduce("", (a, b) -> a + " " + b);
                 }
                 output.add(suffix.get(rn));
                 totalSize += suffix.get(rn).length();
             }
-            if (totalSize+output.size()  >= expectedSize) return output.stream().reduce("", (a, b) -> a + " " + b);
+            if (totalSize + output.size() >= expectedSize)
+                return output.stream().reduce("", (a, b) -> a + " " + b);
             n++;
             prefix = output.stream().skip(n).limit(keySize).reduce("", (a, b) -> a + " " + b).trim();
         }

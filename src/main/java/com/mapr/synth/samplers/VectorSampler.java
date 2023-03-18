@@ -30,19 +30,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Sample double precision numbers from a variety of distributions.
  * <p>
- * If you specify mean and sd, you will get numbers from a normal distribution. The
- * default values are 0 and 1 respectively, but not that omitting both may have
- * surprising results if min or max is specified.
+ * If you specify mean and sd, you will get numbers from a normal distribution. The default values are 0 and 1
+ * respectively, but not that omitting both may have surprising results if min or max is specified.
  * <p>
- * If you specify min and/or max, the distribution will be trimmed, but if min and
- * max are given but neither mean nor sd are given, then the distribution will be
- * uniform rather than a trimmed normal.
+ * If you specify min and/or max, the distribution will be trimmed, but if min and max are given but neither mean nor sd
+ * are given, then the distribution will be uniform rather than a trimmed normal.
  * <p>
- * If you set transform to exp or log, the result will be transformed appropriately.
- * Note that the transform is applied after any summing.
+ * If you set transform to exp or log, the result will be transformed appropriately. Note that the transform is applied
+ * after any summing.
  * <p>
- * If you set resolution to a number, all values will be rounded to the nearest value that
- * is a multiple of the resolution.
+ * If you set resolution to a number, all values will be rounded to the nearest value that is a multiple of the
+ * resolution.
  */
 public class VectorSampler extends FieldSampler {
     private double mean = Double.NaN;
@@ -133,16 +131,16 @@ public class VectorSampler extends FieldSampler {
     @SuppressWarnings("unused")
     public void setTransform(String xform) {
         switch (xform) {
-            case "exp":
-                transform = Math::exp;
-                inverse = Math::log;
-                break;
-            case "log":
-                transform = Math::log;
-                inverse = Math::exp;
-                break;
-            default:
-                throw new IllegalArgumentException("Transform can only be \"exp\" or \"log\"");
+        case "exp":
+            transform = Math::exp;
+            inverse = Math::log;
+            break;
+        case "log":
+            transform = Math::log;
+            inverse = Math::exp;
+            break;
+        default:
+            throw new IllegalArgumentException("Transform can only be \"exp\" or \"log\"");
         }
     }
 

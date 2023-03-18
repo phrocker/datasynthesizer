@@ -31,7 +31,7 @@ import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Samples from a user space.  Each user has a variety of internal characteristics.
+ * Samples from a user space. Each user has a variety of internal characteristics.
  */
 public class User implements Comparable<User> {
     private static final AtomicInteger idCounter = new AtomicInteger();
@@ -49,8 +49,10 @@ public class User implements Comparable<User> {
     private final double rate;
 
     private double nextSession;
-    private final AbstractContinousDistribution queryTimeDistribution = new Exponential(1.0 / 120, RandomUtils.getRandom());
-    private final AbstractContinousDistribution sessionLengthDistribution = new Exponential(1.0 / 4, RandomUtils.getRandom());
+    private final AbstractContinousDistribution queryTimeDistribution = new Exponential(1.0 / 120,
+            RandomUtils.getRandom());
+    private final AbstractContinousDistribution sessionLengthDistribution = new Exponential(1.0 / 4,
+            RandomUtils.getRandom());
 
     public User(InetAddress address, String geoCode, TermGenerator terms, double period) {
         this.terms = terms;
@@ -100,7 +102,8 @@ public class User implements Comparable<User> {
 
     @Override
     public String toString() {
-        return String.format("{\"ip\":\"%s\", \"cookie\":\"%08x\", \"geo\":\"%s\"}", address.getHostAddress(), cookie, geoCode);
+        return String.format("{\"ip\":\"%s\", \"cookie\":\"%08x\", \"geo\":\"%s\"}", address.getHostAddress(), cookie,
+                geoCode);
     }
 
     public int compareTo(User o) {

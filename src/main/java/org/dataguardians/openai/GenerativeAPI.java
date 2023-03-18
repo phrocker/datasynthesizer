@@ -19,28 +19,27 @@ import java.util.Objects;
  * </p>
  *
  * original @author <a href="https://github.com/LiLittleCat">LiLittleCat</a>
+ *
  * @since 2023/3/2
  */
 @Slf4j
-public  class GenerativeAPI {
+public class GenerativeAPI {
     protected final TokenProvider authToken;
     protected OkHttpClient client;
     protected final ObjectMapper objectMapper = new ObjectMapper();
-
 
     public GenerativeAPI(TokenProvider authToken, OkHttpClient client) {
         Objects.requireNonNull(authToken);
         Objects.requireNonNull(client);
         this.client = client;
-        this.authToken=authToken;
+        this.authToken = authToken;
     }
 
     public GenerativeAPI(TokenProvider authToken) {
         this(authToken, new OkHttpClient());
     }
 
-
-     String buildRequestBody(final ApiEndPointRequest request) {
+    String buildRequestBody(final ApiEndPointRequest request) {
         try {
             return objectMapper.writeValueAsString(request.create());
         } catch (JsonProcessingException e) {
@@ -51,18 +50,18 @@ public  class GenerativeAPI {
     /**
      * ask for response message
      *
-     * @param apiRequest Api Request object
+     * @param apiRequest
+     *            Api Request object
+     *
      * @return ChatCompletionResponseBody
      */
-    public String sample(final ApiEndPointRequest apiRequest) throws HttpException{
+    public String sample(final ApiEndPointRequest apiRequest) throws HttpException {
         Objects.requireNonNull(apiRequest);
-        RequestBody body = RequestBody.create(buildRequestBody(apiRequest), MediaType.get("application/json; charset=utf-8"));
+        RequestBody body = RequestBody.create(buildRequestBody(apiRequest),
+                MediaType.get("application/json; charset=utf-8"));
 
-        Request request = new Request.Builder()
-                .url(apiRequest.getEndpoint())
-                .header("Authorization", "Bearer " + authToken.getToken())
-                .post(body)
-                .build();
+        Request request = new Request.Builder().url(apiRequest.getEndpoint())
+                .header("Authorization", "Bearer " + authToken.getToken()).post(body).build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -82,10 +81,10 @@ public  class GenerativeAPI {
         }
     }
 
-    public <T> T sample(final ApiEndPointRequest apiRequest, Class<T> clazz) throws HttpException, JsonProcessingException {
+    public <T> T sample(final ApiEndPointRequest apiRequest, Class<T> clazz)
+            throws HttpException, JsonProcessingException {
 
         return (T) objectMapper.readValue(sample(apiRequest), clazz);
     }
-
 
 }

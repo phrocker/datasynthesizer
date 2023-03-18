@@ -25,9 +25,8 @@ import org.apache.mahout.math.random.Sampler;
 import java.util.List;
 
 /**
- * Samples from a set of things based on a long-tailed distribution.  This converts
- * the Pittman-Yor distribution from a distribution over integers into a distribution
- * over more plausible looking things like words.
+ * Samples from a set of things based on a long-tailed distribution. This converts the Pittman-Yor distribution from a
+ * distribution over integers into a distribution over more plausible looking things like words.
  */
 public abstract class LongTail<T> implements Sampler<T> {
     private final PittmanYorProcess base;

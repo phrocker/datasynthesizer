@@ -27,7 +27,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
 public class SchemaSynthesizer {
 
     protected Schema definedSchema = null;
@@ -55,9 +54,9 @@ public class SchemaSynthesizer {
 
         if (maxRecordsToGenerate > 0) {
             final SamplerBase mySampler = sampler.get();
-            IntStream.range(0,maxRecordsToGenerate).forEach(i -> records.add(mySampler.nextSample()));
+            IntStream.range(0, maxRecordsToGenerate).forEach(i -> records.add(mySampler.nextSample()));
         }
         return records.stream().filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
-       }
+    }
 
 }

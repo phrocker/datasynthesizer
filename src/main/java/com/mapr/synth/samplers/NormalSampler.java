@@ -38,7 +38,6 @@ public class NormalSampler extends FieldSampler {
     private int seed = Integer.MAX_VALUE;
     private Normal rand = null;
 
-
     @SuppressWarnings("UnusedDeclaration")
     public void setSeed(int seed) {
         if (seed == Integer.MAX_VALUE) {

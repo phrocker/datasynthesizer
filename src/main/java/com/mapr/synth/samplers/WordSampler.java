@@ -28,7 +28,9 @@ import com.mapr.synth.distributions.WordGenerator;
  * Sample from English words with somewhat plausible frequency distribution.
  */
 public class WordSampler extends FieldSampler {
-    private final TermGenerator gen = new TermGenerator(new WordGenerator("word-frequency-seed", "other-words"), 1, 0.8);
+    private final TermGenerator gen = new TermGenerator(new WordGenerator("word-frequency-seed", "other-words"), 1,
+            0.8);
+
     public WordSampler() {
     }
 

@@ -41,28 +41,25 @@ import java.util.regex.Pattern;
 public class Util {
     public static final long ONE_DAY = TimeUnit.DAYS.toMillis(1);
     private static final Pattern ratePattern = Pattern.compile("([0-9.e\\-]+)(/[smhd])?");
-    private static final Map<String, TimeUnit> unitMap = ImmutableMap.of(
-            "s", TimeUnit.SECONDS,
-            "m", TimeUnit.MINUTES,
-            "h", TimeUnit.HOURS,
-            "d", TimeUnit.DAYS);
+    private static final Map<String, TimeUnit> unitMap = ImmutableMap.of("s", TimeUnit.SECONDS, "m", TimeUnit.MINUTES,
+            "h", TimeUnit.HOURS, "d", TimeUnit.DAYS);
 
     public static Integer parseInteger(String argument) {
         int n = Integer.parseInt(argument.replaceAll("[KMG]?$", ""));
 
         switch (argument.charAt(argument.length() - 1)) {
-            case 'G':
-                n *= 1e9;
-                break;
-            case 'M':
-                n *= 1e6;
-                break;
-            case 'K':
-                n *= 1e3;
-                break;
-            default:
-                // no suffix leads here
-                break;
+        case 'G':
+            n *= 1e9;
+            break;
+        case 'M':
+            n *= 1e6;
+            break;
+        case 'K':
+            n *= 1e3;
+            break;
+        default:
+            // no suffix leads here
+            break;
         }
         return n;
     }
@@ -71,18 +68,18 @@ public class Util {
         double n = Double.parseDouble(argument.replaceAll("[KMG]?$", ""));
 
         switch (argument.charAt(argument.length() - 1)) {
-            case 'G':
-                n *= 1e9;
-                break;
-            case 'M':
-                n *= 1e6;
-                break;
-            case 'K':
-                n *= 1e3;
-                break;
-            default:
-                // no suffix leads here
-                break;
+        case 'G':
+            n *= 1e9;
+            break;
+        case 'M':
+            n *= 1e6;
+            break;
+        case 'K':
+            n *= 1e3;
+            break;
+        default:
+            // no suffix leads here
+            break;
         }
         return n;
     }
@@ -139,7 +136,7 @@ public class Util {
     }
 
     public static void readData(String resource, Function<String, Void> callback) throws IOException {
-        //noinspection UnstableApiUsage
+        // noinspection UnstableApiUsage
         Resources.readLines(Resources.getResource(resource), Charsets.UTF_8, new LineProcessor<Void>() {
             @Override
             public boolean processLine(String line) {

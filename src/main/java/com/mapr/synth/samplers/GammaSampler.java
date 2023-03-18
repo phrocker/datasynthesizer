@@ -26,8 +26,8 @@ import org.apache.mahout.math.jet.random.Gamma;
 import java.util.Random;
 
 /**
- * Samples from a gamma distribution.  This is often useful for modeling the unknown value of the standard
- * deviation of a normal distribution.
+ * Samples from a gamma distribution. This is often useful for modeling the unknown value of the standard deviation of a
+ * normal distribution.
  * <p>
  * Note that the mean is alpha * scale = alpha / rate
  */
@@ -48,7 +48,6 @@ class GammaSampler extends FieldSampler {
     public JsonNode sample() {
         return new DoubleNode(rand.nextDouble());
     }
-
 
     @SuppressWarnings("UnusedDeclaration")
     public void setSeed(int seed) {
@@ -115,7 +114,8 @@ class GammaSampler extends FieldSampler {
             a = alpha;
             b = beta;
         } else {
-            throw new IllegalArgumentException("Must use either alpha,beta,rate (or defaults) or dof,scale to parametrize gamma");
+            throw new IllegalArgumentException(
+                    "Must use either alpha,beta,rate (or defaults) or dof,scale to parametrize gamma");
         }
         if (seed != SEED_NOT_SET) {
             rand = new Gamma(a, b, new Random(seed));
@@ -124,4 +124,3 @@ class GammaSampler extends FieldSampler {
         }
     }
 }
-

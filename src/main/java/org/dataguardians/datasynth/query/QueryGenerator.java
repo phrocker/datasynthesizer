@@ -17,21 +17,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The QueryGenerator class is responsible for generating inputs and queries for a database.
- * It provides three methods: generateInput(), parseQueries(String), and generate().
+ * The QueryGenerator class is responsible for generating inputs and queries for a database. It provides three methods:
+ * generateInput(), parseQueries(String), and generate().
  *
- * The generateInput() method generates a string input for a database. It randomly generates a list
- * of values and returns them as a string.
+ * The generateInput() method generates a string input for a database. It randomly generates a list of values and
+ * returns them as a string.
  *
- * The parseQueries(String) method takes a string input and parses it into a list of queries.
- * The input should be in a specific format: each query should be on a new line, and have its
- * parameters separated by commas. The method returns a list of strings, where each string is a
- * query with its parameters separated by spaces.
+ * The parseQueries(String) method takes a string input and parses it into a list of queries. The input should be in a
+ * specific format: each query should be on a new line, and have its parameters separated by commas. The method returns
+ * a list of strings, where each string is a query with its parameters separated by spaces.
  *
- * The generate() method generates a list of random queries with random parameters. It returns a
- * list of queries as strings.
+ * The generate() method generates a list of random queries with random parameters. It returns a list of queries as
+ * strings.
  *
  * @author Marc Parisi
+ *
  * @version 1.0
  */
 @Slf4j
@@ -41,13 +41,15 @@ public class QueryGenerator extends DataGenerator<List<String>> {
 
     private final QueryConfiguration queryConfig;
 
-    public QueryGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config, QueryConfiguration queryConfig) {
+    public QueryGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config,
+            QueryConfiguration queryConfig) {
         super(token, generator, config);
         this.queryConfig = queryConfig;
     }
 
     /**
      * Generates input for the generative AI endpoint.
+     *
      * @return Question to be asked to the generative AI endpoint.
      */
     @Override
@@ -72,7 +74,10 @@ public class QueryGenerator extends DataGenerator<List<String>> {
 
     /**
      * Parses queries from the response.
-     * @param response query response from the AI endpoint.
+     *
+     * @param response
+     *            query response from the AI endpoint.
+     *
      * @return
      */
     static List<String> parseQueries(final String response) {
@@ -96,12 +101,16 @@ public class QueryGenerator extends DataGenerator<List<String>> {
      * Generates a list of Strings by HTTP request and JSON processing.
      *
      * @return the list of Strings generated
-     * @throws HttpException if there is a problem with the HTTP request
-     * @throws JsonProcessingException if there is a problem processing the JSON
+     *
+     * @throws HttpException
+     *             if there is a problem with the HTTP request
+     * @throws JsonProcessingException
+     *             if there is a problem processing the JSON
      */
     @Override
     public List<String> generate() throws HttpException, JsonProcessingException {
-        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).maxTokens(1024).build();
+        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).maxTokens(1024)
+                .build();
         Response hello = api.sample(request, Response.class);
         return parseQueries(hello.concatenateResponses());
     }

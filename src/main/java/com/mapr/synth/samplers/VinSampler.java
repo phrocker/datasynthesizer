@@ -43,12 +43,14 @@ import java.util.regex.Pattern;
  * Parameters can be used to limit the samples produced:
  * <p>
  * <ul>
- * <li><em>countries</em> Comma separated list of two letter country codes.  Acceptable codes include
- * us, ca, north_america, eu, uk, de, kr, jp</li>
- * <li><em>years</em> Comma separated list of year ranges.  Each year range is a 4 digit year or a hyphenated year range</li>
- * <li><em>makes</em> Comma separated list of car manufacturers.  Can include ford, chevrolet, gm, bmw, vw, audi,
+ * <li><em>countries</em> Comma separated list of two letter country codes. Acceptable codes include us, ca,
+ * north_america, eu, uk, de, kr, jp</li>
+ * <li><em>years</em> Comma separated list of year ranges. Each year range is a 4 digit year or a hyphenated year
+ * range</li>
+ * <li><em>makes</em> Comma separated list of car manufacturers. Can include ford, chevrolet, gm, bmw, vw, audi,
  * mitsubishi, subaru, mazda, honda, toyota, hyundai, kia, nissan, ferrari, jaguar, delorean, chrysler, tesla</li>
- * <li><em>verbose</em> If set to true, the result will include a textual description of aspects of the generated VIN</li>
+ * <li><em>verbose</em> If set to true, the result will include a textual description of aspects of the generated
+ * VIN</li>
  * </ul>
  */
 public class VinSampler extends FieldSampler {
@@ -80,12 +82,12 @@ public class VinSampler extends FieldSampler {
     private static Map<String, Integer> letterCode;
     private static List<String> letters;
 
-    private static final List<Integer> checkWeights = Lists.newArrayList(8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2);
+    private static final List<Integer> checkWeights = Lists.newArrayList(8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4,
+            3, 2);
 
     static {
         fill();
     }
-
 
     private final Random rand = new Random();
     private final List<String> legalCodes;
@@ -118,40 +120,39 @@ public class VinSampler extends FieldSampler {
         String make = makes.get(manufacturer);
 
         switch (make) {
-            case "Ford": {
-                String model = randomCode(fordModelCodes);
-                String engine = randomCode(fordEngineCodes);
-                plant = randomCode(fordPlantCodes);
-                front = pad(manufacturer, 3, "AAAAAAAAAAAAAAAAAA") + restraint + pad(model, 3, "0000000000000000") + engine;
-                if (verbose) {
-                    r.set("model", new TextNode(fordModels.get(model)));
-                    r.set("engine", new TextNode(fordEngines.get(engine)));
-                }
-                break;
+        case "Ford": {
+            String model = randomCode(fordModelCodes);
+            String engine = randomCode(fordEngineCodes);
+            plant = randomCode(fordPlantCodes);
+            front = pad(manufacturer, 3, "AAAAAAAAAAAAAAAAAA") + restraint + pad(model, 3, "0000000000000000") + engine;
+            if (verbose) {
+                r.set("model", new TextNode(fordModels.get(model)));
+                r.set("engine", new TextNode(fordEngines.get(engine)));
             }
-            case "BMW":
-            case "BMW M": {
-                String model = randomCode(bmwModelCodes);
-                plant = randomCode(bmwPlantCodes);
-                front = pad(manufacturer, 3, "AAAAAAAAAAAAAAAAAA") + restraint + model;
-                if (verbose) {
-                    r.set("model", new TextNode(bmwModels.get(model)));
-                    r.set("plant", new TextNode(bmwPlants.get(plant)));
-                }
-                break;
+            break;
+        }
+        case "BMW":
+        case "BMW M": {
+            String model = randomCode(bmwModelCodes);
+            plant = randomCode(bmwPlantCodes);
+            front = pad(manufacturer, 3, "AAAAAAAAAAAAAAAAAA") + restraint + model;
+            if (verbose) {
+                r.set("model", new TextNode(bmwModels.get(model)));
+                r.set("plant", new TextNode(bmwPlants.get(plant)));
             }
-            default: {
-                String model = gibberish(4);
-                plant = gibberish(1);
-                front = pad(manufacturer, 3, "AAAAAAAAAAAAAAAAAA") + restraint + model;
-                break;
-            }
+            break;
+        }
+        default: {
+            String model = gibberish(4);
+            plant = gibberish(1);
+            front = pad(manufacturer, 3, "AAAAAAAAAAAAAAAAAA") + restraint + model;
+            break;
+        }
         }
         String check = "0";
 
         String rawVin = front + check + yearCode + plant + String.format("%06d", sequence);
         String vin = addCheckDigit(rawVin);
-        
 
         if (verbose) {
             r.set("VIN", new TextNode(vin));
@@ -185,7 +186,8 @@ public class VinSampler extends FieldSampler {
             if (code != null) {
                 sum += checkWeights.get(i) * code;
             } else {
-                throw new IllegalArgumentException(String.format("Invalid character: %s in VIN: %s", rawVin.charAt(i), rawVin));
+                throw new IllegalArgumentException(
+                        String.format("Invalid character: %s in VIN: %s", rawVin.charAt(i), rawVin));
             }
         }
         sum = sum % 11;
@@ -196,11 +198,9 @@ public class VinSampler extends FieldSampler {
         }
     }
 
-
     private <T> T randomCode(List<T> codes) {
         return codes.get(rand.nextInt(codes.size()));
     }
-
 
     @SuppressWarnings("UnusedDeclaration")
     public void setCountries(String countries) {
@@ -224,7 +224,7 @@ public class VinSampler extends FieldSampler {
         this.verbose = verbose;
     }
 
-    @SuppressWarnings({"UnusedDeclaration", "WeakerAccess"})
+    @SuppressWarnings({ "UnusedDeclaration", "WeakerAccess" })
     public void setMakes(String makes) {
 
         Set<String> s = Sets.newHashSet();
@@ -243,7 +243,7 @@ public class VinSampler extends FieldSampler {
         setMakes(makes);
     }
 
-    @SuppressWarnings({"UnusedDeclaration", "WeakerAccess"})
+    @SuppressWarnings({ "UnusedDeclaration", "WeakerAccess" })
     public void setYears(String years) {
         legalYears = yearCodes(years);
     }
@@ -295,45 +295,47 @@ public class VinSampler extends FieldSampler {
     private static Map<String, String> mapResource(String name) throws IOException {
         final Splitter onTab = Splitter.on("\t");
 
-        //noinspection UnstableApiUsage
-        return Resources.readLines(Resources.getResource(name), Charsets.UTF_8, new LineProcessor<Map<String, String>>() {
-            final Map<String, String> r = Maps.newHashMap();
+        // noinspection UnstableApiUsage
+        return Resources.readLines(Resources.getResource(name), Charsets.UTF_8,
+                new LineProcessor<Map<String, String>>() {
+                    final Map<String, String> r = Maps.newHashMap();
 
-            @Override
-            public boolean processLine(String line) {
-                Iterator<String> pieces = onTab.split(line).iterator();
-                String key = pieces.next();
-                r.put(key, pieces.next());
-                return true;
-            }
+                    @Override
+                    public boolean processLine(String line) {
+                        Iterator<String> pieces = onTab.split(line).iterator();
+                        String key = pieces.next();
+                        r.put(key, pieces.next());
+                        return true;
+                    }
 
-            @Override
-            public Map<String, String> getResult() {
-                return r;
-            }
-        });
+                    @Override
+                    public Map<String, String> getResult() {
+                        return r;
+                    }
+                });
     }
 
     private static SetMultimap<String, String> multiMapResource(String name) throws IOException {
         final Splitter onTab = Splitter.on("\t");
 
-        //noinspection UnstableApiUsage
-        return Resources.readLines(Resources.getResource(name), Charsets.UTF_8, new LineProcessor<SetMultimap<String, String>>() {
-            final SetMultimap<String, String> r = HashMultimap.create();
+        // noinspection UnstableApiUsage
+        return Resources.readLines(Resources.getResource(name), Charsets.UTF_8,
+                new LineProcessor<SetMultimap<String, String>>() {
+                    final SetMultimap<String, String> r = HashMultimap.create();
 
-            @Override
-            public boolean processLine(String line) {
-                Iterator<String> pieces = onTab.split(line).iterator();
-                String key = pieces.next();
-                r.put(key, pieces.next());
-                return true;
-            }
+                    @Override
+                    public boolean processLine(String line) {
+                        Iterator<String> pieces = onTab.split(line).iterator();
+                        String key = pieces.next();
+                        r.put(key, pieces.next());
+                        return true;
+                    }
 
-            @Override
-            public SetMultimap<String, String> getResult() {
-                return r;
-            }
-        });
+                    @Override
+                    public SetMultimap<String, String> getResult() {
+                        return r;
+                    }
+                });
     }
 
     private static void fill() {

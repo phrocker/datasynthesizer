@@ -38,8 +38,9 @@ public class IpV4AddressSampler extends FieldSampler {
     protected AtomicReference<Multinomial<String>> distribution = new AtomicReference<>();
     protected Random rand = new Random();
     protected List<String> bagOhWords = new ArrayList<>();
-    protected Faker faker =  new Faker();
+    protected Faker faker = new Faker();
     protected Boolean privateAddress = new Boolean(false);
+
     public IpV4AddressSampler() {
     }
 
@@ -47,10 +48,10 @@ public class IpV4AddressSampler extends FieldSampler {
     public void setText(String string) {
         bagOhWords.add(string);
     }
+
     public void setPrivate(String isPrivate) {
         privateAddress = Boolean.valueOf(isPrivate);
     }
-
 
     public IpV4AddressSampler(String resource) {
 
@@ -58,8 +59,9 @@ public class IpV4AddressSampler extends FieldSampler {
 
     @Override
     public JsonNode sample() {
-      synchronized (this) {
-        return new TextNode( privateAddress ? faker.internet().privateIpV4Address() : faker.internet().ipV4Address()  );
-      }
+        synchronized (this) {
+            return new TextNode(
+                    privateAddress ? faker.internet().privateIpV4Address() : faker.internet().ipV4Address());
+        }
     }
 }

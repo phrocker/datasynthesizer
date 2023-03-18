@@ -37,16 +37,16 @@ import org.dataguardians.security.TokenProvider;
 
 class ChatGPTShortTextSampler extends FieldSampler {
 
-   final ShortTextGenerator shortTextGenerator;
+    final ShortTextGenerator shortTextGenerator;
 
-   int preCache = 2;
+    int preCache = 2;
     private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
 
     @SuppressWarnings("WeakerAccess")
     public ChatGPTShortTextSampler() {
         // gross assumption of average of 4 characters per token.
         GeneratorConfiguration config = GeneratorConfiguration.builder().maxTokens(40).build();
-        shortTextGenerator = new ShortTextGenerator(provider,new GenerativeAPI(provider),config);
+        shortTextGenerator = new ShortTextGenerator(provider, new GenerativeAPI(provider), config);
 
     }
 

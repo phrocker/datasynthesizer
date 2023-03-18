@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 /**
- * Glue together elements of a list as strings.  Should normally only be done with a list of strings.
+ * Glue together elements of a list as strings. Should normally only be done with a list of strings.
  *
  * Thread safe for sampling
  */
@@ -48,7 +48,7 @@ class JoinSampler extends FieldSampler {
         JsonNode value = delegate.sample();
         StringBuilder r = new StringBuilder();
 
-        String separator="";
+        String separator = "";
         for (JsonNode component : value) {
             r.append(separator);
             r.append(component.asText());
@@ -57,4 +57,3 @@ class JoinSampler extends FieldSampler {
         return new TextNode(r.toString());
     }
 }
-

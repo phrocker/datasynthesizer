@@ -39,9 +39,7 @@ import java.util.List;
  * Thread safe
  */
 public class StreetNameSampler extends FieldSampler {
-    List<Multinomial<String>> sampler = ImmutableList.of(
-            new Multinomial<>(), new Multinomial<>(), new Multinomial<>()
-    );
+    List<Multinomial<String>> sampler = ImmutableList.of(new Multinomial<>(), new Multinomial<>(), new Multinomial<>());
 
     public StreetNameSampler() {
         Splitter onTabs = Splitter.on("\t");
@@ -62,7 +60,8 @@ public class StreetNameSampler extends FieldSampler {
     @Override
     public JsonNode sample() {
         synchronized (this) {
-          return new TextNode(sampler.get(0).sample() + " " + sampler.get(1).sample() + " " + sampler.get(2).sample());
+            return new TextNode(
+                    sampler.get(0).sample() + " " + sampler.get(1).sample() + " " + sampler.get(2).sample());
         }
     }
 }

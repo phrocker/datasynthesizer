@@ -13,12 +13,11 @@ public abstract class ComplianceScorer extends DataGenerator<Double> {
 
     protected ComplianceConfiguration complianceConfig;
 
-    public ComplianceScorer(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config, ComplianceConfiguration complianceConfig) {
+    public ComplianceScorer(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config,
+            ComplianceConfiguration complianceConfig) {
         super(token, generator, config);
         this.complianceConfig = complianceConfig;
     }
-
-
 
     /**
      * Parses queries from the response.

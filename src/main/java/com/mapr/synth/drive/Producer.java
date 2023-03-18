@@ -38,12 +38,13 @@ public class Producer implements Runnable {
         final Vector3D east = start.east();
         final Vector3D north = start.north(east);
 
-        GeoPoint end = new GeoPoint(start.as3D().add(east.scalarMultiply(-12.0 / Constants.EARTH_RADIUS_KM)).add(north.scalarMultiply(7.0 / Constants.EARTH_RADIUS_KM)));
+        GeoPoint end = new GeoPoint(start.as3D().add(east.scalarMultiply(-12.0 / Constants.EARTH_RADIUS_KM))
+                .add(north.scalarMultiply(7.0 / Constants.EARTH_RADIUS_KM)));
 
         Vector3D zz = project(east, north, end.as3D());
         System.out.printf("==> %.2f %.2f\n", zz.getX(), zz.getY());
 
-        //noinspection InfiniteLoopStatement
+        // noinspection InfiniteLoopStatement
         while (true) {
             double t = 0;
             final Car car = new Car();
@@ -64,6 +65,7 @@ public class Producer implements Runnable {
     }
 
     static Vector3D project(Vector3D east, Vector3D north, Vector3D step) {
-        return new Vector3D(step.dotProduct(east) * Constants.EARTH_RADIUS_KM, step.dotProduct(north) * Constants.EARTH_RADIUS_KM, 0);
+        return new Vector3D(step.dotProduct(east) * Constants.EARTH_RADIUS_KM,
+                step.dotProduct(north) * Constants.EARTH_RADIUS_KM, 0);
     }
 }

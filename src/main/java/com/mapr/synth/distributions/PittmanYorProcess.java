@@ -29,9 +29,9 @@ import java.util.Random;
 /**
  * Generates samples from a generalized or Pittman-Yor process.
  * <p>
- * The number of values drawn exactly once will asymptotically be equal to the discount parameter
- * as the total number of draws T increases without bound.  The number of unique values sampled will
- * increase as O(alpha * log T) if discount = 0 or O(alpha * T^discount) for discount > 0.
+ * The number of values drawn exactly once will asymptotically be equal to the discount parameter as the total number of
+ * draws T increases without bound. The number of unique values sampled will increase as O(alpha * log T) if discount =
+ * 0 or O(alpha * T^discount) for discount > 0.
  */
 public final class PittmanYorProcess implements Sampler<Integer> {
     private double alpha;
@@ -41,9 +41,10 @@ public final class PittmanYorProcess implements Sampler<Integer> {
     private final Random rand = RandomUtils.getRandom();
 
     /**
-     * Constructs a Dirichlet process sampler.  This is done by setting discount = 0.
+     * Constructs a Dirichlet process sampler. This is done by setting discount = 0.
      *
-     * @param alpha The strength parameter for the Dirichlet process.
+     * @param alpha
+     *            The strength parameter for the Dirichlet process.
      */
     @SuppressWarnings("unused")
     public PittmanYorProcess(double alpha) {
@@ -53,8 +54,10 @@ public final class PittmanYorProcess implements Sampler<Integer> {
     /**
      * Constructs a Pitman-Yor sampler.
      *
-     * @param alpha    The strength parameter that drives the number of unique values as a function of draws.
-     * @param discount The discount parameter that drives the percentage of values that occur once in a large sample.
+     * @param alpha
+     *            The strength parameter that drives the number of unique values as a function of draws.
+     * @param discount
+     *            The discount parameter that drives the percentage of values that occur once in a large sample.
      */
     public PittmanYorProcess(double alpha, double discount) {
         Preconditions.checkArgument(alpha > 0);
@@ -101,7 +104,9 @@ public final class PittmanYorProcess implements Sampler<Integer> {
     }
 
     /**
-     * @param j Which value to test.
+     * @param j
+     *            Which value to test.
+     *
      * @return The number of times that j has been returned so far.
      */
     @SuppressWarnings("unused")

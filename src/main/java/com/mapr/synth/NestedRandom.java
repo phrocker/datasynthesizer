@@ -28,16 +28,14 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Defines a tree of random number generators such that complex randomized structures can be
- * built in parallel in a deterministic way. The based idea is that a NestedRandom can produce
- * off-shoot NestedRandom generators given either an index or a String. You can also get a
- * conventional Random from a NestedRandom at any time.  The idea is that a data structure
- * can have components which need stable randomness sources and those components will also have
- * components. At the leaves of such a JSON-style nested data structure, you have conventional
- * random number generators seeded consistently given the path down to that generator.
+ * Defines a tree of random number generators such that complex randomized structures can be built in parallel in a
+ * deterministic way. The based idea is that a NestedRandom can produce off-shoot NestedRandom generators given either
+ * an index or a String. You can also get a conventional Random from a NestedRandom at any time. The idea is that a data
+ * structure can have components which need stable randomness sources and those components will also have components. At
+ * the leaves of such a JSON-style nested data structure, you have conventional random number generators seeded
+ * consistently given the path down to that generator.
  *
- * Note that NestedRandom instances are immutable and do not share any storage. They are
- * fully thread safe.
+ * Note that NestedRandom instances are immutable and do not share any storage. They are fully thread safe.
  */
 public class NestedRandom implements Iterable<NestedRandom> {
     private final NestedRandom parent;
@@ -53,7 +51,9 @@ public class NestedRandom implements Iterable<NestedRandom> {
 
     /**
      * Returns a NestedRandom with a specified seed.
-     * @param seed  The seed to use.
+     *
+     * @param seed
+     *            The seed to use.
      */
     public NestedRandom(int seed) {
         this(null, seed);
@@ -61,7 +61,10 @@ public class NestedRandom implements Iterable<NestedRandom> {
 
     /**
      * Get a NestedRandom corresponding to the component with the specified name.
-     * @param component  Which component to return.
+     *
+     * @param component
+     *            Which component to return.
+     *
      * @return A component stream.
      */
     public NestedRandom get(String component) {
@@ -69,9 +72,11 @@ public class NestedRandom implements Iterable<NestedRandom> {
     }
 
     /**
-     * Get a NestedRandom corresponding to a specified position in the notional array
-     * of random generators with index i.
-     * @param i  Which component to get.
+     * Get a NestedRandom corresponding to a specified position in the notional array of random generators with index i.
+     *
+     * @param i
+     *            Which component to get.
+     *
      * @return The requested component.
      */
     public NestedRandom get(int i) {
@@ -80,6 +85,7 @@ public class NestedRandom implements Iterable<NestedRandom> {
 
     /**
      * Returns an iterator through the same generators indexed using @get(int).
+     *
      * @return An iterator that returns all of the integer addressable components.
      */
     public Iterator<NestedRandom> iterator() {

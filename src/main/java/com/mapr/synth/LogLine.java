@@ -35,8 +35,8 @@ public class LogLine implements Comparable<LogLine> {
     private static final AtomicInteger counter = new AtomicInteger();
 
     // these add up to enough to cause 0.3% of the queries to be 5x slower
-    private static final Set<String> slowWords = ImmutableSet.of("company", "office", "boss", "law",
-            "chocolate", "drinking", "table", "english");
+    private static final Set<String> slowWords = ImmutableSet.of("company", "office", "boss", "law", "chocolate",
+            "drinking", "table", "english");
     private final Random rand = new Random();
 
     private final InetAddress ip;

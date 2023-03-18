@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 /**
- * Delegate to another sampler which generates a list of lists.  Flatten that list into a single list.
+ * Delegate to another sampler which generates a list of lists. Flatten that list into a single list.
  * <p>
  * Thread safe for sampling
  */

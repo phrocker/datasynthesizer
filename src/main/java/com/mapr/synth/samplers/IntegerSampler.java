@@ -71,13 +71,13 @@ class IntegerSampler extends FieldSampler {
     }
 
     /**
-     * Sets the distribution to be used. The format is a list of number pairs.
-     * The first value in each pair is the value to return, the second is the
-     * (unnormalized) probability for that number. For instance [1, 50, 2, 30, 3, 1]
-     * will cause the sampler to return 1 a bit less than 60% of the time, 2 a bit
-     * less than 40% of the time and 3 just a bit over 1% of the time.
+     * Sets the distribution to be used. The format is a list of number pairs. The first value in each pair is the value
+     * to return, the second is the (unnormalized) probability for that number. For instance [1, 50, 2, 30, 3, 1] will
+     * cause the sampler to return 1 a bit less than 60% of the time, 2 a bit less than 40% of the time and 3 just a bit
+     * over 1% of the time.
      *
-     * @param dist A JSON list describing the distribution of numbers.
+     * @param dist
+     *            A JSON list describing the distribution of numbers.
      */
     public void setDist(JsonNode dist) {
         if (dist.isArray()) {
@@ -90,7 +90,9 @@ class IntegerSampler extends FieldSampler {
                 JsonNode v = i.next();
                 JsonNode p = i.next();
                 if (!v.canConvertToLong() || !p.isNumber()) {
-                    throw new IllegalArgumentException(String.format("Need distribution to be a list of value, probability pairs, got %s (%s,%s)", dist, v.getClass(), p.getClass()));
+                    throw new IllegalArgumentException(
+                            String.format("Need distribution to be a list of value, probability pairs, got %s (%s,%s)",
+                                    dist, v.getClass(), p.getClass()));
                 }
                 this.dist.add(v.asLong(), p.asDouble());
             }
@@ -102,14 +104,13 @@ class IntegerSampler extends FieldSampler {
     }
 
     /**
-     * Sets the amount of skew.  Skew is added by taking the min of several samples.
-     * Setting power = 0 gives uniform distribution, setting it to 5 gives a very
-     * heavily skewed distribution.
+     * Sets the amount of skew. Skew is added by taking the min of several samples. Setting power = 0 gives uniform
+     * distribution, setting it to 5 gives a very heavily skewed distribution.
      * <p>
-     * If you set power to a negative number, the skew is reversed so large values
-     * are preferred.
+     * If you set power to a negative number, the skew is reversed so large values are preferred.
      *
-     * @param skew Controls how skewed the distribution is.
+     * @param skew
+     *            Controls how skewed the distribution is.
      */
     public void setSkew(int skew) {
         this.power = skew;
@@ -129,7 +130,7 @@ class IntegerSampler extends FieldSampler {
     public JsonNode sample() {
         synchronized (this) {
             if (dist == null) {
-                if (min == max){
+                if (min == max) {
                     return new IntNode(min);
                 }
                 int r = power >= 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;

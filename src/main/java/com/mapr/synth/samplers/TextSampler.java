@@ -39,12 +39,13 @@ public class TextSampler extends FieldSampler {
     protected Random rand = new Random();
     protected List<String> bagOhWords = new ArrayList<>();
     Faker faker = new Faker();
-    private enum FakerType{
-        CHUCK_NORRIS,
-        BACK_TO_THE_FUTURE,
-        GAME_OF_THRONES
+
+    private enum FakerType {
+        CHUCK_NORRIS, BACK_TO_THE_FUTURE, GAME_OF_THRONES
     }
+
     FakerType myType = FakerType.BACK_TO_THE_FUTURE;
+
     public TextSampler() {
     }
 
@@ -55,42 +56,39 @@ public class TextSampler extends FieldSampler {
 
     @SuppressWarnings("unused")
     public void setType(String type) {
-        if ("chucknorris".equalsIgnoreCase(type)){
+        if ("chucknorris".equalsIgnoreCase(type)) {
             myType = FakerType.CHUCK_NORRIS;
-        }
-        else if("backtothefuture".equalsIgnoreCase(type)){
+        } else if ("backtothefuture".equalsIgnoreCase(type)) {
             myType = FakerType.BACK_TO_THE_FUTURE;
-        }
-        else if("gameofthrones".equalsIgnoreCase(type)){
+        } else if ("gameofthrones".equalsIgnoreCase(type)) {
             myType = FakerType.GAME_OF_THRONES;
         }
 
     }
 
-
     public TextSampler(String resource) {
 
     }
 
-    private String getString(){
-        if ( bagOhWords.isEmpty()){
-            switch(myType){
-                case CHUCK_NORRIS:
-                    return faker.chuckNorris().fact();
-                case BACK_TO_THE_FUTURE:
-                    return faker.backToTheFuture().quote();
-                case GAME_OF_THRONES:
-                    return faker.gameOfThrones().quote();
+    private String getString() {
+        if (bagOhWords.isEmpty()) {
+            switch (myType) {
+            case CHUCK_NORRIS:
+                return faker.chuckNorris().fact();
+            case BACK_TO_THE_FUTURE:
+                return faker.backToTheFuture().quote();
+            case GAME_OF_THRONES:
+                return faker.gameOfThrones().quote();
             }
         }
 
-        return bagOhWords.get( rand.nextInt(bagOhWords.size()));
+        return bagOhWords.get(rand.nextInt(bagOhWords.size()));
     }
 
     @Override
     public JsonNode sample() {
-      synchronized (this) {
-        return new TextNode( getString() );
-      }
+        synchronized (this) {
+            return new TextNode(getString());
+        }
     }
 }

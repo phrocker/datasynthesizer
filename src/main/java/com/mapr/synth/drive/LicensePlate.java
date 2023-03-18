@@ -20,8 +20,7 @@
 package com.mapr.synth.drive;
 
 public class LicensePlate {
-    static String[] INVALID_PLATE_LETTERS = { "FOR", "AXE", "JAM", "JAB", "ZIP", "ARE", "YOU",
-            "JUG", "JAW", "JOY" };
+    static String[] INVALID_PLATE_LETTERS = { "FOR", "AXE", "JAM", "JAB", "ZIP", "ARE", "YOU", "JUG", "JAW", "JOY" };
 
     static String generateLetters(int amount) {
         String letters = "";
@@ -70,4 +69,3 @@ public class LicensePlate {
         System.out.println(generateLicensePlate());
     }
 }
-

@@ -83,15 +83,14 @@ public class StringSampler extends FieldSampler {
         }
     }
 
-
     protected String translate(String s) {
         return s;
     }
 
     @Override
     public JsonNode sample() {
-      synchronized (this) {
-        return new TextNode(distribution.get().sample());
-      }
+        synchronized (this) {
+            return new TextNode(distribution.get().sample());
+        }
     }
 }

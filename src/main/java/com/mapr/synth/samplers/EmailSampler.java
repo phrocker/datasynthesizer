@@ -44,14 +44,14 @@ public class EmailSampler extends FieldSampler {
 
     private final LongTail<String> domainDistribution;
 
-    public enum Type {FIRST, LAST, FIRST_LAST, LAST_FIRST}
+    public enum Type {
+        FIRST, LAST, FIRST_LAST, LAST_FIRST
+    }
 
     private static final AtomicReference<Multinomial<String>> first = new AtomicReference<>(null);
     private static final AtomicReference<Multinomial<String>> last = new AtomicReference<>(null);
 
     private final NameSampler.Type type = NameSampler.Type.FIRST_LAST;
-
-
 
     // distribution parameters for domain names
     private double alpha = 1000;
@@ -85,10 +85,10 @@ public class EmailSampler extends FieldSampler {
             if (first.compareAndSet(null, new Multinomial<>())) {
                 Preconditions.checkState(last.getAndSet(new Multinomial<>()) == null);
 
-                Splitter onTab = Splitter.on(CharMatcher.whitespace())
-                        .omitEmptyStrings().trimResults(CharMatcher.anyOf(" \""));
+                Splitter onTab = Splitter.on(CharMatcher.whitespace()).omitEmptyStrings()
+                        .trimResults(CharMatcher.anyOf(" \""));
                 for (String resourceName : ImmutableList.of("dist.male.first", "dist.female.first")) {
-                    //noinspection UnstableApiUsage
+                    // noinspection UnstableApiUsage
                     for (String line : Resources.readLines(Resources.getResource(resourceName), Charsets.UTF_8)) {
                         if (!line.startsWith("#")) {
                             Iterator<String> parts = onTab.split(line).iterator();
@@ -104,7 +104,7 @@ public class EmailSampler extends FieldSampler {
                     }
                 }
 
-                //noinspection UnstableApiUsage
+                // noinspection UnstableApiUsage
                 for (String line : Resources.readLines(Resources.getResource("dist.all.last"), Charsets.UTF_8)) {
                     if (!line.startsWith("#")) {
                         Iterator<String> parts = onTab.split(line).iterator();
@@ -124,7 +124,6 @@ public class EmailSampler extends FieldSampler {
     private String initialCap(String s) {
         return s.toLowerCase();
     }
-
 
     public void setAlpha(double alpha) {
         this.alpha = alpha;

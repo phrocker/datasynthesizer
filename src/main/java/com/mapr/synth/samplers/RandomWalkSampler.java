@@ -31,8 +31,8 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 /**
- * Does a random walk where the next step is distributed according to a Normal distribution, but where
- * the standard deviation of the step distribution may not be fixed.
+ * Does a random walk where the next step is distributed according to a Normal distribution, but where the standard
+ * deviation of the step distribution may not be fixed.
  */
 public class RandomWalkSampler extends FieldSampler {
     private static final JsonNode ONE = new DoubleNode(1);

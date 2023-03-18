@@ -28,41 +28,31 @@ import java.util.Random;
 import static java.lang.Math.log;
 
 /**
- * Produces quasi-plausible trip information for cars using the Engine
- * class for low level process simulation and a highly biased random
- * walk to pick way-points and speed targets.  <p> The basic idea is
- * that there are two special locations associated with a car. Call
- * them "home" and "work". The simulation proceeds by picking a script
- * to be followed and then elaborates that script with lower level
- * maneuvers to execute the script. All of the maneuvers start at
- * either home or work and end with the car being at one of those
+ * Produces quasi-plausible trip information for cars using the Engine class for low level process simulation and a
+ * highly biased random walk to pick way-points and speed targets.
+ * <p>
+ * The basic idea is that there are two special locations associated with a car. Call them "home" and "work". The
+ * simulation proceeds by picking a script to be followed and then elaborates that script with lower level maneuvers to
+ * execute the script. All of the maneuvers start at either home or work and end with the car being at one of those
  * locations.
  * <p>
  * The scripts available include:
  * <p>
  * a) commute from home to work or back
  * <p>
- * b) if at home, run an errand that involves driving to one or more
- * locations near the home.
+ * b) if at home, run an errand that involves driving to one or more locations near the home.
  * <p>
- * A script consists of a sequence of way-points that must be
- * visited. To visit each waypoint, a driving strategy picks
- * maneuvers. The maneuvers available include short-term urban style
- * driving segments and longer highway-style segments. The choice of
- * urban or highway segment is made according to how far away the next
- * end-point is.
+ * A script consists of a sequence of way-points that must be visited. To visit each waypoint, a driving strategy picks
+ * maneuvers. The maneuvers available include short-term urban style driving segments and longer highway-style segments.
+ * The choice of urban or highway segment is made according to how far away the next end-point is.
  * <p>
- * Each segment starts with a turn to a new bearing according to a
- * distribution that is biased based on where the destination is and
- * what the bearing for the current step was. Urban steps tend to
- * prefer a grid (ish) pattern of driving so the new bearing is either
- * the same as the current bearing or 90 degrees left or right of the
- * current bearing with some noise and some chance of a non-right
- * angle turn. Turns onto a highway segment have no grid bias, but are
- * heavily constrained by the direction to the next waypoint.
+ * Each segment starts with a turn to a new bearing according to a distribution that is biased based on where the
+ * destination is and what the bearing for the current step was. Urban steps tend to prefer a grid (ish) pattern of
+ * driving so the new bearing is either the same as the current bearing or 90 degrees left or right of the current
+ * bearing with some noise and some chance of a non-right angle turn. Turns onto a highway segment have no grid bias,
+ * but are heavily constrained by the direction to the next waypoint.
  * <p>
- * Urban segments also have more variable and lower speeds. Highway
- * segments have relative consistent high speeds.
+ * Urban segments also have more variable and lower speeds. Highway segments have relative consistent high speeds.
  */
 public class Car {
     // how well do the brakes work
@@ -105,7 +95,8 @@ public class Car {
             currentSpeed = Math.min(currentSpeed, maxSpeed(distanceToGo * 1000, segment.exitSpeed()));
             engine.stepToTime(t, currentSpeed, BRAKING_ACCELERATION);
             t += dt;
-            currentPosition.setPosition(start.add(travelDirection.scalarMultiply(engine.getDistance() / 1000 / Constants.EARTH_RADIUS_KM)));
+            currentPosition.setPosition(
+                    start.add(travelDirection.scalarMultiply(engine.getDistance() / 1000 / Constants.EARTH_RADIUS_KM)));
             progress.call(t, engine, currentPosition);
             previousDistance = distanceToGo;
             distanceToGo = currentPosition.distance(segment.end);
@@ -116,9 +107,13 @@ public class Car {
     /**
      * Produces a sequenct of segments that result in travel from start to end.
      *
-     * @param start Where the trip starts
-     * @param end   Where the trip ends
-     * @param rand  Random number generator to use
+     * @param start
+     *            Where the trip starts
+     * @param end
+     *            Where the trip ends
+     * @param rand
+     *            Random number generator to use
+     *
      * @return A list of trip segments
      */
     @SuppressWarnings("WeakerAccess")
@@ -171,11 +166,14 @@ public class Car {
     }
 
     /**
-     * What is our current max speed given our distance to our segment end and our desired exit speed. Note
-     * that we leave leave 20 meters margin and never quote a max speed less than 5 m/s.
+     * What is our current max speed given our distance to our segment end and our desired exit speed. Note that we
+     * leave leave 20 meters margin and never quote a max speed less than 5 m/s.
      *
-     * @param distance  How far to the end of the segment
-     * @param exitSpeed How fast should we be going at the end
+     * @param distance
+     *            How far to the end of the segment
+     * @param exitSpeed
+     *            How fast should we be going at the end
+     *
      * @return How fast we are allowed to be going right now.
      */
     private static double maxSpeed(double distance, double exitSpeed) {
@@ -191,13 +189,13 @@ public class Car {
     private static boolean pickHighway(double distance, Random rand) {
         // formula was picked heuristically to fit intuition
         // d(km) p
-        //   1  0.002472623
-        //   2  0.013828044
-        //   5  0.121702566
-        //   10  0.439414832
-        //   20  0.815977791
-        //   50  0.977687816
-        //   100  0.995981922
+        // 1 0.002472623
+        // 2 0.013828044
+        // 5 0.121702566
+        // 10 0.439414832
+        // 20 0.815977791
+        // 50 0.977687816
+        // 100 0.995981922
 
         double logOdds = -6 + 2 * log(distance);
         double u = rand.nextDouble();

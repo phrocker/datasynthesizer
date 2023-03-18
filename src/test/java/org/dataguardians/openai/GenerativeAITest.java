@@ -28,15 +28,14 @@ public class GenerativeAITest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
-//    @Test
+
+    // @Test
     public void test() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input("Hello, how are you today?").build();
         Response hello = chatGPT.sample(request, Response.class);
         System.out.println(hello.concatenateResponses());
     }
-
-
 
     @Test
     public void testMockResponseNoBody() throws IOException, HttpException {
@@ -45,7 +44,7 @@ public class GenerativeAITest {
         exceptionRule.expectMessage("Response Code: 500 occurred, with exception");
 
         OkHttpClient mockClient = mock(OkHttpClient.class);
-        GenerativeAPI chatGPT = spy( new GenerativeAPI(provider, mockClient) );
+        GenerativeAPI chatGPT = spy(new GenerativeAPI(provider, mockClient));
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input("Hello, how are you today?").build();
 
         Request req = mock(Request.class);
@@ -62,13 +61,11 @@ public class GenerativeAITest {
     @Test
     public void testMockResponseWithBody() throws IOException, HttpException {
 
-        final String jsonText = IOUtils.toString(
-                this.getClass().getResourceAsStream("/ChatGPTResponse1.json"),
-                "UTF-8"
-        );
+        final String jsonText = IOUtils.toString(this.getClass().getResourceAsStream("/ChatGPTResponse1.json"),
+                "UTF-8");
 
         OkHttpClient mockClient = mock(OkHttpClient.class);
-        GenerativeAPI chatGPT = spy( new GenerativeAPI(provider, mockClient) );
+        GenerativeAPI chatGPT = spy(new GenerativeAPI(provider, mockClient));
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input("Hello, how are you today?").build();
 
         Request req = mock(Request.class);
@@ -82,7 +79,8 @@ public class GenerativeAITest {
 
         when(mockClient.newCall(any())).thenReturn(httpCall);
         Response hello = chatGPT.sample(request, Response.class);
-        Assert.assertTrue(hello.concatenateResponses().contains("I'm an AI language model, so I don't have feelings, but I'm here to assist you. How can I help you today"));
+        Assert.assertTrue(hello.concatenateResponses().contains(
+                "I'm an AI language model, so I don't have feelings, but I'm here to assist you. How can I help you today"));
     }
 
     // TODO: add test for other response codes
@@ -92,16 +90,14 @@ public class GenerativeAITest {
     @Test
     public void testIncorrectKeyUsed() throws IOException, HttpException {
 
-        final String jsonText = IOUtils.toString(
-                this.getClass().getResourceAsStream("/ChatGPTResponse1.json"),
-                "UTF-8"
-        );
+        final String jsonText = IOUtils.toString(this.getClass().getResourceAsStream("/ChatGPTResponse1.json"),
+                "UTF-8");
 
         exceptionRule.expect(HttpException.class);
         exceptionRule.expectMessage("Response Code: 401 occurred, with exception");
 
         OkHttpClient mockClient = mock(OkHttpClient.class);
-        GenerativeAPI chatGPT = spy( new GenerativeAPI(provider, mockClient) );
+        GenerativeAPI chatGPT = spy(new GenerativeAPI(provider, mockClient));
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input("Hello, how are you today?").build();
 
         Request req = mock(Request.class);
@@ -124,15 +120,15 @@ public class GenerativeAITest {
         OkHttpClient mockClient = mock(OkHttpClient.class);
         GenerativeAPI chatGPT = spy(new GenerativeAPI(null));
     }
+
     @Test
     public void testNullConstructor2() throws IOException, HttpException {
 
         exceptionRule.expect(NullPointerException.class);
 
         OkHttpClient mockClient = mock(OkHttpClient.class);
-        GenerativeAPI chatGPT = spy(new GenerativeAPI(null,null));
+        GenerativeAPI chatGPT = spy(new GenerativeAPI(null, null));
     }
-
 
     @Test
     public void testNullApiRequest() throws IOException, HttpException {
@@ -140,10 +136,9 @@ public class GenerativeAITest {
         exceptionRule.expect(NullPointerException.class);
 
         OkHttpClient mockClient = mock(OkHttpClient.class);
-        GenerativeAPI chatGPT = spy(new GenerativeAPI(null,null));
+        GenerativeAPI chatGPT = spy(new GenerativeAPI(null, null));
         chatGPT.sample(null);
     }
-
 
     @Test
     public void testInvalidApiRequest() throws IOException, HttpException {
@@ -151,13 +146,9 @@ public class GenerativeAITest {
         exceptionRule.expect(NullPointerException.class);
 
         OkHttpClient mockClient = mock(OkHttpClient.class);
-        GenerativeAPI chatGPT = spy( new GenerativeAPI(provider, mockClient) );
+        GenerativeAPI chatGPT = spy(new GenerativeAPI(provider, mockClient));
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().build();
         chatGPT.sample(request);
     }
 
-
-
-
 }
-
