@@ -9,6 +9,7 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;
+import lombok.extern.slf4j.Slf4j;
 import org.dataguardians.exceptions.HttpException;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.util.List;
  * @version 1.0
  * @since [3/18/2023]
  */
+@Slf4j
 public class JavaCommentGenerator {
 
     private final boolean replaceComments;
@@ -53,9 +55,7 @@ public class JavaCommentGenerator {
      * @throws IOException If an IO error occurs while retrieving the configuration.
      */
     public List<String> generate() throws HttpException, IOException {
-        // SourceRoot is a tool that read and writes Java files from packages on a certain root directory.
-        // In this case the root directory is found by taking the root from the current Maven module,
-        // with src/main/resources appended.
+        log.info("Generating comments for file: " + fileOrDirectory);
         SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(JavaCommentGenerator.class).resolve("src/main/java"));
         // Our sample is in the root of this directory, so no package name.
         CompilationUnit cu = sourceRoot.parse("", fileOrDirectory);
