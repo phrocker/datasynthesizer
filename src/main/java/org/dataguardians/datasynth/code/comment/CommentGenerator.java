@@ -1,6 +1,7 @@
 package org.dataguardians.datasynth.code.comment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.dataguardians.datasynth.DataGenerator;
 import org.dataguardians.datasynth.GeneratorConfiguration;
@@ -25,6 +26,7 @@ import java.util.List;
  *
  * This class is intended for use in generating code templates and scaffolding for projects.
  */
+@Slf4j
 public class CommentGenerator extends DataGenerator<String> {
 
     public CommentGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config) {
@@ -97,7 +99,9 @@ public class CommentGenerator extends DataGenerator<String> {
      * @throws JsonProcessingException if an error occurs during JSON processing
      */
     public String generateMethodJavaDoc(String className, String methodSignature) throws HttpException, JsonProcessingException {
-        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateMethodFromSignature(className, methodSignature)).build();
+        final String req = generateMethodFromSignature(className, methodSignature);
+        log.debug("Making request for {} ",req);
+        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(req).build();
         request.setMaxTokens(config.getMaxTokens());
         Response hello = api.sample(request, Response.class);
         return hello.concatenateResponses();
@@ -113,7 +117,9 @@ public class CommentGenerator extends DataGenerator<String> {
      * @throws JsonProcessingException If there is a JSON processing exception during the generation process.
      */
     public String generateClassJavaDoc(String className, List<String> methodSignatures) throws HttpException, JsonProcessingException {
-        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateClassSignature(className, methodSignatures)).build();
+        final String req = generateClassSignature(className, methodSignatures);
+        log.debug("Making request for {} ",req);
+        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(req).build();
         request.setMaxTokens(config.getMaxTokens());
         Response hello = api.sample(request, Response.class);
         return hello.concatenateResponses();

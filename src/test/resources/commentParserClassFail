@@ -1,0 +1,15 @@
+
+
+/**
+ * The QueryConfiguration class provides configuration options for executing database queries.
+ *
+ * This class includes several methods to configure the query execution, including:
+ * - setQuery(String query) - sets the SQL query string to be executed
+ * - setParameters(Object[] params) - sets the parameters to be used in the query execution
+ * - setFetchSize(int fetchSize) - sets the number of rows to fetch in a single fetch loop
+ * - setMaxRows(int maxRows) - sets the maximum number of rows to fetch
+ * - setAutoCommit(boolean autoCommit) - sets whether or not to automatically commit changes to the database
+ *
+ * Once the query configuration has been set, it can be passed to a QueryExecutor object to execute the query against the database.
+ */
+```

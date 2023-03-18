@@ -8,6 +8,8 @@ import org.dataguardians.security.TokenProvider;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * The CommentGeneratorMain class provides methods for generating comments.
@@ -32,6 +34,8 @@ public class CommentGeneratorMain {
      */
     public static void main(String[] args) throws HttpException, IOException {
         String filename = args[0];
+        String author = args[1];
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         JavaFileVisitor jfr = new JavaFileVisitor(0.5);
         Files.walkFileTree(Path.of(filename), jfr);
         final GenerativeAPI chatGPT = new GenerativeAPI(provider);

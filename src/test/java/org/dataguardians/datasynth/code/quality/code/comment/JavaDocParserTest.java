@@ -19,4 +19,15 @@ public class JavaDocParserTest {
         String out = JavaDocParser.parseClassJavaDoc("CommentGenerator",txt);
         Assert.assertTrue(out.contains("input"));
     }
+
+    @Test
+    public void testFail() throws IOException {
+        final String txt = IOUtils.toString(
+                this.getClass().getResourceAsStream("/commentParserClassFail"),
+                "UTF-8"
+        );
+
+        String out = JavaDocParser.parseClassJavaDoc("CommentGenerator",txt);
+        Assert.assertTrue(out.contains("QueryConfiguration"));
+    }
 }
