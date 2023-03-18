@@ -11,7 +11,6 @@ import com.github.javaparser.utils.SourceRoot;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.dataguardians.exceptions.HttpException;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,15 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The JavaDocParser class provides methods for parsing and analyzing JavaDoc documentation for classes and methods.
- *
- * Methods: - Visitable visit(MethodDeclaration, Void): allows visiting a method declaration in a Java file, returns a
- * Visitable object. - String parseJavaDocFrom(String, String): parses the JavaDoc comments from a given file and
- * returns them as a string. - void main(String[]): the main method of the class, used for running the program. -
- * Visitable visit(ClassOrInterfaceDeclaration, Void): allows visiting a class or interface declaration in a Java file,
- * returns a Visitable object. - String parseClassJavaDoc(String, String): parses the JavaDoc comments for a specific
- * class and returns them as a string. - boolean javaDocsMeetCriteria(String, boolean, boolean, Double): returns true if
- * the given JavaDoc comments meet the specified criteria.
+ * The JavaDocParser class is responsible for parsing and analyzing Java Doc comments for both
+ * classes/interfaces and methods as well as checking if they meet certain criteria.
+ * It has the ability to visit ClassOrInterfaceDeclaration and MethodDeclaration nodes in
+ * the Abstract Syntax Tree (AST) and parse the associated Java Doc comments. The class also
+ * provides methods to parse a JavaDoc comment from a given String and retrieve a class's
+ * JavaDoc comment. Additionally, the class contains a main method to demonstrate the functionality
+ * of the class. The class includes a boolean method that determines if a given JavaDoc comment meets
+ * the criteria of having a minimum length, containing certain keywords and meeting a minimum "readability"
+ * score specified by a Double value.
  */
 @Slf4j
 public class JavaDocParser {
@@ -50,8 +49,7 @@ public class JavaDocParser {
         // SourceRoot is a tool that read and writes Java files from packages on a certain root directory.
         // In this case the root directory is found by taking the root from the current Maven module,
         // with src/main/resources appended.
-        SourceRoot sourceRoot = new SourceRoot(
-                CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
+        SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
         File tempFile = File.createTempFile("created-", "-java");
         tempFile.deleteOnExit();
         StringBuilder sb = new StringBuilder();
@@ -124,8 +122,7 @@ public class JavaDocParser {
         // SourceRoot is a tool that read and writes Java files from packages on a certain root directory.
         // In this case the root directory is found by taking the root from the current Maven module,
         // with src/main/resources appended.
-        SourceRoot sourceRoot = new SourceRoot(
-                CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
+        SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
         File tempFile = File.createTempFile("created-", "-java");
         tempFile.deleteOnExit();
         StringBuilder sb = new StringBuilder();
@@ -167,7 +164,6 @@ public class JavaDocParser {
         } catch (ParseProblemException e) {
             throw e;
         }
-
     }
 
     /**
@@ -190,10 +186,8 @@ public class JavaDocParser {
      * @throws HttpException
      *             If an error occurs while trying to retrieve additional information.
      */
-    public static boolean javaDocsMeetCriteria(String filePath, boolean mustHaveClassDoc, boolean meetThreshold,
-            Double threshold) throws IOException, HttpException {
-        SourceRoot sourceRoot = new SourceRoot(
-                CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
+    public static boolean javaDocsMeetCriteria(String filePath, boolean mustHaveClassDoc, boolean meetThreshold, Double threshold) throws IOException, HttpException {
+        SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
         // Our sample is in the root of this directory, so no package name.
         CompilationUnit cu = sourceRoot.parse("", filePath);
         final StringBuilder comment = new StringBuilder();

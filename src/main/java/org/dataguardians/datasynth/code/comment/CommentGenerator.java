@@ -13,16 +13,15 @@ import org.dataguardians.security.TokenProvider;
 import java.util.List;
 
 /**
- * This ClassName class provides methods for generating input strings, methods, class and method signatures, as well as
- * class and method JavaDoc.
+ * A class that generates comments for code snippets.
  *
- * Methods in this class include: - generateInput(): generates an input string - generate(): generates a string -
- * generateMethodFromSignature(String name, String returnType): generates a method from its signature -
- * generateClassSignature(String className, List<String> interfaceNames): generates a class signature -
- * generateMethodJavaDoc(String methodDescription, String parameterDescription): generates JavaDoc for a method -
- * generateClassJavaDoc(String classDescription, List<String> authorList): generates JavaDoc for a class
+ * This class provides methods for generating input strings, method signatures,
+ * and java docs for classes and methods. It also generates source code
+ * snippets with comments.
  *
- * This class is intended for use in generating code templates and scaffolding for projects.
+ * @author Marc Parisi
+ * @version 0.1
+ * @since 3/17/2021
  */
 @Slf4j
 public class CommentGenerator extends DataGenerator<String> {
@@ -58,8 +57,7 @@ public class CommentGenerator extends DataGenerator<String> {
      *             if there are errors while converting the data to JSON
      */
     public String generate() throws HttpException, JsonProcessingException {
-        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).maxTokens(1024)
-                .build();
+        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).maxTokens(1024).build();
         request.setMaxTokens(config.getMaxTokens());
         Response hello = api.sample(request, Response.class);
         return hello.concatenateResponses();
@@ -80,8 +78,7 @@ public class CommentGenerator extends DataGenerator<String> {
      *             if the className or methodSig is invalid
      */
     private String generateMethodFromSignature(String className, String methodSig) {
-        return "Generate a javadoc for a method " + methodSig + " that is in a class named " + className
-                + ". Please only generate the method javadoc";
+        return "Generate a javadoc for a method " + methodSig + " that is in a class named " + className + ". Please only generate the method javadoc";
     }
 
     /**
@@ -96,8 +93,7 @@ public class CommentGenerator extends DataGenerator<String> {
      * @return A string representing the generated class signature.
      */
     private String generateClassSignature(String className, List<String> methods) {
-        return "Generate a class comment for " + className + " that has the following methods:"
-                + StringUtils.join(methods, ", ") + ". Please only generate the class javadoc";
+        return "Generate a class comment for " + className + " that has the following methods:" + StringUtils.join(methods, ", ") + ". Please only generate the class javadoc";
     }
 
     /**
@@ -116,8 +112,7 @@ public class CommentGenerator extends DataGenerator<String> {
      * @throws JsonProcessingException
      *             if an error occurs during JSON processing
      */
-    public String generateMethodJavaDoc(String className, String methodSignature)
-            throws HttpException, JsonProcessingException {
+    public String generateMethodJavaDoc(String className, String methodSignature) throws HttpException, JsonProcessingException {
         final String req = generateMethodFromSignature(className, methodSignature);
         log.debug("Making request for {} ", req);
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(req).build();
@@ -141,8 +136,7 @@ public class CommentGenerator extends DataGenerator<String> {
      * @throws JsonProcessingException
      *             If there is a JSON processing exception during the generation process.
      */
-    public String generateClassJavaDoc(String className, List<String> methodSignatures)
-            throws HttpException, JsonProcessingException {
+    public String generateClassJavaDoc(String className, List<String> methodSignatures) throws HttpException, JsonProcessingException {
         final String req = generateClassSignature(className, methodSignatures);
         log.debug("Making request for {} ", req);
         ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(req).build();
