@@ -3,6 +3,7 @@ package org.dataguardians.datasynth.code.comment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
@@ -19,19 +20,24 @@ import java.util.List;
 public class JavaCommentGenerator {
 
 
+    private final boolean replaceComments;
     private CommentGenerator generator;
     private String fileOrDirectory;
 
     private boolean saveToFile;
 
     public JavaCommentGenerator(CommentGenerator generator, String  fileOrDirectory, boolean saveToFile){
+        this(generator, fileOrDirectory, saveToFile, false);
+    }
+
+    public JavaCommentGenerator(CommentGenerator generator, String  fileOrDirectory, boolean saveToFile, boolean replaceComments){
         this.generator= generator;
         this.fileOrDirectory = fileOrDirectory;
         this.saveToFile = saveToFile;
+        this.replaceComments=replaceComments;
     }
 
-
-    public List<String> generate(){
+    public List<String> generate() throws HttpException, IOException {
         // JavaParser has a minimal logging class that normally logs nothing.
         // Let's ask it to write to standard out:
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
@@ -46,14 +52,17 @@ public class JavaCommentGenerator {
 
         String className = cu.getPrimaryTypeName().get();
         final List<String> commentsAdded = new ArrayList<>();
+        final List<String> methods = new ArrayList<>();
         cu.accept(new ModifierVisitor<Void>() {
             @Override
             public Visitable visit(final MethodDeclaration n, final Void arg) {
                 var ret = super.visit(n, arg);
-                if (!n.getComment().isPresent()){
+                methods.add(n.getDeclarationAsString(false, false, false));
+                if (!n.getComment().isPresent() || replaceComments){
                     String comment = null;
                     try {
-                        comment = generator.generate(className,n.getDeclarationAsString(true, true, true));
+                        final String methodDeclr = n.getDeclarationAsString(true, true, true);
+                        comment = generator.generateMethodJavaDoc(className,methodDeclr);
                         n.setComment(new JavadocComment(JavaDocParser.parseJavaDocFrom(className,comment)));
                         commentsAdded.add(comment);
                     } catch (HttpException e) {
@@ -70,7 +79,16 @@ public class JavaCommentGenerator {
 
             }
         }, null);
+        var classJavaDoc = new JavadocComment(JavaDocParser.parseClassJavaDoc(className,generator.generateClassJavaDoc(className,methods)));
+        cu.accept(new ModifierVisitor<Void>() {
+            @Override
+            public Visitable visit(final ClassOrInterfaceDeclaration n, final Void arg) {
+                var ret = super.visit(n, arg);
+                n.setComment(classJavaDoc);
+                return ret;
 
+            }
+        }, null);
         sourceRoot.saveAll();
         return commentsAdded;
     }

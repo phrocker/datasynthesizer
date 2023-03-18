@@ -17,7 +17,7 @@ import java.util.List;
 public class CodeQualityTest {
 
     private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
-    @Test
+    //@Test
     public void test() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
 

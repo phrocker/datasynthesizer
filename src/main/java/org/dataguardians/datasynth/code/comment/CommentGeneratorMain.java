@@ -1,19 +1,12 @@
 package org.dataguardians.datasynth.code.comment;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.visitor.ModifierVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.utils.CodeGenerationUtils;
-import com.github.javaparser.utils.Log;
-import com.github.javaparser.utils.SourceRoot;
 import org.dataguardians.datasynth.GeneratorConfiguration;
 import org.dataguardians.exceptions.HttpException;
 import org.dataguardians.openai.GenerativeAPI;
 import org.dataguardians.security.ApiKey;
 import org.dataguardians.security.TokenProvider;
+
+import java.io.IOException;
 
 public class CommentGeneratorMain {
 
@@ -21,7 +14,7 @@ public class CommentGeneratorMain {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws HttpException, IOException {
 
         String filename = args[0];
         GenerativeAPI chatGPT = new GenerativeAPI(provider);

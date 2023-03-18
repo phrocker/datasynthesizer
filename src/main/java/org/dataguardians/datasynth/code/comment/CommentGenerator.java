@@ -1,6 +1,7 @@
 package org.dataguardians.datasynth.code.comment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.StringUtils;
 import org.dataguardians.datasynth.DataGenerator;
 import org.dataguardians.datasynth.GeneratorConfiguration;
 import org.dataguardians.exceptions.HttpException;
@@ -8,7 +9,22 @@ import org.dataguardians.openai.GenerativeAPI;
 import org.dataguardians.openai.api.chat.Response;
 import org.dataguardians.openai.endpoints.ChatApiEndpointRequest;
 import org.dataguardians.security.TokenProvider;
+import java.util.List;
 
+/**
+ * This ClassName class provides methods for generating input strings, methods, class and method signatures,
+ * as well as class and method JavaDoc.
+ *
+ * Methods in this class include:
+ * - generateInput(): generates an input string
+ * - generate(): generates a string
+ * - generateMethodFromSignature(String name, String returnType): generates a method from its signature
+ * - generateClassSignature(String className, List<String> interfaceNames): generates a class signature
+ * - generateMethodJavaDoc(String methodDescription, String parameterDescription): generates JavaDoc for a method
+ * - generateClassJavaDoc(String classDescription, List<String> authorList): generates JavaDoc for a class
+ *
+ * This class is intended for use in generating code templates and scaffolding for projects.
+ */
 public class CommentGenerator extends DataGenerator<String> {
 
     public CommentGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config) {
@@ -54,7 +70,20 @@ public class CommentGenerator extends DataGenerator<String> {
      * @throws IllegalArgumentException if the className or methodSig is invalid
      */
     private String generateMethodFromSignature(String className, String methodSig) {
-        return "Please generate a javadoc for a method " + methodSig + " that is in a class named " + className + ". Please only generate the method javadoc";
+        return "Generate a javadoc for a method " + methodSig + " that is in a class named " + className + ". Please only generate the method javadoc";
+    }
+
+    /**
+     * Generates a class signature using the provided class name and list of methods.
+     * The generated signature includes the class name, implemented interfaces,
+     * and public method signatures.
+     *
+     * @param className The name of the class to generate the signature for.
+     * @param methods A list of method signatures to include in the signature.
+     * @return A string representing the generated class signature.
+     */
+    private String generateClassSignature(String className, List<String> methods) {
+        return "Generate a class comment for className that has the following methods:" + StringUtils.join(methods, ", ") + ". Please only generate the class javadoc";
     }
 
     /**
@@ -67,10 +96,24 @@ public class CommentGenerator extends DataGenerator<String> {
      * @throws HttpException if an error occurs during HTTP communication
      * @throws JsonProcessingException if an error occurs during JSON processing
      */
-    public String generate(String className, String methodSignature) throws HttpException, JsonProcessingException {
-        String req = generateMethodFromSignature(className, methodSignature);
-        System.out.println(req);
-        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(req).maxTokens(1024).build();
+    public String generateMethodJavaDoc(String className, String methodSignature) throws HttpException, JsonProcessingException {
+        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateMethodFromSignature(className, methodSignature)).build();
+        request.setMaxTokens(config.getMaxTokens());
+        Response hello = api.sample(request, Response.class);
+        return hello.concatenateResponses();
+    }
+
+    /**
+     * Generates the JavaDoc for a given class and list of method signatures.
+     *
+     * @param className The name of the class for which JavaDoc is to be generated.
+     * @param methodSignatures The list of method signatures for which JavaDoc is to be generated.
+     * @return The generated JavaDoc.
+     * @throws HttpException If there is an HTTP exception during the generation process.
+     * @throws JsonProcessingException If there is a JSON processing exception during the generation process.
+     */
+    public String generateClassJavaDoc(String className, List<String> methodSignatures) throws HttpException, JsonProcessingException {
+        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateClassSignature(className, methodSignatures)).build();
         request.setMaxTokens(config.getMaxTokens());
         Response hello = api.sample(request, Response.class);
         return hello.concatenateResponses();
