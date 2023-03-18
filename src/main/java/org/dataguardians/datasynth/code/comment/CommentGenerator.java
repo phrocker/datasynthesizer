@@ -83,7 +83,7 @@ public class CommentGenerator extends DataGenerator<String> {
      * @return A string representing the generated class signature.
      */
     private String generateClassSignature(String className, List<String> methods) {
-        return "Generate a class comment for className that has the following methods:" + StringUtils.join(methods, ", ") + ". Please only generate the class javadoc";
+        return "Generate a class comment for " + className + " that has the following methods:" + StringUtils.join(methods, ", ") + ". Please only generate the class javadoc";
     }
 
     /**

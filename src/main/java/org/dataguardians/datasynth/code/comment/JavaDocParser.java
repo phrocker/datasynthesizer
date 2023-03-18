@@ -11,6 +11,7 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.dataguardians.exceptions.HttpException;
 
 import java.io.File;
@@ -62,7 +63,7 @@ public class JavaDocParser {
         }, null);
 
         tempFile.delete();
-        return commentsAdded.get(0);
+        return commentsAdded.isEmpty() ? "" : commentsAdded.get(0);
     }
 
 
@@ -112,5 +113,50 @@ public class JavaDocParser {
 
         tempFile.delete();
         return comment.toString();
+    }
+
+    public static boolean javaDocsMeetCriteria (String filePath, boolean mustHaveClassDoc, boolean meetThreshold, Double threshold) throws IOException, HttpException {
+        SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
+
+
+        // Our sample is in the root of this directory, so no package name.
+        CompilationUnit cu = sourceRoot.parse("", filePath);
+
+        final StringBuilder comment = new StringBuilder();
+        List<String> methods = new ArrayList<>();
+        List<String> methodsWithDoc = new ArrayList<>();
+        MutableBoolean hasClassDoc = new MutableBoolean(false);
+        cu.accept(new ModifierVisitor<Void>() {
+            @Override
+            public Visitable visit(final ClassOrInterfaceDeclaration n, final Void arg) {
+                var ret = super.visit(n, arg);
+                methods.add(n.getNameAsString());
+                if (n.getComment().isPresent()){
+                    methodsWithDoc.add(n.getNameAsString());
+                }
+                return ret;
+
+            }
+            @Override
+            public Visitable visit(final MethodDeclaration n, final Void arg) {
+                var ret = super.visit(n, arg);
+
+                if (n.getComment().isPresent()){
+                    hasClassDoc.setTrue();
+                }
+
+                return ret;
+
+            }
+        }, null);
+
+        if (mustHaveClassDoc && !hasClassDoc.booleanValue()){
+            return false;
+        }
+        if (meetThreshold){
+            double percentage = (double) methodsWithDoc.size() / methods.size();
+            return percentage >= threshold;
+        }
+        return true;
     }
 }
