@@ -9,13 +9,14 @@ import org.dataguardians.openai.api.chat.Message;
 
 import java.util.List;
 
-/**
- * Query configuration requestor for simple queries
- */
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * Query configuration requestor for simple queries
+ */
 public class QueryConfiguration {
 
     private List<DataDictionaryDefinition> dataDictionary;
@@ -28,6 +29,9 @@ public class QueryConfiguration {
 
     @Data
     @Builder
+    /**
+     * Data dictionary for the query configuration object.
+     */
     public static class DataDictionaryDefinition {
 
         public String fieldName;

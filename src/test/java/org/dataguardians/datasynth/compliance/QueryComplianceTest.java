@@ -1,13 +1,9 @@
 package org.dataguardians.datasynth.compliance;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.dataguardians.datasynth.query.QueryGenerator;
-import org.dataguardians.datasynth.query.compliance.ComplianceRule;
+import org.dataguardians.datasynth.rules.ComplianceRule;
 import org.dataguardians.datasynth.query.compliance.QueryComplianceConfiguration;
 import org.dataguardians.datasynth.query.compliance.QueryComplianceScorer;
-import org.dataguardians.datasynth.query.entity.FieldType;
-import org.dataguardians.datasynth.query.entity.QueryConfiguration;
-import org.dataguardians.datasynth.query.entity.QueryType;
 import org.dataguardians.exceptions.HttpException;
 import org.dataguardians.openai.GenerativeAPI;
 import org.dataguardians.security.ApiKey;

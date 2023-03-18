@@ -4,16 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.dataguardians.datasynth.rules.ComplianceConfiguration;
+import org.dataguardians.datasynth.rules.ComplianceRule;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueryComplianceConfiguration {
+/**
+ * Query compliance configuration object that extends the compliance configuration.
+ */
+public class QueryComplianceConfiguration extends ComplianceConfiguration {
 
-    List<ComplianceRule> rules;
 
     String query;
 

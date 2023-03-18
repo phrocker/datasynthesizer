@@ -86,7 +86,7 @@ public class EmailNameSampler extends NameSampler {
             if (first.compareAndSet(null, new Multinomial<>())) {
                 Preconditions.checkState(last.getAndSet(new Multinomial<>()) == null);
 
-                Splitter onTab = Splitter.on(CharMatcher.WHITESPACE)
+                Splitter onTab = Splitter.on(CharMatcher.whitespace())
                         .omitEmptyStrings().trimResults(CharMatcher.anyOf(" \""));
                 for (String resourceName : ImmutableList.of("dist.male.first", "dist.female.first")) {
                     //noinspection UnstableApiUsage

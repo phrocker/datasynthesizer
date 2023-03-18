@@ -27,6 +27,7 @@ import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import org.apache.mahout.common.RandomUtils;
 
+import java.nio.charset.Charset;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -37,7 +38,7 @@ import java.util.regex.Pattern;
 public class EquipmentIdentitySampler extends FieldSampler {
 
     private Random rand = RandomUtils.getRandom();
-    private final BloomFilter<CharSequence> bloomy = BloomFilter.create(Funnels.stringFunnel(), 20000000);
+    private final BloomFilter<CharSequence> bloomy = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), 20000000);
     private boolean unique = false;
 
     public EquipmentIdentitySampler() {
