@@ -45,14 +45,14 @@ public class EmailNameSampler extends NameSampler {
 
     private final LongTail<String> domainDistribution;
 
-    public enum Type {FIRST, LAST, FIRST_LAST, LAST_FIRST}
+    public enum Type {
+        FIRST, LAST, FIRST_LAST, LAST_FIRST
+    }
 
     private static final AtomicReference<Multinomial<String>> first = new AtomicReference<>(null);
     private static final AtomicReference<Multinomial<String>> last = new AtomicReference<>(null);
 
     private final NameSampler.Type type = NameSampler.Type.FIRST_LAST;
-
-
 
     // distribution parameters for domain names
     private double alpha = 1000;
@@ -86,10 +86,10 @@ public class EmailNameSampler extends NameSampler {
             if (first.compareAndSet(null, new Multinomial<>())) {
                 Preconditions.checkState(last.getAndSet(new Multinomial<>()) == null);
 
-                Splitter onTab = Splitter.on(CharMatcher.whitespace())
-                        .omitEmptyStrings().trimResults(CharMatcher.anyOf(" \""));
+                Splitter onTab = Splitter.on(CharMatcher.whitespace()).omitEmptyStrings()
+                        .trimResults(CharMatcher.anyOf(" \""));
                 for (String resourceName : ImmutableList.of("dist.male.first", "dist.female.first")) {
-                    //noinspection UnstableApiUsage
+                    // noinspection UnstableApiUsage
                     for (String line : Resources.readLines(Resources.getResource(resourceName), Charsets.UTF_8)) {
                         if (!line.startsWith("#")) {
                             Iterator<String> parts = onTab.split(line).iterator();
@@ -105,7 +105,7 @@ public class EmailNameSampler extends NameSampler {
                     }
                 }
 
-                //noinspection UnstableApiUsage
+                // noinspection UnstableApiUsage
                 for (String line : Resources.readLines(Resources.getResource("dist.all.last"), Charsets.UTF_8)) {
                     if (!line.startsWith("#")) {
                         Iterator<String> parts = onTab.split(line).iterator();
@@ -125,7 +125,6 @@ public class EmailNameSampler extends NameSampler {
     private String initialCap(String s) {
         return s.toLowerCase();
     }
-
 
     public void setAlpha(double alpha) {
         this.alpha = alpha;
@@ -168,13 +167,12 @@ public class EmailNameSampler extends NameSampler {
 
     @Override
     public JsonNode sample() {
-        if (NameSampler.previousName.get() != null){
-            Map.Entry<String,String> name = previousName.get();
+        if (NameSampler.previousName.get() != null) {
+            Map.Entry<String, String> name = previousName.get();
             return new TextNode(name.getKey() + "." + name.getValue() + "@" + domainDistribution.sample());
-        }
-        else{
+        } else {
             return new TextNode(first.get().sample() + "." + last.get().sample() + "@" + domainDistribution.sample());
         }
-        
+
     }
 }

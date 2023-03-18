@@ -1,6 +1,6 @@
 [
-  {
-    "name": "terminal_id",
-    "class": "uuid"
-  }
+    {
+        "name" : "terminal_id",
+        "class" : "uuid"
+    }
 ]

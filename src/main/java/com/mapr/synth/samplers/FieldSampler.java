@@ -34,8 +34,7 @@ import java.io.IOException;
 import java.util.Set;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "class")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = AddressSampler.class, name = "address"),
+@JsonSubTypes({ @JsonSubTypes.Type(value = AddressSampler.class, name = "address"),
         @JsonSubTypes.Type(value = ArrayFlattener.class, name = "array-flatten"),
         @JsonSubTypes.Type(value = ArrivalSampler.class, name = "event"),
         @JsonSubTypes.Type(value = BrowserSampler.class, name = "browser"),
@@ -121,8 +120,7 @@ public abstract class FieldSampler implements Sampler<JsonNode> {
     }
 
     /**
-     * Restart should back up any variables to the minimum values, but should not reseed any
-     * random number generators.
+     * Restart should back up any variables to the minimum values, but should not reseed any random number generators.
      */
     public void restart() {
         // do nothing
@@ -140,7 +138,7 @@ public abstract class FieldSampler implements Sampler<JsonNode> {
         this.name = name;
     }
 
-    @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
+    @SuppressWarnings({ "WeakerAccess", "SameParameterValue" })
     public void setFlattener(boolean flattener) {
         this.flattener = flattener;
     }

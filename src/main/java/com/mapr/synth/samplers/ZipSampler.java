@@ -52,7 +52,7 @@ public class ZipSampler extends FieldSampler {
     private int zipCount;
     private double latitudeFuzz = 0;
     private double longitudeFuzz = 0;
-    private String country="";
+    private String country = "";
     private LocationBound limits = null;
     private boolean verbose = true;
     private int selectedIndex = -1;
@@ -63,7 +63,7 @@ public class ZipSampler extends FieldSampler {
         try {
             addressSampler = new AddressSampler();
             List<String> names = null;
-            //noinspection UnstableApiUsage
+            // noinspection UnstableApiUsage
             for (String line : Resources.readLines(Resources.getResource("zip.csv"), Charsets.UTF_8)) {
                 CsvSplitter onComma = new CsvSplitter();
                 if (line.startsWith("#")) {
@@ -124,16 +124,16 @@ public class ZipSampler extends FieldSampler {
     }
 
     /**
-     * Sets the longitude bounds for the returned points.  The format should be two comma separated decimal numbers
+     * Sets the longitude bounds for the returned points. The format should be two comma separated decimal numbers
      * representing the minimum and maximum longitude for all returned points.
      *
-     * @param bounds A comma separated list of min and max longitude for the returned points.
+     * @param bounds
+     *            A comma separated list of min and max longitude for the returned points.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setLongitude(String bounds) {
-        List<Double> boundList = Lists.newArrayList(
-                Splitter.on(", ").split(bounds)).stream()
-                .map(Double::parseDouble).collect(Collectors.toList());
+        List<Double> boundList = Lists.newArrayList(Splitter.on(", ").split(bounds)).stream().map(Double::parseDouble)
+                .collect(Collectors.toList());
         Preconditions.checkArgument(boundList.size() == 2);
         double minLongitude = Math.min(boundList.get(0), boundList.get(1));
         double maxLongitude = Math.max(boundList.get(0), boundList.get(1));
@@ -144,38 +144,38 @@ public class ZipSampler extends FieldSampler {
             ((BoundingBox) limits).setLongitude(minLongitude, maxLongitude);
         }
     }
+
     @SuppressWarnings("UnusedDeclaration")
-    public void setZip(final String zipcode){
+    public void setZip(final String zipcode) {
         String searchZip = zipcode;
         int idx = zipcode.indexOf("-");
-        if (idx > 0){
+        if (idx > 0) {
             searchZip = zipcode.substring(0, idx);
         }
-        List<String> sortedZips = Lists.newArrayList( values.get("zip") );
-        Collections.sort( sortedZips );
+        List<String> sortedZips = Lists.newArrayList(values.get("zip"));
+        Collections.sort(sortedZips);
         int zipIndex = Collections.binarySearch(sortedZips, searchZip);
-        if (zipIndex < 0 ){
+        if (zipIndex < 0) {
             zipIndex = (-zipIndex - 1);
         }
         // select the closest zip
         final String selectedZip = sortedZips.get(zipIndex);
         OptionalInt indexOpt = IntStream.range(0, values.get("zip").size())
-                .filter(i -> selectedZip.equals(values.get("zip").get(i)))
-                .findFirst();
+                .filter(i -> selectedZip.equals(values.get("zip").get(i))).findFirst();
         selectedIndex = indexOpt.orElse(-1);
     }
 
     /**
-     * Sets the latitude bounds for the returned points.  The format should be two comma separated decimal numbers
+     * Sets the latitude bounds for the returned points. The format should be two comma separated decimal numbers
      * representing the minimum and maximum latitude for all returned points.
      *
-     * @param bounds A comma separated list of min and max latitude for the returned points.
+     * @param bounds
+     *            A comma separated list of min and max latitude for the returned points.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setLatitude(String bounds) {
-        List<Double> boundList = Lists.newArrayList(
-                Splitter.on(", ").split(bounds)).stream()
-                .map(Double::parseDouble).collect(Collectors.toList());
+        List<Double> boundList = Lists.newArrayList(Splitter.on(", ").split(bounds)).stream().map(Double::parseDouble)
+                .collect(Collectors.toList());
         Preconditions.checkArgument(boundList.size() == 2);
         double minLatitude = Math.min(boundList.get(0), boundList.get(1));
         double maxLatitude = Math.max(boundList.get(0), boundList.get(1));
@@ -188,22 +188,21 @@ public class ZipSampler extends FieldSampler {
     }
 
     /**
-     * Sets the center of a radial bound for the returned points.  The format should be two comma separated decimal
+     * Sets the center of a radial bound for the returned points. The format should be two comma separated decimal
      * numbers representing the longitude and latitude of the center of the region.
      *
-     * @param bounds A comma separated list of min and max latitude for the returned points.
+     * @param bounds
+     *            A comma separated list of min and max latitude for the returned points.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setNear(String bounds) {
-        List<Double> center = Lists.newArrayList(
-                Splitter.on(CharMatcher.anyOf(", "))
-                        .trimResults().split(bounds)).stream()
-                .map(Double::parseDouble).collect(Collectors.toList());
+        List<Double> center = Lists.newArrayList(Splitter.on(CharMatcher.anyOf(", ")).trimResults().split(bounds))
+                .stream().map(Double::parseDouble).collect(Collectors.toList());
         limits = new RadialBound(center.get(0), center.get(1), 10);
     }
 
     /**
-     * Adjusts the radius for an existing radial bound.  Sets the radius in miles
+     * Adjusts the radius for an existing radial bound. Sets the radius in miles
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setMilesFrom(double distance) {
@@ -212,7 +211,7 @@ public class ZipSampler extends FieldSampler {
     }
 
     /**
-     * Adjusts the radius for an existing radial bound.  Sets the radius in miles
+     * Adjusts the radius for an existing radial bound. Sets the radius in miles
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setKmFrom(double distance) {
@@ -246,17 +245,19 @@ public class ZipSampler extends FieldSampler {
                 r.set(key, new TextNode(values.get(key).get(i)));
             }
 
-            if (!StringUtils.isEmpty(country)){
-                r.set("country",new TextNode(country));
+            if (!StringUtils.isEmpty(country)) {
+                r.set("country", new TextNode(country));
             }
 
-            if (useAddress){
-                r.set("address",addressSampler.sample());
+            if (useAddress) {
+                r.set("address", addressSampler.sample());
             }
 
             if (latitudeFuzz > 0 || longitudeFuzz > 0) {
-                r.set("longitude", new TextNode(String.format("%.4f", r.get("longitude").asDouble() + rand.nextDouble() * longitudeFuzz)));
-                r.set("latitude", new TextNode(String.format("%.4f", r.get("latitude").asDouble() + rand.nextDouble() * latitudeFuzz)));
+                r.set("longitude", new TextNode(
+                        String.format("%.4f", r.get("longitude").asDouble() + rand.nextDouble() * longitudeFuzz)));
+                r.set("latitude", new TextNode(
+                        String.format("%.4f", r.get("latitude").asDouble() + rand.nextDouble() * latitudeFuzz)));
             }
 
             if (limits == null || limits.accept(r)) {
@@ -295,7 +296,7 @@ public class ZipSampler extends FieldSampler {
         boolean accept(JsonNode location) {
             String longitude = location.get("longitude").asText();
             String latitude = location.get("latitude").asText();
-            //noinspection SimplifiableIfStatement
+            // noinspection SimplifiableIfStatement
             if (longitude == null || longitude.equals("") || latitude == null || latitude.equals("")) {
                 return false;
             } else {
@@ -319,7 +320,8 @@ public class ZipSampler extends FieldSampler {
 
         @Override
         boolean accept(double latitude, double longitude) {
-            return longitude >= minLongitude && longitude <= maxLongitude && latitude >= minLatitude && latitude <= maxLatitude;
+            return longitude >= minLongitude && longitude <= maxLongitude && latitude >= minLatitude
+                    && latitude <= maxLatitude;
         }
 
         @SuppressWarnings("WeakerAccess")

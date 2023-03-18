@@ -55,7 +55,7 @@ public class TollSampler extends FieldSampler {
     public TollSampler() {
         try {
             List<String> names = null;
-            //noinspection UnstableApiUsage
+            // noinspection UnstableApiUsage
             for (String line : Resources.readLines(Resources.getResource("zip.csv"), Charsets.UTF_8)) {
                 CsvSplitter onComma = new CsvSplitter();
                 if (line.startsWith("#")) {
@@ -111,16 +111,16 @@ public class TollSampler extends FieldSampler {
     }
 
     /**
-     * Sets the longitude bounds for the returned points.  The format should be two comma separated decimal numbers
+     * Sets the longitude bounds for the returned points. The format should be two comma separated decimal numbers
      * representing the minimum and maximum longitude for all returned points.
      *
-     * @param bounds A comma separated list of min and max longitude for the returned points.
+     * @param bounds
+     *            A comma separated list of min and max longitude for the returned points.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setLongitude(String bounds) {
-        List<Double> boundList = Lists.newArrayList(
-                Splitter.on(", ").split(bounds)).stream()
-                .map(Double::parseDouble).collect(Collectors.toList());
+        List<Double> boundList = Lists.newArrayList(Splitter.on(", ").split(bounds)).stream().map(Double::parseDouble)
+                .collect(Collectors.toList());
         Preconditions.checkArgument(boundList.size() == 2);
         double minLongitude = Math.min(boundList.get(0), boundList.get(1));
         double maxLongitude = Math.max(boundList.get(0), boundList.get(1));
@@ -133,16 +133,16 @@ public class TollSampler extends FieldSampler {
     }
 
     /**
-     * Sets the latitude bounds for the returned points.  The format should be two comma separated decimal numbers
+     * Sets the latitude bounds for the returned points. The format should be two comma separated decimal numbers
      * representing the minimum and maximum latitude for all returned points.
      *
-     * @param bounds A comma separated list of min and max latitude for the returned points.
+     * @param bounds
+     *            A comma separated list of min and max latitude for the returned points.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setLatitude(String bounds) {
-        List<Double> boundList = Lists.newArrayList(
-                Splitter.on(", ").split(bounds)).stream()
-                .map(Double::parseDouble).collect(Collectors.toList());
+        List<Double> boundList = Lists.newArrayList(Splitter.on(", ").split(bounds)).stream().map(Double::parseDouble)
+                .collect(Collectors.toList());
         Preconditions.checkArgument(boundList.size() == 2);
         double minLatitude = Math.min(boundList.get(0), boundList.get(1));
         double maxLatitude = Math.max(boundList.get(0), boundList.get(1));
@@ -155,22 +155,21 @@ public class TollSampler extends FieldSampler {
     }
 
     /**
-     * Sets the center of a radial bound for the returned points.  The format should be two comma separated decimal
+     * Sets the center of a radial bound for the returned points. The format should be two comma separated decimal
      * numbers representing the longitude and latitude of the center of the region.
      *
-     * @param bounds A comma separated list of min and max latitude for the returned points.
+     * @param bounds
+     *            A comma separated list of min and max latitude for the returned points.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setNear(String bounds) {
-        List<Double> center = Lists.newArrayList(
-                Splitter.on(CharMatcher.anyOf(", "))
-                        .trimResults().split(bounds)).stream()
-                .map(Double::parseDouble).collect(Collectors.toList());
+        List<Double> center = Lists.newArrayList(Splitter.on(CharMatcher.anyOf(", ")).trimResults().split(bounds))
+                .stream().map(Double::parseDouble).collect(Collectors.toList());
         limits = new RadialBound(center.get(0), center.get(1), 10);
     }
 
     /**
-     * Adjusts the radius for an existing radial bound.  Sets the radius in miles
+     * Adjusts the radius for an existing radial bound. Sets the radius in miles
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setMilesFrom(double distance) {
@@ -179,7 +178,7 @@ public class TollSampler extends FieldSampler {
     }
 
     /**
-     * Adjusts the radius for an existing radial bound.  Sets the radius in miles
+     * Adjusts the radius for an existing radial bound. Sets the radius in miles
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setKmFrom(double distance) {
@@ -210,25 +209,26 @@ public class TollSampler extends FieldSampler {
             int i = rand.nextInt(zipCount);
             ObjectNode r = new ObjectNode(nodeFactory);
             for (String key : values.keySet()) {
-                if (key.equalsIgnoreCase("zip")){
+                if (key.equalsIgnoreCase("zip")) {
                     r.set(key, new IntNode(Integer.valueOf(values.get(key).get(i))));
-                }
-                else{
+                } else {
                     r.set(key, new TextNode(values.get(key).get(i)));
-            }   
+                }
             }
 
-            if (!country.isEmpty()){
-                r.set("country",new TextNode(country));
+            if (!country.isEmpty()) {
+                r.set("country", new TextNode(country));
             }
 
-            long unixtime=(long) (System.currentTimeMillis()-rand.nextDouble()*60*60*24*365);
-            
-            r.set("timestamp",new LongNode(unixtime));
+            long unixtime = (long) (System.currentTimeMillis() - rand.nextDouble() * 60 * 60 * 24 * 365);
+
+            r.set("timestamp", new LongNode(unixtime));
 
             if (latitudeFuzz > 0 || longitudeFuzz > 0) {
-                r.set("longitude", new DoubleNode(Double.valueOf(String.format("%.4f", r.get("longitude").asDouble() + rand.nextDouble() * longitudeFuzz))));
-                r.set("latitude", new DoubleNode(Double.valueOf(String.format("%.4f", r.get("latitude").asDouble() + rand.nextDouble() * latitudeFuzz))));
+                r.set("longitude", new DoubleNode(Double.valueOf(
+                        String.format("%.4f", r.get("longitude").asDouble() + rand.nextDouble() * longitudeFuzz))));
+                r.set("latitude", new DoubleNode(Double.valueOf(
+                        String.format("%.4f", r.get("latitude").asDouble() + rand.nextDouble() * latitudeFuzz))));
             }
 
             if (limits == null || limits.accept(r)) {
@@ -267,7 +267,7 @@ public class TollSampler extends FieldSampler {
         boolean accept(JsonNode location) {
             String longitude = location.get("longitude").asText();
             String latitude = location.get("latitude").asText();
-            //noinspection SimplifiableIfStatement
+            // noinspection SimplifiableIfStatement
             if (longitude == null || longitude.equals("") || latitude == null || latitude.equals("")) {
                 return false;
             } else {
@@ -291,7 +291,8 @@ public class TollSampler extends FieldSampler {
 
         @Override
         boolean accept(double latitude, double longitude) {
-            return longitude >= minLongitude && longitude <= maxLongitude && latitude >= minLatitude && latitude <= maxLatitude;
+            return longitude >= minLongitude && longitude <= maxLongitude && latitude >= minLatitude
+                    && latitude <= maxLatitude;
         }
 
         @SuppressWarnings("WeakerAccess")

@@ -7,24 +7,21 @@ import org.dataguardians.openai.api.chat.Response;
 import org.dataguardians.openai.endpoints.ChatApiEndpointRequest;
 import org.dataguardians.security.TokenProvider;
 
-public class ShortTextGenerator extends DataGenerator<String>{
+public class ShortTextGenerator extends DataGenerator<String> {
     public ShortTextGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config) {
         super(token, generator, config);
     }
 
-    protected String generateInput(){
+    protected String generateInput() {
         return "Write me a random short paragraph.";
     }
 
-
     public String generate() throws HttpException, JsonProcessingException {
-        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).maxTokens(1024).build();
+        ChatApiEndpointRequest request = ChatApiEndpointRequest.builder().input(generateInput()).maxTokens(1024)
+                .build();
         request.setMaxTokens(config.getMaxTokens());
         Response hello = api.sample(request, Response.class);
         return hello.concatenateResponses();
     }
-
-
-
 
 }

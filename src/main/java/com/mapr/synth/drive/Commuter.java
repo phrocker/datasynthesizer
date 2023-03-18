@@ -41,21 +41,20 @@ import java.util.concurrent.LinkedBlockingQueue;
  * <p>
  * The model for deciding the next action is
  * <p>
- * 1) commuting to work happens mostly happens with a strong peak from 7-9, but could happen anytime
- * 2) commuting back home happens mostly from 15 to 20, with a strong peak from 17-19, but could happen any time.
- * 3) errands happen much more during the day than at night and only happen if the commuter is at home.
+ * 1) commuting to work happens mostly happens with a strong peak from 7-9, but could happen anytime 2) commuting back
+ * home happens mostly from 15 to 20, with a strong peak from 17-19, but could happen any time. 3) errands happen much
+ * more during the day than at night and only happen if the commuter is at home.
  * <p>
  * Once the next action is selected, the trip is planned (one-way for commuting, round-trip for errands)
  * <p>
- * The configuration of this sampler is a little bit fancy. The home location is specified as a sampler that
- * returns an object with latitude and longitude fields (typically a zip). The work location is specified as
- * one of several forms:
+ * The configuration of this sampler is a little bit fancy. The home location is specified as a sampler that returns an
+ * object with latitude and longitude fields (typically a zip). The work location is specified as one of several forms:
  * <p>
  * - as a number. This number is used as the mean distance and the work location is picked as a normal distribution
- * around the home.  This is the common case.
+ * around the home. This is the common case.
  * <p>
- * - as an object. The object is interpreted as a sampler that returns an object containing (at least) latitude
- * and longitude fields. Typically this would be a zip.
+ * - as an object. The object is interpreted as a sampler that returns an object containing (at least) latitude and
+ * longitude fields. Typically this would be a zip.
  * <p>
  * In addition, you need to specify the start and stop time for the simulation.
  */
@@ -120,22 +119,24 @@ public class Commuter extends FieldSampler {
         car.getEngine().setTime(start);
 
         JsonNode homeLocation = homeSampler.sample();
-        GeoPoint home = new GeoPoint(Util.toDegrees(homeLocation, "latitude"), Util.toDegrees(homeLocation, "longitude"));
+        GeoPoint home = new GeoPoint(Util.toDegrees(homeLocation, "latitude"),
+                Util.toDegrees(homeLocation, "longitude"));
 
         double radius = workSampler.sample().asDouble();
         GeoPoint work = home.nearby(radius, rand);
 
-        //---------------
+        // ---------------
         ObjectNode base = new ObjectNode(FACTORY);
         base.putObject("home").setAll((ObjectNode) homeLocation);
 
         work.asJson(base.putObject("work"));
         ArrayNode trips = new ArrayNode(FACTORY);
 
-        for (double t = start; t < end; ) {
+        for (double t = start; t < end;) {
             double tCommute = search(atHome, t, Util.nextExponentialTime(rand, 1));
             if (atHome) {
-                double tErrand = t + Util.nextExponentialTime(rand, (isWeekend(t) ? WEEKEND_ERRAND_RATE : WEEKDAY_ERRAND_RATE) / DAY_IN_S);
+                double tErrand = t + Util.nextExponentialTime(rand,
+                        (isWeekend(t) ? WEEKEND_ERRAND_RATE : WEEKDAY_ERRAND_RATE) / DAY_IN_S);
                 while (tErrand < tCommute && tErrand < end) {
                     GeoPoint nearby = home.nearby(ERRAND_SIZE_KM, rand);
                     ObjectNode trip = trips.addObject();
@@ -195,7 +196,7 @@ public class Commuter extends FieldSampler {
 
     private void recordTrip(double start, double duration, String type, double distance, ObjectNode trip) {
         trip.put("t", duration);
-        //noinspection SynchronizeOnNonFinalField
+        // noinspection SynchronizeOnNonFinalField
         synchronized (df) {
             trip.put("start", df.format(new Date((long) (start * 1000))));
         }
@@ -257,7 +258,7 @@ public class Commuter extends FieldSampler {
                 ObjectNode sample = data.addObject();
                 position.asJson(sample);
                 sample.put("t", t);
-                //noinspection SynchronizeOnNonFinalField
+                // noinspection SynchronizeOnNonFinalField
                 synchronized (df) {
                     sample.put("timestamp", df.format(new Date((long) (t * 1000))));
                 }

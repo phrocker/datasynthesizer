@@ -25,12 +25,11 @@ import com.fasterxml.jackson.databind.node.IntNode;
 import com.mapr.synth.distributions.PittmanYorProcess;
 
 /**
- * Samples from a Pitman-Yor process with parameters alpha (strength) and d (discount).
- * For d = 0, this is a Dirichlet process and will have close order of (alpha * log T) unique values
- * (where T is the number of samples taken. For d > 0, the growth will be as
- * alpha * T^d.
+ * Samples from a Pitman-Yor process with parameters alpha (strength) and d (discount). For d = 0, this is a Dirichlet
+ * process and will have close order of (alpha * log T) unique values (where T is the number of samples taken. For d >
+ * 0, the growth will be as alpha * T^d.
  */
-public class LongTailSampler extends FieldSampler     {
+public class LongTailSampler extends FieldSampler {
     PittmanYorProcess dist;
 
     public LongTailSampler(@JsonProperty("alpha") double alpha, @JsonProperty("d") double discount) {

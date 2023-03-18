@@ -14,22 +14,14 @@ public abstract class DataGenerator<T> {
 
     protected final GeneratorConfiguration config;
 
-    public DataGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config){
-        this.token=token;
-        this.api=generator;
-        this.config =config;
+    public DataGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config) {
+        this.token = token;
+        this.api = generator;
+        this.config = config;
     }
-
 
     protected abstract String generateInput();
 
-
-
     public abstract T generate() throws HttpException, JsonProcessingException;
-
-
-
-
-
 
 }

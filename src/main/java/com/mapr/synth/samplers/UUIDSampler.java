@@ -26,8 +26,8 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 /**
- * Samples a version 4 (random) UUID.  Note that the random bits generated are pull from the
- * standard Java random number generator and are subject to limitations because of that.
+ * Samples a version 4 (random) UUID. Note that the random bits generated are pull from the standard Java random number
+ * generator and are subject to limitations because of that.
  *
  * See http://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_.28random.29
  *
@@ -36,6 +36,7 @@ import java.util.Random;
 
 public class UUIDSampler extends FieldSampler {
     private final Random rand = new SecureRandom();
+
     public UUIDSampler() {
     }
 

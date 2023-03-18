@@ -20,98 +20,67 @@ import java.util.List;
 public class QueryGeneratorTest {
 
     private TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
-  //  @Test
+
+    // @Test
     public void test() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
         List<QueryConfiguration.DataDictionaryDefinition> dataDictionary = new ArrayList<>();
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carType")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carColor")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carModel")
-                .type(FieldType.FUZZY)
-                .build());
-        final QueryConfiguration queryConfig = QueryConfiguration.builder()
-                .count(2)
-                .queryType(QueryType.SQL).dataDictionary(dataDictionary)
-                .build();
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carType")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carColor")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carModel")
+                .type(FieldType.FUZZY).build());
+        final QueryConfiguration queryConfig = QueryConfiguration.builder().count(2).queryType(QueryType.SQL)
+                .dataDictionary(dataDictionary).build();
         QueryGenerator generator = new QueryGenerator(provider, chatGPT, null, queryConfig);
         System.out.println(generator.generate());
     }
 
-  //  @Test
+    // @Test
     public void testJexl() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
         List<QueryConfiguration.DataDictionaryDefinition> dataDictionary = new ArrayList<>();
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carType")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carColor")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carModel")
-                .type(FieldType.FUZZY)
-                .build());
-        final QueryConfiguration queryConfig = QueryConfiguration.builder()
-                .count(2)
-                .queryType(QueryType.JEXL).dataDictionary(dataDictionary)
-                .build();
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carType")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carColor")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carModel")
+                .type(FieldType.FUZZY).build());
+        final QueryConfiguration queryConfig = QueryConfiguration.builder().count(2).queryType(QueryType.JEXL)
+                .dataDictionary(dataDictionary).build();
         QueryGenerator generator = new QueryGenerator(provider, chatGPT, null, queryConfig);
         System.out.println(generator.generate());
     }
 
-    //@Test
+    // @Test
     public void testSQLWithInvalid() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
         List<QueryConfiguration.DataDictionaryDefinition> dataDictionary = new ArrayList<>();
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carType")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carColor")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carModel")
-                .type(FieldType.FUZZY)
-                .build());
-        final QueryConfiguration queryConfig = QueryConfiguration.builder()
-                .count(2)
-                .queryType(QueryType.SQL).dataDictionary(dataDictionary).invalidOnly(true)
-                .build();
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carType")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carColor")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carModel")
+                .type(FieldType.FUZZY).build());
+        final QueryConfiguration queryConfig = QueryConfiguration.builder().count(2).queryType(QueryType.SQL)
+                .dataDictionary(dataDictionary).invalidOnly(true).build();
         QueryGenerator generator = new QueryGenerator(provider, chatGPT, null, queryConfig);
         System.out.println(generator.generate());
     }
 
-    //@Test
+    // @Test
     public void testLuceneInvalid() throws HttpException, JsonProcessingException {
         GenerativeAPI chatGPT = new GenerativeAPI(provider);
         List<QueryConfiguration.DataDictionaryDefinition> dataDictionary = new ArrayList<>();
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carType")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carColor")
-                .type(FieldType.EXACT)
-                .build());
-        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder()
-                .fieldName("carModel")
-                .type(FieldType.FUZZY)
-                .build());
-        final QueryConfiguration queryConfig = QueryConfiguration.builder()
-                .count(2)
-                .queryType(QueryType.LUCENE).dataDictionary(dataDictionary).invalidOnly(true)
-                .build();
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carType")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carColor")
+                .type(FieldType.EXACT).build());
+        dataDictionary.add(QueryConfiguration.DataDictionaryDefinition.builder().fieldName("carModel")
+                .type(FieldType.FUZZY).build());
+        final QueryConfiguration queryConfig = QueryConfiguration.builder().count(2).queryType(QueryType.LUCENE)
+                .dataDictionary(dataDictionary).invalidOnly(true).build();
         QueryGenerator generator = new QueryGenerator(provider, chatGPT, null, queryConfig);
         System.out.println(generator.generate());
     }
@@ -119,10 +88,8 @@ public class QueryGeneratorTest {
     @Test
     public void testParseResponse() throws IOException, HttpException {
 
-        final String jsonText = IOUtils.toString(
-                this.getClass().getResourceAsStream("/ChatGPTResponse2.json"),
-                "UTF-8"
-        );
+        final String jsonText = IOUtils.toString(this.getClass().getResourceAsStream("/ChatGPTResponse2.json"),
+                "UTF-8");
         List<String> responses = new ArrayList<>();
         responses.add("(carType == \"Sedan\") && (carColor == \"Blue\") && (carModel ~= \"Camry\")");
         responses.add("(carType == \"Truck\") && (carColor == \"Black\") && (carModel ~= \"F-150\")");
@@ -135,10 +102,8 @@ public class QueryGeneratorTest {
     @Test
     public void testParseEmptyResponse() throws IOException, HttpException {
 
-        final String jsonText = IOUtils.toString(
-                this.getClass().getResourceAsStream("/ChatGPTResponseEmpty.json"),
-                "UTF-8"
-        );
+        final String jsonText = IOUtils.toString(this.getClass().getResourceAsStream("/ChatGPTResponseEmpty.json"),
+                "UTF-8");
 
         Response resp = new ObjectMapper().readValue(jsonText, Response.class);
 

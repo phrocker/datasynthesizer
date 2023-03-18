@@ -38,11 +38,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The changer sampler emulates data evolution over time.  The idea is that you give a schema for the
- * base record.  Fields in the base record will be changed at random and the value of the record will
- * be recorded in a list. In addition to the fields in the record, there will be a list of change flags,
- * one per field that are set to 1 when a field changed and left as 0 otherwise. The time of each change
- * is also recorded.
+ * The changer sampler emulates data evolution over time. The idea is that you give a schema for the base record. Fields
+ * in the base record will be changed at random and the value of the record will be recorded in a list. In addition to
+ * the fields in the record, there will be a list of change flags, one per field that are set to 1 when a field changed
+ * and left as 0 otherwise. The time of each change is also recorded.
  * <p>
  * The final result is the list of all record states and change flags.
  */
@@ -66,38 +65,32 @@ class Changer extends FieldSampler {
         }
     }
 
-    private static final Map<String, ? extends MilliConverter> unitMap = ImmutableMap.of(
-            "s", new MilliConverter() {
-                @Override
-                public double toMillis(double x) {
-                    return TimeUnit.SECONDS.toMillis(1) * x;
-                }
-            },
-            "m", new MilliConverter() {
-                @Override
-                public double toMillis(double x) {
-                    return TimeUnit.MINUTES.toMillis(1) * x;
-                }
-            },
-            "h", new MilliConverter() {
-                @Override
-                public double toMillis(double x) {
-                    return TimeUnit.HOURS.toMillis(1) * x;
-                }
-            },
-            "d", new MilliConverter() {
-                @Override
-                public double toMillis(double x) {
-                    return TimeUnit.DAYS.toMillis(1) * x;
-                }
-            },
-            "w", new MilliConverter() {
-                @Override
-                public double toMillis(double x) {
-                    return 7 * TimeUnit.DAYS.toMillis(1) * x;
-                }
-            }
-    );
+    private static final Map<String, ? extends MilliConverter> unitMap = ImmutableMap.of("s", new MilliConverter() {
+        @Override
+        public double toMillis(double x) {
+            return TimeUnit.SECONDS.toMillis(1) * x;
+        }
+    }, "m", new MilliConverter() {
+        @Override
+        public double toMillis(double x) {
+            return TimeUnit.MINUTES.toMillis(1) * x;
+        }
+    }, "h", new MilliConverter() {
+        @Override
+        public double toMillis(double x) {
+            return TimeUnit.HOURS.toMillis(1) * x;
+        }
+    }, "d", new MilliConverter() {
+        @Override
+        public double toMillis(double x) {
+            return TimeUnit.DAYS.toMillis(1) * x;
+        }
+    }, "w", new MilliConverter() {
+        @Override
+        public double toMillis(double x) {
+            return 7 * TimeUnit.DAYS.toMillis(1) * x;
+        }
+    });
 
     private final List<FieldSampler> fields;
     private final List<String> fieldNames;
@@ -112,8 +105,8 @@ class Changer extends FieldSampler {
     // these are used to sample which field to change
     private Gamma x, y;
 
-    private double meanInterval = 1000;  // interval - offset will have this mean
-    private double minInterval = 0;      // no interval can be less than this
+    private double meanInterval = 1000; // interval - offset will have this mean
+    private double minInterval = 0; // no interval can be less than this
     private FancyTimeFormatter df = new FancyTimeFormatter("yyyy-MM-dd");
 
     public Changer(@JsonProperty("values") List<FieldSampler> fields) {
@@ -143,12 +136,12 @@ class Changer extends FieldSampler {
     }
 
     /**
-     * Determines the rate at which simulated events arrive.  This rate can be a number in which case
-     * it is interpreted as a number of events per second.  The rate can also be a string like 5/m
-     * which means 5 events per minute.  The supported units are seconds (s), minutes (m), hours (h),
-     * and days (d).
+     * Determines the rate at which simulated events arrive. This rate can be a number in which case it is interpreted
+     * as a number of events per second. The rate can also be a string like 5/m which means 5 events per minute. The
+     * supported units are seconds (s), minutes (m), hours (h), and days (d).
      *
-     * @param rate   The rate at which events arrive.
+     * @param rate
+     *            The rate at which events arrive.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setRate(String rate) {
@@ -162,11 +155,11 @@ class Changer extends FieldSampler {
     }
 
     /**
-     * Sets a lower bound on the time between events.  This bound is enforced by generating events
-     * with an exponential distribution and then adding this offset.  The offset is specified in
-     * seconds.
+     * Sets a lower bound on the time between events. This bound is enforced by generating events with an exponential
+     * distribution and then adding this offset. The offset is specified in seconds.
      *
-     * @param offset The minimum separation between events
+     * @param offset
+     *            The minimum separation between events
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setOffset(String offset) {
@@ -180,13 +173,13 @@ class Changer extends FieldSampler {
     }
 
     /**
-     * Sets the format to be used in outputing event times.  Standard Java date formatting rules apply.  The
-     * default format is yyyy-MM-dd.  Another popular option is "yyyy-MM-dd HH:mm:ss.SS X".
+     * Sets the format to be used in outputing event times. Standard Java date formatting rules apply. The default
+     * format is yyyy-MM-dd. Another popular option is "yyyy-MM-dd HH:mm:ss.SS X".
      *
-     * As a special treat, "s" can be used for seconds since epoch and "Q" can be used for milliseconds since
-     * the epoch.
+     * As a special treat, "s" can be used for seconds since epoch and "Q" can be used for milliseconds since the epoch.
      *
-     * @param format The preferred data format.
+     * @param format
+     *            The preferred data format.
      */
     @SuppressWarnings("unused")
     public void setFormat(String format) {
@@ -194,11 +187,11 @@ class Changer extends FieldSampler {
     }
 
     /**
-     * Sets the starting time for events. This will be exactly the time of the first event. Note that
-     * the format for the starting time will be the default format unless the format argument precedes
-     * this attribute.
+     * Sets the starting time for events. This will be exactly the time of the first event. Note that the format for the
+     * starting time will be the default format unless the format argument precedes this attribute.
      *
-     * @param start The start time for the sequence
+     * @param start
+     *            The start time for the sequence
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setStart(String start) throws ParseException {
@@ -208,7 +201,8 @@ class Changer extends FieldSampler {
     /**
      * Sets the ending time for events. This will be after the time of any event we generate.
      *
-     * @param end   The upper bound for event time
+     * @param end
+     *            The upper bound for event time
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setEnd(String end) throws ParseException {

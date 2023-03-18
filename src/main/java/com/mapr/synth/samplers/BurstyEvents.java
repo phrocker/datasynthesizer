@@ -42,7 +42,8 @@ public class BurstyEvents extends FieldSampler {
     private FieldSampler value;
 
     // most internal parameters will be resampled on each restart
-    // in some cases, these are actually a distribution that is reparametrized on each restart and sampled each transaction
+    // in some cases, these are actually a distribution that is reparametrized on each restart and sampled each
+    // transaction
     private final Gamma dilationDistribution = new Gamma(6, 1, base);
     private double dilation;
 
@@ -56,7 +57,7 @@ public class BurstyEvents extends FieldSampler {
 
     // distribution of query times
     private Exponential meanIntervalDistribution = new Exponential(1.0 / TimeUnit.MINUTES.toMillis(1), base);
-    private Exponential interval;   // interval sampled from this
+    private Exponential interval; // interval sampled from this
 
     // distribution of how much slower queries go slower when inactive
     private final Gamma idleDistribution = new Gamma(6, 1.0, base);
@@ -80,12 +81,11 @@ public class BurstyEvents extends FieldSampler {
     // emulates roughly a US dominated audience with almost a 4:1 peak to valley ratio for the distribution
     // of sunrise times. The actual times of the bursts will be more spread out than this due the length of
     // days
-    private final WrappedNormal sunriseGenerator = new WrappedNormal(
-            Util.ONE_DAY,
-            TimeUnit.HOURS.toMillis(19),
+    private final WrappedNormal sunriseGenerator = new WrappedNormal(Util.ONE_DAY, TimeUnit.HOURS.toMillis(19),
             TimeUnit.HOURS.toMillis(5));
     private double sunriseTime = sunriseGenerator.nextDouble();
-    private double sunsetTime = sunriseTime < NIGHT_DURATION ? sunriseTime - NIGHT_DURATION + Util.ONE_DAY : sunriseTime - NIGHT_DURATION;
+    private double sunsetTime = sunriseTime < NIGHT_DURATION ? sunriseTime - NIGHT_DURATION + Util.ONE_DAY
+            : sunriseTime - NIGHT_DURATION;
 
     private boolean isDaytime = Util.isDaytime(now, sunriseTime, sunsetTime);
 
@@ -98,9 +98,7 @@ public class BurstyEvents extends FieldSampler {
     }
 
     enum Event {
-        SUNRISE, SUNSET,
-        ACTIVATE, DEACTIVATE,
-        ACTION, END
+        SUNRISE, SUNSET, ACTIVATE, DEACTIVATE, ACTION, END
     }
 
     /**
@@ -230,7 +228,8 @@ public class BurstyEvents extends FieldSampler {
         }
 
         sunriseTime = sunriseGenerator.nextDouble();
-        sunsetTime = sunriseTime < NIGHT_DURATION ? sunriseTime - NIGHT_DURATION + Util.ONE_DAY : sunriseTime - NIGHT_DURATION;
+        sunsetTime = sunriseTime < NIGHT_DURATION ? sunriseTime - NIGHT_DURATION + Util.ONE_DAY
+                : sunriseTime - NIGHT_DURATION;
 
         // we start inactive
         isDaytime = Util.isDaytime(Util.timeOfDay(now), sunriseTime, sunsetTime);
@@ -278,7 +277,6 @@ public class BurstyEvents extends FieldSampler {
         fields.add("timestamp_ms");
     }
 
-
     @Override
     public JsonNode sample() {
         JsonNode r;
@@ -310,15 +308,15 @@ public class BurstyEvents extends FieldSampler {
         Event e = null;
         while (e != Event.ACTION) {
             e = step();
-//            System.out.printf("%8s/%-9s %11s %s %8.2f %8.2f %8.2f %8.2f\n",
-//                    Util.isDaytime(Util.timeOfDay(now), sunriseTime, sunsetTime) ? "day" : "night",
-//                    isActive ? "active" : "inactive",
-//                    e, df.format((long) now),
-//                    (nextQuery - now) / TimeUnit.HOURS.toMillis(1),
-//                    (nextTransition - now) / TimeUnit.HOURS.toMillis(1),
-//                    24 * Util.fractionalPart((sunriseTime - Util.timeOfDay(now)) / TimeUnit.HOURS.toMillis(24)),
-//                    24 * Util.fractionalPart((sunsetTime - Util.timeOfDay(now)) / TimeUnit.HOURS.toMillis(24))
-//            );
+            // System.out.printf("%8s/%-9s %11s %s %8.2f %8.2f %8.2f %8.2f\n",
+            // Util.isDaytime(Util.timeOfDay(now), sunriseTime, sunsetTime) ? "day" : "night",
+            // isActive ? "active" : "inactive",
+            // e, df.format((long) now),
+            // (nextQuery - now) / TimeUnit.HOURS.toMillis(1),
+            // (nextTransition - now) / TimeUnit.HOURS.toMillis(1),
+            // 24 * Util.fractionalPart((sunriseTime - Util.timeOfDay(now)) / TimeUnit.HOURS.toMillis(24)),
+            // 24 * Util.fractionalPart((sunsetTime - Util.timeOfDay(now)) / TimeUnit.HOURS.toMillis(24))
+            // );
             if (e == Event.END) {
                 return false;
             }

@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class Schema {
     private String schemaDefinition;
 
-    public static class SchemaBuilder{
+    public static class SchemaBuilder {
         public SchemaBuilder from(File schemaFile) throws IOException {
             this.schemaDefinition = IOUtils.toString(schemaFile.toURI(), StandardCharsets.UTF_8);
             return this;

@@ -24,20 +24,16 @@ import java.io.Serializable;
 /**
  * Simulates engine behavior with automatic transmission.
  * <p>
- * The basic idea is that we have a transmission with different gears.
- * The transmission will shift to a higher gear as RPM's reach a high
- * shift point and will shift down as RPM's reach a low shift point.
+ * The basic idea is that we have a transmission with different gears. The transmission will shift to a higher gear as
+ * RPM's reach a high shift point and will shift down as RPM's reach a low shift point.
  * <p>
- * The shift points depend a bit on load which, in turn, depends on
- * whether we are accelerating or decelerating.
+ * The shift points depend a bit on load which, in turn, depends on whether we are accelerating or decelerating.
  * <p>
- * The input is a desired speed. The throttle setting will be selected
- * based on whether we are too slow or fast. That will determine the load
- * which in turn determines the shift points. The engine load and transmission
- * setting will determine how the speed changes and off we go.
+ * The input is a desired speed. The throttle setting will be selected based on whether we are too slow or fast. That
+ * will determine the load which in turn determines the shift points. The engine load and transmission setting will
+ * determine how the speed changes and off we go.
  * <p>
- * So far, this works pretty well, but it doesn't the engine braking emulation
- * is kind of a hack.
+ * So far, this works pretty well, but it doesn't the engine braking emulation is kind of a hack.
  */
 public class Engine implements Serializable {
 
@@ -46,9 +42,8 @@ public class Engine implements Serializable {
     private static final double ACCELERATION_BACKOFF = 30;
 
     // observed transmission properties for typical turbo-diesel
-    private static final double[] MPS_BY_RPM = {
-            4.4704 / 2000, 8.9408 / 2000, 13.4112 / 2000, 13.4112 / 1500, 17.8816 / 1500, 22.3520 / 1500, 22.3520 / 1000
-    };
+    private static final double[] MPS_BY_RPM = { 4.4704 / 2000, 8.9408 / 2000, 13.4112 / 2000, 13.4112 / 1500,
+            17.8816 / 1500, 22.3520 / 1500, 22.3520 / 1000 };
     private static final int TOP_GEAR = MPS_BY_RPM.length - 1;
     private static final double ZERO_TORQUE_RPM = 3500;
 
@@ -107,12 +102,14 @@ public class Engine implements Serializable {
     }
 
     /**
-     * Runs the simulation up to just past the desired sampleTime with a specified
-     * target speed.
+     * Runs the simulation up to just past the desired sampleTime with a specified target speed.
      *
-     * @param sampleTime  When to stop the simulation and return
-     * @param speedTarget The speed we would like to reach
-     * @param maxBrake    The maximum amount of braking in g's. Typically 0.1 for gentle driving, 1 for maniacs.
+     * @param sampleTime
+     *            When to stop the simulation and return
+     * @param speedTarget
+     *            The speed we would like to reach
+     * @param maxBrake
+     *            The maximum amount of braking in g's. Typically 0.1 for gentle driving, 1 for maniacs.
      */
     @SuppressWarnings("WeakerAccess")
     public void stepToTime(double sampleTime, double speedTarget, double maxBrake) {
@@ -120,7 +117,8 @@ public class Engine implements Serializable {
 
             // throttle rises or falls quite fast unless we are close to the desired speed
             // when speed is close, we switch to a bit of a proportional control
-            double desiredThrottle = THROTTLE_CONTROL_GAIN * (speedTarget - currentSpeed) - ACCELERATION_BACKOFF * currentAcceleration;
+            double desiredThrottle = THROTTLE_CONTROL_GAIN * (speedTarget - currentSpeed)
+                    - ACCELERATION_BACKOFF * currentAcceleration;
             desiredThrottle = Math.min(MAX_THROTTLE, desiredThrottle);
             desiredThrottle = Math.max(0, desiredThrottle);
 
@@ -149,7 +147,8 @@ public class Engine implements Serializable {
             }
 
             // power is a combination of assumed linear decrease in torque from zero to some high RPM
-            double engineForce = TORQUE_AT_ZERO / MPS_BY_RPM[currentGear] * (1.0 - currentRPM / ZERO_TORQUE_RPM) * powerSetting;
+            double engineForce = TORQUE_AT_ZERO / MPS_BY_RPM[currentGear] * (1.0 - currentRPM / ZERO_TORQUE_RPM)
+                    * powerSetting;
 
             // drag is based on an asymptotic max speed of 150 MPH where aerodynamic drag == enginePower
             // the extra drag is engine drag

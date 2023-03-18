@@ -55,7 +55,7 @@ public class SsnSampler extends FieldSampler {
         Splitter onComma = Splitter.on(",").trimResults();
         try {
             names = null;
-            //noinspection UnstableApiUsage
+            // noinspection UnstableApiUsage
             for (String line : Resources.readLines(Resources.getResource("ssn-seeds"), Charsets.UTF_8)) {
                 if (line.startsWith("#")) {
                     // last comment line contains actual field names
@@ -101,10 +101,10 @@ public class SsnSampler extends FieldSampler {
         keepTypes = Sets.newHashSet(Splitter.on(Pattern.compile("[\\s,;]+")).split(types));
         Set<String> legalTypes = ImmutableSet.of("normal", "extra");
         for (String type : keepTypes) {
-            Preconditions.checkArgument(legalTypes.contains(type), "Illegal type requested: %s, needed one of %s", type, legalTypes);
+            Preconditions.checkArgument(legalTypes.contains(type), "Illegal type requested: %s, needed one of %s", type,
+                    legalTypes);
         }
     }
-
 
     @SuppressWarnings("UnusedDeclaration")
     public void setVerbose(boolean verbose) {
@@ -130,11 +130,13 @@ public class SsnSampler extends FieldSampler {
                     }
                     Preconditions.checkState(!nx.hasNext());
                     if (keepFields.contains("ssn")) {
-                        rx.set("ssn", new TextNode(String.format("%s-%02d-%04d", codes.get(i), rand.nextInt(99) + 1, rand.nextInt(9999) + 1)));
+                        rx.set("ssn", new TextNode(String.format("%s-%02d-%04d", codes.get(i), rand.nextInt(99) + 1,
+                                rand.nextInt(9999) + 1)));
                     }
                     return rx;
                 } else {
-                    return new TextNode(String.format("%s-%02d-%04d", codes.get(i), rand.nextInt(99) + 1, rand.nextInt(9999) + 1));
+                    return new TextNode(
+                            String.format("%s-%02d-%04d", codes.get(i), rand.nextInt(99) + 1, rand.nextInt(9999) + 1));
                 }
             }
         }

@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
  * </p>
  *
  * original @author <a href="https://github.com/LiLittleCat">LiLittleCat</a>
+ *
  * @since 2023/3/2
  */
 
@@ -28,7 +29,6 @@ public abstract class BaseGenerativeRequest {
      * Defined end user id : https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids
      */
     protected String user;
-
 
     /**
      * Model name, if applicable of the request"

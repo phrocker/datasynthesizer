@@ -42,24 +42,17 @@ public class HeaderSampler extends FieldSampler {
     private String prolog;
 
     private enum Type {
-        NORMAL,
-        ABABIL,
-        MAL1,
-        MAL2,
-        MAL3
+        NORMAL, ABABIL, MAL1, MAL2, MAL3
     }
 
     private Type headerType = Type.NORMAL;
 
     private final BrowserSampler browser = new BrowserSampler();
-    private final Map<String, StringSampler> headers = ImmutableMap.<String, StringSampler>builder()
+    private final Map<String, StringSampler> headers = ImmutableMap.<String, StringSampler> builder()
             .put("chrome", new StringSampler("user-agents/chrome"))
-            .put("firefox", new StringSampler("user-agents/firefox"))
-            .put("ie", new StringSampler("user-agents/ie"))
-            .put("mobile", new StringSampler("user-agents/mobile"))
-            .put("opera", new StringSampler("user-agents/opera"))
-            .put("safari", new StringSampler("user-agents/safari"))
-            .build();
+            .put("firefox", new StringSampler("user-agents/firefox")).put("ie", new StringSampler("user-agents/ie"))
+            .put("mobile", new StringSampler("user-agents/mobile")).put("opera", new StringSampler("user-agents/opera"))
+            .put("safari", new StringSampler("user-agents/safari")).build();
     private final StringSampler language = new LanguageSampler();
 
     private final Random gen = new Random();
@@ -82,14 +75,14 @@ public class HeaderSampler extends FieldSampler {
         cfg.setTemplateLoader(new ClassTemplateLoader(getClass(), "/web-headers"));
         String templateName = "header";
         switch (headerType) {
-            case MAL3:
-                templateName = "mal3";
-                break;
-            case ABABIL:
-                templateName = "ababil";
-                break;
-            default:
-                break;
+        case MAL3:
+            templateName = "mal3";
+            break;
+        case ABABIL:
+            templateName = "ababil";
+            break;
+        default:
+            break;
         }
         template = cfg.getTemplate(templateName);
     }
@@ -97,20 +90,20 @@ public class HeaderSampler extends FieldSampler {
     // these methods sample the pieces of the headers
     String encoding() {
         switch (headerType) {
-            case MAL1:
-                return "identity";
-            case MAL2:
-                return "             ";
+        case MAL1:
+            return "identity";
+        case MAL2:
+            return "             ";
+        default:
+            switch (gen.nextInt(3)) {
+            case 0:
+                return "gzip";
+            case 1:
+                return "deflate";
+            case 2:
             default:
-                switch (gen.nextInt(3)) {
-                    case 0:
-                        return "gzip";
-                    case 1:
-                        return "deflate";
-                    case 2:
-                    default:
-                        return "gzip, deflate";
-                }
+                return "gzip, deflate";
+            }
         }
     }
 
@@ -136,8 +129,7 @@ public class HeaderSampler extends FieldSampler {
     }
 
     String url(boolean isImage) {
-        return String.format("http://foo.bar.com/%06d/%06x%s",
-                gen.nextInt(1_000_000), gen.nextInt(0x1_000_000),
+        return String.format("http://foo.bar.com/%06d/%06x%s", gen.nextInt(1_000_000), gen.nextInt(0x1_000_000),
                 isImage ? ".jpg" : ".html");
     }
 
@@ -156,15 +148,10 @@ public class HeaderSampler extends FieldSampler {
     @Override
     public JsonNode sample() {
         boolean isImage = gen.nextDouble() < 0.3;
-        Map<String, String> params = ImmutableMap.<String, String>builder()
-                .put("url", url(isImage))
-                .put("host", String.format("x%03d.foo.com", gen.nextInt(5)))
-                .put("accept", accept(isImage))
-                .put("userAgent", userAgent())
-                .put("language", language())
-                .put("encoding", encoding())
-                .put("referer", url(false))
-                .build();
+        Map<String, String> params = ImmutableMap.<String, String> builder().put("url", url(isImage))
+                .put("host", String.format("x%03d.foo.com", gen.nextInt(5))).put("accept", accept(isImage))
+                .put("userAgent", userAgent()).put("language", language()).put("encoding", encoding())
+                .put("referer", url(false)).build();
         StringWriter out = new StringWriter();
         if (prolog != null) {
             out.append(prolog);

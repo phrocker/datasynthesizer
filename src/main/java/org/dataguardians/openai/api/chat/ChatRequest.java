@@ -15,9 +15,11 @@ import java.util.Map;
  * <p>
  * Inspired by LiLittleCat's ChatCopmletionRequestBody
  * </p>
- * see: <a href="https://platform.openai.com/docs/api-reference/chat">https://platform.openai.com/docs/api-reference/chat</a>
+ * see:
+ * <a href="https://platform.openai.com/docs/api-reference/chat">https://platform.openai.com/docs/api-reference/chat</a>
  *
  * borrowed from <a href="https://github.com/LiLittleCat">LiLittleCat</a>
+ *
  * @since 2023/3/2
  */
 @Data
@@ -26,8 +28,8 @@ public class ChatRequest extends BaseGenerativeRequest {
     /**
      * Required
      * <p>
-     * The messages to generate chat completions for, in the
-     * <a href=https://platform.openai.com/docs/guides/chat/introduction>chat format</a>.
+     * The messages to generate chat completions for, in the <a
+     * href=https://platform.openai.com/docs/guides/chat/introduction>chat format</a>.
      */
     @JsonProperty(value = "messages")
     private List<Message> messages;
@@ -37,9 +39,8 @@ public class ChatRequest extends BaseGenerativeRequest {
      * <p>
      * Defaults to 1
      * <p>
-     * What sampling temperature to use, between 0 and 2.
-     * Higher values like 0.8 will make the output more random,
-     * while lower values like 0.2 will make it more focused and deterministic.
+     * What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while
+     * lower values like 0.2 will make it more focused and deterministic.
      * <p>
      * We generally recommend altering this or `top_p` but not both.
      */
@@ -51,9 +52,9 @@ public class ChatRequest extends BaseGenerativeRequest {
      * <p>
      * Defaults to 1
      * <p>
-     * An alternative to sampling with temperature, called nucleus sampling,
-     * where the model considers the results of the tokens with top_p probability mass.
-     * So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+     * An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of
+     * the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are
+     * considered.
      * <p>
      * We generally recommend altering this or `temperature` but not both.
      */
@@ -75,10 +76,9 @@ public class ChatRequest extends BaseGenerativeRequest {
      * <p>
      * Defaults to false
      * <p>
-     * If set, partial message deltas will be sent, like in ChatGPT.
-     * Tokens will be sent as data-only <a href=https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format>server-sent events</a>
-     * as they become available,
-     * with the stream terminated by a `data: [DONE]` message.
+     * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only <a
+     * href=https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format>server-sent
+     * events</a> as they become available, with the stream terminated by a `data: [DONE]` message.
      */
     @JsonProperty(value = "stream")
     private Boolean stream;
@@ -98,8 +98,8 @@ public class ChatRequest extends BaseGenerativeRequest {
      * <p>
      * Defaults to inf
      * <p>
-     * The maximum number of tokens allowed for the generated answer.
-     * By default, the number of tokens the model can return will be (4096 - prompt tokens).
+     * The maximum number of tokens allowed for the generated answer. By default, the number of tokens the model can
+     * return will be (4096 - prompt tokens).
      */
     @JsonProperty(value = "max_tokens")
     private Integer maxTokens;
@@ -109,11 +109,11 @@ public class ChatRequest extends BaseGenerativeRequest {
      * <p>
      * Defaults to 0
      * <p>
-     * Number between -2.0 and 2.0.
-     * Positive values penalize new tokens based on whether they appear in the text so far,
+     * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far,
      * increasing the model's likelihood to talk about new topics.
      * <p>
-     * <a href=https://platform.openai.com/docs/api-reference/parameter-details>See more information about frequency and presence penalties.</a>
+     * <a href=https://platform.openai.com/docs/api-reference/parameter-details>See more information about frequency and
+     * presence penalties.</a>
      */
     @JsonProperty(value = "presence_penalty")
     private Float presencePenalty;
@@ -123,11 +123,11 @@ public class ChatRequest extends BaseGenerativeRequest {
      * <p>
      * Defaults to 0
      * <p>
-     * Number between -2.0 and 2.0.
-     * Positive values penalize new tokens based on their existing frequency in the text so far,
-     * decreasing the model's likelihood to repeat the same line verbatim.
+     * Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so
+     * far, decreasing the model's likelihood to repeat the same line verbatim.
      * <p>
-     * <a href=https://platform.openai.com/docs/api-reference/parameter-details>See more information about frequency and presence penalties.</a>
+     * <a href=https://platform.openai.com/docs/api-reference/parameter-details>See more information about frequency and
+     * presence penalties.</a>
      */
     @JsonProperty(value = "frequency_penalty")
     private Float frequencyPenalty;
@@ -139,10 +139,10 @@ public class ChatRequest extends BaseGenerativeRequest {
      * <p>
      * Modify the likelihood of specified tokens appearing in the completion.
      * <p>
-     * Accepts a json object that maps tokens (specified by their token ID in the tokenizer) to an associated bias value from -100 to 100.
-     * Mathematically, the bias is added to the logits generated by the model prior to sampling.
-     * The exact effect will vary per model, but values between -1 and 1 should decrease or increase likelihood of selection;
-     * values like -100 or 100 should result in a ban or exclusive selection of the relevant token.
+     * Accepts a json object that maps tokens (specified by their token ID in the tokenizer) to an associated bias value
+     * from -100 to 100. Mathematically, the bias is added to the logits generated by the model prior to sampling. The
+     * exact effect will vary per model, but values between -1 and 1 should decrease or increase likelihood of
+     * selection; values like -100 or 100 should result in a ban or exclusive selection of the relevant token.
      */
     @JsonProperty(value = "logit_bias")
     private Map<Object, Object> logitBias;

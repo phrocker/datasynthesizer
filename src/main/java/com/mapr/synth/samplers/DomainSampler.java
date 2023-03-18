@@ -68,7 +68,6 @@ public class DomainSampler extends FieldSampler {
         restart();
     }
 
-
     public void setAlpha(double alpha) {
         this.alpha = alpha;
         domainDistribution.getBaseDistribution().setAlpha(alpha);

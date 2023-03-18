@@ -50,7 +50,7 @@ class FileSampler extends FieldSampler {
     public FileSampler() {
     }
 
-    @SuppressWarnings({"unused", "UnstableApiUsage"})
+    @SuppressWarnings({ "unused", "UnstableApiUsage" })
     public void setFile(String lookup) throws IOException {
         if (lookup.matches(".*\\.json")) {
             readJsonData(Files.newReader(new File(lookup), Charsets.UTF_8));
@@ -71,7 +71,7 @@ class FileSampler extends FieldSampler {
         }
     }
 
-    @SuppressWarnings({"UnusedDeclaration", "UnstableApiUsage"})
+    @SuppressWarnings({ "UnusedDeclaration", "UnstableApiUsage" })
     public void setResource(String lookup) throws IOException {
         if (lookup.matches(".*\\.json")) {
             readJsonData(Files.newReader(new File(Resources.getResource(lookup).getFile()), Charsets.UTF_8));
@@ -99,7 +99,8 @@ class FileSampler extends FieldSampler {
         for (String line : lines.subList(1, lines.size())) {
             ObjectNode r = nf.objectNode();
             List<String> fields = Lists.newArrayList(splitter.split(line));
-            Preconditions.checkState(names.size() == fields.size(), "Wrong number of fields, expected ", names.size(), fields.size());
+            Preconditions.checkState(names.size() == fields.size(), "Wrong number of fields, expected ", names.size(),
+                    fields.size());
             Iterator<String> ix = names.iterator();
             for (String field : fields) {
                 r.put(ix.next(), field);
@@ -115,16 +116,15 @@ class FileSampler extends FieldSampler {
     }
 
     /**
-     * Sets the amount of skew.  Skew is added by taking the min of several samples.
-     * Setting power = 0 gives uniform distribution, setting it to 5 gives a very
-     * heavily skewed distribution.
+     * Sets the amount of skew. Skew is added by taking the min of several samples. Setting power = 0 gives uniform
+     * distribution, setting it to 5 gives a very heavily skewed distribution.
      * <p>
-     * If you set power to a negative number, the skew is reversed so large values
-     * are preferred.
+     * If you set power to a negative number, the skew is reversed so large values are preferred.
      *
-     * @param skew Controls how skewed the distribution is.
+     * @param skew
+     *            Controls how skewed the distribution is.
      */
-    @SuppressWarnings({"UnusedDeclaration"})
+    @SuppressWarnings({ "UnusedDeclaration" })
     public void setSkew(int skew) {
         if (index != null) {
             index.setSkew(skew);
@@ -135,8 +135,8 @@ class FileSampler extends FieldSampler {
 
     @Override
     public JsonNode sample() {
-      synchronized (this) {
-        return data.get(index.sample().asInt());
-      }
+        synchronized (this) {
+            return data.get(index.sample().asInt());
+        }
     }
 }

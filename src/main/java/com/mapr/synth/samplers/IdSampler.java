@@ -30,25 +30,25 @@ import java.util.concurrent.atomic.AtomicInteger;
  * The only cleverness here is that we allow a variable amount of key skew.
  */
 public class IdSampler extends FieldSampler {
-  private final AtomicInteger current = new AtomicInteger(0);
-  private int start;
+    private final AtomicInteger current = new AtomicInteger(0);
+    private int start;
 
-  public IdSampler() {
-  }
+    public IdSampler() {
+    }
 
-  @Override
-  public void restart() {
-    current.set(this.start);
-  }
+    @Override
+    public void restart() {
+        current.set(this.start);
+    }
 
-  @Override
-  public JsonNode sample() {
-    return new IntNode(current.getAndIncrement());
-  }
+    @Override
+    public JsonNode sample() {
+        return new IntNode(current.getAndIncrement());
+    }
 
-  @SuppressWarnings("UnusedDeclaration")
-  public void setStart(int start) {
-    this.start = start;
-    this.current.set(start);
-  }
+    @SuppressWarnings("UnusedDeclaration")
+    public void setStart(int start) {
+        this.start = start;
+        this.current.set(start);
+    }
 }

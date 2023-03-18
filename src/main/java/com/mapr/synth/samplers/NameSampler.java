@@ -39,8 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Sample from US names.
  * <p>
- * See http://www.census.gov/genealogy/www/data/1990surnames/names_files.html
- * for data.
+ * See http://www.census.gov/genealogy/www/data/1990surnames/names_files.html for data.
  *
  * Thread safe
  */
@@ -62,7 +61,6 @@ public class NameSampler extends FieldSampler {
         try {
             if (first.compareAndSet(null, new Multinomial<>())) {
                 Preconditions.checkState(last.getAndSet(new Multinomial<>()) == null);
-
 
                 Splitter onTab = Splitter.on(CharMatcher.whitespace()).omitEmptyStrings()
                         .trimResults(CharMatcher.anyOf(" \""));
@@ -112,8 +110,8 @@ public class NameSampler extends FieldSampler {
         synchronized (this) {
             final String firstname = first.get().sample();
             final String lastname = last.get().sample();
-            previousName.set(new AbstractMap.SimpleEntry<String,String>(firstname, lastname));
-        switch (type) {
+            previousName.set(new AbstractMap.SimpleEntry<String, String>(firstname, lastname));
+            switch (type) {
             case FIRST:
                 return new TextNode(firstname);
             case LAST:
@@ -123,15 +121,14 @@ public class NameSampler extends FieldSampler {
             case LAST_FIRST:
                 return new TextNode(lastname + ", " + firstname);
             case RAND_FIRST_LAST:
-                if (rand.nextBoolean()){
+                if (rand.nextBoolean()) {
                     return new TextNode(lastname + ", " + firstname);
-                }
-                else{
+                } else {
                     return new TextNode(firstname + " " + lastname);
                 }
+            }
         }
-      }
-      // can't happen
+        // can't happen
         return null;
     }
 

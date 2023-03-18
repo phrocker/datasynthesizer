@@ -96,7 +96,6 @@ public class Trails extends PApplet {
         }
     }
 
-
     private Rect2D drawText(float x, float y, String format, Object... args) {
         String s = String.format(format, args);
         float w = textWidth(s);
@@ -104,7 +103,7 @@ public class Trails extends PApplet {
         float down = textDescent();
         float width = w * 1.1F;
         float height = (up + down) * 1.1F;
-//        rect(x, y + down, width, height);
+        // rect(x, y + down, width, height);
 
         stroke(0, 0, 0, 100);
         fill(0, 0, 0, 100);
@@ -140,10 +139,10 @@ public class Trails extends PApplet {
                 }
             }
 
-//            fill(0xee + dither(5), 0xee + dither(5), 0xff + dither(5), 60);
-//            drawText(250, 50, "%8.1f %8.1f", old.here.getX(), old.here.getY());
-//            fill(0xee + dither(5), 0xee + dither(5), 0xff + dither(5), 60);
-//            drawText(50, 50, "%8.0f %8.1f", old.car.getRpm(), old.car.getSpeed() / Constants.MPH);
+            // fill(0xee + dither(5), 0xee + dither(5), 0xff + dither(5), 60);
+            // drawText(250, 50, "%8.1f %8.1f", old.here.getX(), old.here.getY());
+            // fill(0xee + dither(5), 0xee + dither(5), 0xff + dither(5), 60);
+            // drawText(50, 50, "%8.0f %8.1f", old.car.getRpm(), old.car.getSpeed() / Constants.MPH);
 
             speed.display();
             rpm.display();
@@ -151,10 +150,10 @@ public class Trails extends PApplet {
         }
 
         if (clicks > 0) {
-            //Fade everything which is drawn
+            // Fade everything which is drawn
             if (frameCount % 10 == 0) {
-//                noStroke();
-//            fill(0xee + dither(5), 0xee + dither(5), 0xfe + dither(5), 3);
+                // noStroke();
+                // fill(0xee + dither(5), 0xee + dither(5), 0xfe + dither(5), 3);
                 colorMode(HSB, 100);
                 stroke(0, 0, 0, 100);
                 fill(0F, 0F, 120 + dither(11), 6F);
@@ -186,7 +185,7 @@ public class Trails extends PApplet {
                     if (stepSize < 10) {
                         meanSpeed += (old.car.getSpeed() - meanSpeed) * 0.4;
                         speedDistribution.add(meanSpeed);
-//                        double hue = speedDistribution.cdf(old.car.getSpeed());
+                        // double hue = speedDistribution.cdf(old.car.getSpeed());
                         double hue = 100 * Math.pow(old.car.getSpeed() / Constants.MPH, 2) / Math.pow(100, 2);
                         stroke((float) hue, 70, 80);
                         line((float) old.here.getX(), (float) old.here.getY(), (float) p.getX(), (float) p.getY());
@@ -210,9 +209,8 @@ public class Trails extends PApplet {
     }
 
     public static void main(String[] args) {
-        PApplet.main("com.mapr.com.mapr.synth.drive.Trails", new String[]{""});
+        PApplet.main("com.mapr.com.mapr.synth.drive.Trails", new String[] { "" });
     }
-
 
     public static class State {
         private final Engine car;
@@ -228,38 +226,36 @@ public class Trails extends PApplet {
      * Draws a stripchart recorder.
      */
     class Stripchart {
-        int x;           // horizontal position of chart
-        int y;           // vertical position of chart
-        int nSamples;    // number of samples to display (affects width)
-        int h;           // height of chart
-        int colour;    // color of dots to plot
-        int dataPos;     // where does next data point go?
-        int startPos;    // where do we start plotting?
-        int nPoints;     // number of points currently in the array
-        int period;      // how often to draw a gray line
-        double minValue;  // minimum value to display
-        double maxValue;  // maximum value to display
-        float[] points;  // the data points to plot
+        int x; // horizontal position of chart
+        int y; // vertical position of chart
+        int nSamples; // number of samples to display (affects width)
+        int h; // height of chart
+        int colour; // color of dots to plot
+        int dataPos; // where does next data point go?
+        int startPos; // where do we start plotting?
+        int nPoints; // number of points currently in the array
+        int period; // how often to draw a gray line
+        double minValue; // minimum value to display
+        double maxValue; // maximum value to display
+        float[] points; // the data points to plot
 
         private final DecimalFormat d = new DecimalFormat("0.#");
-        private final String minString;  // minimum value as a string
-        private final String maxString;  // maximum value as a string
+        private final String minString; // minimum value as a string
+        private final String maxString; // maximum value as a string
 
         private final PFont legendFont = createFont("Arial", 10);
-        private float prevX;    // remember previous point
+        private float prevX; // remember previous point
         private float prevY;
 
         /*
-          rightSpace tells how much room there is for the chart
-          legend. VSPACE and HSPACE give the spacing from the border
-          of the stripchart to the point plotting area.
-        */
+         * rightSpace tells how much room there is for the chart legend. VSPACE and HSPACE give the spacing from the
+         * border of the stripchart to the point plotting area.
+         */
         private float rightSpace = 0;
         final static int VSPACE = 2;
         final static int HSPACE = 2;
 
-        Stripchart(int x, int y, int nSamples, int h, int period, int c,
-                   double minValue, double maxValue) {
+        Stripchart(int x, int y, int nSamples, int h, int period, int c, double minValue, double maxValue) {
             this.x = x;
             this.y = y;
             this.nSamples = nSamples;
@@ -284,25 +280,22 @@ public class Trails extends PApplet {
         }
 
         /**
-         * Add a data point to be plotted.
-         * At this point you may be wondering why I am using an array
-         * instead of an ArrayList. Although programmaticaly it may
-         * be easier to add a new value to the list and remove the
-         * first one, it takes much less compute time to calculate
-         * a mod and keep track of where the oldest data is.
+         * Add a data point to be plotted. At this point you may be wondering why I am using an array instead of an
+         * ArrayList. Although programmaticaly it may be easier to add a new value to the list and remove the first one,
+         * it takes much less compute time to calculate a mod and keep track of where the oldest data is.
          *
-         * @param value the value to plot
+         * @param value
+         *            the value to plot
          */
         void addData(float value) {
             value = constrain(value, (float) minValue, (float) maxValue);
             points[dataPos] = value;
             dataPos = (dataPos + 1) % nSamples; // wrap around when array fills
 
-    /*
-     * If the array isn't full yet, add to the end of the array
-     * Otherwise, the start point for plotting moves through
-     * the array.
-     */
+            /*
+             * If the array isn't full yet, add to the end of the array Otherwise, the start point for plotting moves
+             * through the array.
+             */
             if (nPoints < nSamples) {
                 nPoints++;
             } else {
@@ -355,14 +348,12 @@ public class Trails extends PApplet {
         }
 
         /**
-         * Add a data value and re-display the strip chart.
-         * The addData() and display() methods are decoupled;
-         * this lets you "speed up" the chart by adding
-         * several points before displaying the chart.
-         * This method is a convenience method that does
-         * both actions.
+         * Add a data value and re-display the strip chart. The addData() and display() methods are decoupled; this lets
+         * you "speed up" the chart by adding several points before displaying the chart. This method is a convenience
+         * method that does both actions.
          *
-         * @param value the value to add and display
+         * @param value
+         *            the value to add and display
          */
         void plot(float value) {
             addData(value);

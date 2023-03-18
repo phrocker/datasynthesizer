@@ -9,13 +9,12 @@ import java.io.IOException;
 
 public class SchemaSynthesizerTest {
 
-    private static final String PHONE_REGEX="\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})";
+    private static final String PHONE_REGEX = "\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})";
+
     @Test
     public void testPhoneNumber() throws IOException {
-        final String jsonText = IOUtils.toString(
-                this.getClass().getResourceAsStream("/samplers/phoneNumberOnly.json"),
-                "UTF-8"
-        );
+        final String jsonText = IOUtils.toString(this.getClass().getResourceAsStream("/samplers/phoneNumberOnly.json"),
+                "UTF-8");
 
         Schema schema = Schema.builder().from(jsonText).build();
 
@@ -27,10 +26,8 @@ public class SchemaSynthesizerTest {
 
     @Test
     public void testPhoneNumberZero() throws IOException {
-        final String jsonText = IOUtils.toString(
-                this.getClass().getResourceAsStream("/samplers/phoneNumberOnly.json"),
-                "UTF-8"
-        );
+        final String jsonText = IOUtils.toString(this.getClass().getResourceAsStream("/samplers/phoneNumberOnly.json"),
+                "UTF-8");
 
         Schema schema = Schema.builder().from(jsonText).build();
 
@@ -41,10 +38,8 @@ public class SchemaSynthesizerTest {
 
     @Test
     public void testPhoneNumberFive() throws IOException {
-        final String jsonText = IOUtils.toString(
-                this.getClass().getResourceAsStream("/samplers/phoneNumberOnly.json"),
-                "UTF-8"
-        );
+        final String jsonText = IOUtils.toString(this.getClass().getResourceAsStream("/samplers/phoneNumberOnly.json"),
+                "UTF-8");
 
         Schema schema = Schema.builder().from(jsonText).build();
 

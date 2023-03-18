@@ -13,10 +13,13 @@ import java.util.stream.Collectors;
  * <p>
  * Response body for ChatGPT API.
  * </p>
- * see: <a href="https://platform.openai.com/docs/api-reference/chat">https://platform.openai.com/docs/api-reference/chat</a>
+ * see:
+ * <a href="https://platform.openai.com/docs/api-reference/chat">https://platform.openai.com/docs/api-reference/chat</a>
  *
  * taken from
+ *
  * @author <a href="https://github.com/LiLittleCat">LiLittleCat</a>
+ *
  * @since 2023/3/2
  */
 @Data
@@ -24,7 +27,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Response {
-
 
     @JsonProperty(value = "id")
     public String id;
@@ -49,7 +51,6 @@ public class Response {
         public String finishReason;
     }
 
-
     @Data
     public static class Usage {
         @JsonProperty(value = "prompt_tokens")
@@ -60,8 +61,8 @@ public class Response {
         public Integer totalTokens;
     }
 
-    public String concatenateResponses(){
-        return getChoices().stream().map( x -> x.getMessage().getContent() ).collect(Collectors.joining());
+    public String concatenateResponses() {
+        return getChoices().stream().map(x -> x.getMessage().getContent()).collect(Collectors.joining());
     }
 
 }

@@ -86,50 +86,51 @@ public class SchemaSampler implements Sampler<JsonNode>, SamplerBase {
     @Override
     public JsonNode sample() {
         // we may have buffered records
-        //JsonNode x = null;
+        // JsonNode x = null;
         /*
-         = buffer.poll();
-        while (x == null) {*/
-            // nothing buffered ... generate some data
-            Map<String, JsonNode> generators = Maps.newTreeMap();
-            ObjectNode r = nodeFactory.objectNode();
-            Iterator<String> fx = fields.iterator();
-            for (FieldSampler s : schema) {
-                String fieldName = s.getName();
-                if (s.isFlat()) {
-                    if (fieldName == null) {
-                        fieldName = FLAT_SEQUENCE_MARKER;
-                    }
-                    // this sampler either generates an object or an array
-                    JsonNode v = s.sample();
-                    if (v.isObject()) {
-                        // an object just produces multiple fields in a single record
-                        r.setAll((ObjectNode) v);
-                    } else if (v.isArray()) {
-                        // an array causes records to be buffered
-                        generators.put(fieldName, v);
-                    } else {
-                        r.set(fieldName, v);
-                    }
-                } else {
-                    r.set(fieldName, s.sample());
+         * = buffer.poll(); while (x == null) {
+         */
+        // nothing buffered ... generate some data
+        Map<String, JsonNode> generators = Maps.newTreeMap();
+        ObjectNode r = nodeFactory.objectNode();
+        Iterator<String> fx = fields.iterator();
+        for (FieldSampler s : schema) {
+            String fieldName = s.getName();
+            if (s.isFlat()) {
+                if (fieldName == null) {
+                    fieldName = FLAT_SEQUENCE_MARKER;
                 }
+                // this sampler either generates an object or an array
+                JsonNode v = s.sample();
+                if (v.isObject()) {
+                    // an object just produces multiple fields in a single record
+                    r.setAll((ObjectNode) v);
+                } else if (v.isArray()) {
+                    // an array causes records to be buffered
+                    generators.put(fieldName, v);
+                } else {
+                    r.set(fieldName, v);
+                }
+            } else {
+                r.set(fieldName, s.sample());
             }
-            // at this point r has all non generator fields
-            if (generators.size() > 0) {
-                // here we have to handle the case of more than one generator
-                return crossProduct(buffer, r, Lists.newArrayList(generators.keySet()), generators, 0);
-                // the generators may or may not have actually generated anything
-                // but that will just cause us to go once more around the circle
-            }
-                // with no array generators, we can short-circuit the process
-            return r;
+        }
+        // at this point r has all non generator fields
+        if (generators.size() > 0) {
+            // here we have to handle the case of more than one generator
+            return crossProduct(buffer, r, Lists.newArrayList(generators.keySet()), generators, 0);
+            // the generators may or may not have actually generated anything
+            // but that will just cause us to go once more around the circle
+        }
+        // with no array generators, we can short-circuit the process
+        return r;
 
-        //}
+        // }
     }
 
     // exposed for testing
-    public static JsonNode crossProduct(Queue<JsonNode> buffer, ObjectNode r, List<String> fields, Map<String, JsonNode> generators, int currentFieldIndex) {
+    public static JsonNode crossProduct(Queue<JsonNode> buffer, ObjectNode r, List<String> fields,
+            Map<String, JsonNode> generators, int currentFieldIndex) {
         if (currentFieldIndex < fields.size()) {
             // get this generator
             JsonNode values = generators.get(fields.get(currentFieldIndex));
@@ -139,11 +140,11 @@ public class SchemaSampler implements Sampler<JsonNode>, SamplerBase {
                 // set that field or fields ...
                 String key = fields.get(currentFieldIndex);
                 // yes, we mean to check for pointer equality here
-                //noinspection StringEquality
+                // noinspection StringEquality
                 if (key == FLAT_SEQUENCE_MARKER) {
                     assert values.get(j).isObject();
                     r.setAll(((ObjectNode) values.get(j)));
-                }else {
+                } else {
                     r.set(key, values.get(j));
                 }
                 // and recurse

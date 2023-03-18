@@ -48,7 +48,9 @@ public class UpperQuantile {
     /**
      * To find a particular quantile, we have to look at the top values in sorted order.
      *
-     * @param q The quantile to estimate.
+     * @param q
+     *            The quantile to estimate.
+     *
      * @return The value of the quantile.
      */
     double quantile(double q) {
@@ -58,8 +60,7 @@ public class UpperQuantile {
 
         // how far from the max value?
         double item = (n - 1) * (1 - q);
-        Preconditions.checkArgument(item <= biggest.size() - 1,
-                "Can't get %.2 %-ile, only retained %d / %d items",
+        Preconditions.checkArgument(item <= biggest.size() - 1, "Can't get %.2 %-ile, only retained %d / %d items",
                 100 * q, biggest.size(), n);
 
         // and how far is that from the beginning of our retained samples?
@@ -127,10 +128,11 @@ public class UpperQuantile {
         }
 
         /**
-         * After a leaf node is placed at location i, the invariants may be violated.
-         * This method restores the invariant.
+         * After a leaf node is placed at location i, the invariants may be violated. This method restores the
+         * invariant.
          *
-         * @param i The index of the leaf node which has been changed.
+         * @param i
+         *            The index of the leaf node which has been changed.
          */
         private void bubble(int i) {
             if (i > 1) {
@@ -196,10 +198,11 @@ public class UpperQuantile {
         }
 
         /**
-         * Rebalances the entire tree from the top-down.  Floyd's algorithm would do it from
-         * the bottom up and be faster, but this isn't used so it doesn't matter.
+         * Rebalances the entire tree from the top-down. Floyd's algorithm would do it from the bottom up and be faster,
+         * but this isn't used so it doesn't matter.
          *
-         * @param base The base of the sub-heap to be balanced.
+         * @param base
+         *            The base of the sub-heap to be balanced.
          */
         private void rebalance(int base) {
             int left = 2 * base;
@@ -220,9 +223,10 @@ public class UpperQuantile {
         }
 
         /**
-         * Verify the invariant.  Bitch if an error are found.
+         * Verify the invariant. Bitch if an error are found.
          *
-         * @param i The index of the root of the tree to check.
+         * @param i
+         *            The index of the root of the tree to check.
          */
         private boolean validate(int i) {
             if (i >= count) {

@@ -48,12 +48,8 @@ public class LogGenerator implements Sampler<LogLine> {
         protected InetAddress createThing() {
             int address = gen.nextInt();
             try {
-                return Inet4Address.getByAddress(new byte[]{
-                        (byte) (address >>> 24),
-                        (byte) (0xff & (address >>> 16)),
-                        (byte) (0xff & (address >>> 8)),
-                        (byte) (0xff & (address))
-                });
+                return Inet4Address.getByAddress(new byte[] { (byte) (address >>> 24), (byte) (0xff & (address >>> 16)),
+                        (byte) (0xff & (address >>> 8)), (byte) (0xff & (address)) });
             } catch (UnknownHostException e) {
                 throw new RuntimeException("Can't happen with numeric IP address", e);
             }
@@ -65,7 +61,8 @@ public class LogGenerator implements Sampler<LogLine> {
     private final TermGenerator geo = new TermGenerator(new WordGenerator(null, "geo-codes"), 10, 0);
 
     // the average user visits once per day, but there is a LOT of variation between users
-    private final AbstractContinousDistribution sessionRateDistribution = new Uniform(1.0 / 24 / 3600, 1.0 / 24 / 3600, RandomUtils.getRandom());
+    private final AbstractContinousDistribution sessionRateDistribution = new Uniform(1.0 / 24 / 3600, 1.0 / 24 / 3600,
+            RandomUtils.getRandom());
 
     public Iterable<User> getUsers() {
         return users;
