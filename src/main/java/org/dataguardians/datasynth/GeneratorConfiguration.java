@@ -6,6 +6,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Generator configuration object.
+ */
 public class GeneratorConfiguration {
 
     @Builder.Default

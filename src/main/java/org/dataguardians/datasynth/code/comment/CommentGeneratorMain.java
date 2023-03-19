@@ -1,5 +1,6 @@
 package org.dataguardians.datasynth.code.comment;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dataguardians.datasynth.GeneratorConfiguration;
 import org.dataguardians.exceptions.HttpException;
 import org.dataguardians.openai.GenerativeAPI;
@@ -16,6 +17,7 @@ import java.util.Date;
  * an array of strings as an argument. The main method is responsible for calling the other methods in the class to
  * generate comments.
  */
+@Slf4j
 public class CommentGeneratorMain {
 
     private static TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
@@ -38,10 +40,12 @@ public class CommentGeneratorMain {
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         JavaFileVisitor jfr = new JavaFileVisitor(0.5);
         Files.walkFileTree(Path.of(filename), jfr);
+        log.info("Walking file tree {}", filename);
         final GenerativeAPI chatGPT = new GenerativeAPI(provider);
         final CommentGenerator gen = new CommentGenerator(provider, chatGPT, new GeneratorConfiguration());
         jfr.getFilesToEvaluate().forEach(requestedFilePath -> {
-            JavaCommentGenerator generator = new JavaCommentGenerator(gen, requestedFilePath, true);
+            log.info("Generating comments for file: {}", requestedFilePath);
+            JavaCommentGenerator generator = new JavaCommentGenerator(gen, requestedFilePath,true, author,date);
             try {
                 generator.generate();
             } catch (HttpException e) {

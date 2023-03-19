@@ -7,25 +7,28 @@ import org.dataguardians.openai.endpoints.ApiEndPointRequest;
 import org.dataguardians.security.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Objects;
 
 /**
- * <p>
- * Generative API calls for OpenAI. Intended to be extensible to other endpoints.
- * </p>
+ * A GenerativeAPI class represents an API that provides methods for generating requests and samples.
+ * It allows users to build a request body by passing an ApiEndPointRequest object,
+ * and generate a sample using the same object.
+ * Users can also specify the type of the sample they want to generate by passing a Class object.
  *
- * original @author <a href="https://github.com/LiLittleCat">LiLittleCat</a>
- *
- * @since 2023/3/2
+ * @author [Marc Parisi]
+ * @version 1.0
+ * @since 09/03/2021
  */
 @Slf4j
 public class GenerativeAPI {
+
     protected final TokenProvider authToken;
+
     protected OkHttpClient client;
+
     protected final ObjectMapper objectMapper = new ObjectMapper();
 
     public GenerativeAPI(TokenProvider authToken, OkHttpClient client) {
@@ -39,6 +42,12 @@ public class GenerativeAPI {
         this(authToken, new OkHttpClient());
     }
 
+    /**
+     * Builds the request body for an API endpoint request.
+     *
+     * @param request the API endpoint request
+     * @return the request body as a string
+     */
     String buildRequestBody(final ApiEndPointRequest request) {
         try {
             return objectMapper.writeValueAsString(request.create());
@@ -57,12 +66,8 @@ public class GenerativeAPI {
      */
     public String sample(final ApiEndPointRequest apiRequest) throws HttpException {
         Objects.requireNonNull(apiRequest);
-        RequestBody body = RequestBody.create(buildRequestBody(apiRequest),
-                MediaType.get("application/json; charset=utf-8"));
-
-        Request request = new Request.Builder().url(apiRequest.getEndpoint())
-                .header("Authorization", "Bearer " + authToken.getToken()).post(body).build();
-
+        RequestBody body = RequestBody.create(buildRequestBody(apiRequest), MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder().url(apiRequest.getEndpoint()).header("Authorization", "Bearer " + authToken.getToken()).post(body).build();
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 if (response.body() == null) {
@@ -81,10 +86,16 @@ public class GenerativeAPI {
         }
     }
 
-    public <T> T sample(final ApiEndPointRequest apiRequest, Class<T> clazz)
-            throws HttpException, JsonProcessingException {
-
+    /**
+     * Samples data from a specified API endpoint request using the provided class type for the data
+     *
+     * @param apiRequest  the API endpoint request to sample from
+     * @param clazz       the class type to parse the data into
+     * @return            the sampled data parsed into the provided class type
+     * @throws HttpException if there is an issue with the HTTP request or response
+     * @throws JsonProcessingException if there is an issue parsing the JSON data
+     */
+    public <T> T sample(final ApiEndPointRequest apiRequest, Class<T> clazz) throws HttpException, JsonProcessingException {
         return (T) objectMapper.readValue(sample(apiRequest), clazz);
     }
-
 }

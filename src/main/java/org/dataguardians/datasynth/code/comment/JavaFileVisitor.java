@@ -32,11 +32,11 @@ import static java.nio.file.FileVisitResult.CONTINUE;
  *
  * The methods in this class allow for customization of the behavior while traversing the directory tree.
  *
- * @author Your Name
+ * @author Marc Parisi
  *
  * @version 1.0
  *
- * @since date
+ * @since 3/18/2023
  */
 @Data
 @Builder
@@ -56,7 +56,7 @@ public class JavaFileVisitor extends SimpleFileVisitor<Path> {
         InputStream inputStream = new FileInputStream(file);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         Stream<String> linesStream = bufferedReader.lines();
-        return !linesStream.filter(a -> a.contains("public class") || a.contains("final class"))
+        return !linesStream.filter(a -> a.contains("public class") || a.contains("final class") || a.contains("abstract class"))
                 .collect(Collectors.toList()).isEmpty();
     }
 

@@ -30,6 +30,8 @@ import java.util.List;
 public class JavaCommentGenerator {
 
     private final boolean replaceComments;
+    private final String date;
+    private final String author;
 
     private CommentGenerator generator;
 
@@ -37,16 +39,18 @@ public class JavaCommentGenerator {
 
     private boolean saveToFile;
 
-    public JavaCommentGenerator(CommentGenerator generator, String fileOrDirectory, boolean saveToFile) {
-        this(generator, fileOrDirectory, saveToFile, false);
+    public JavaCommentGenerator(CommentGenerator generator, String fileOrDirectory, boolean saveToFile,String author,String date) {
+        this(generator, fileOrDirectory, saveToFile, author,date, false);
     }
 
-    public JavaCommentGenerator(CommentGenerator generator, String fileOrDirectory, boolean saveToFile,
+    public JavaCommentGenerator(CommentGenerator generator, String fileOrDirectory, boolean saveToFile,String author,String date,
             boolean replaceComments) {
         this.generator = generator;
         this.fileOrDirectory = fileOrDirectory;
         this.saveToFile = saveToFile;
         this.replaceComments = replaceComments;
+        this.author=author;
+        this.date=date;
     }
 
     /**
@@ -133,6 +137,8 @@ public class JavaCommentGenerator {
                 throw new RuntimeException(ex);
             }
         }
+        classDoc = classDoc.replace("Your Name", author);
+        classDoc = classDoc.replace("@since date", "@since "+date);
         var classJavaDoc = new JavadocComment(JavaDocParser.parseClassJavaDoc(className, classDoc));
         cu.accept(new ModifierVisitor<Void>() {
 

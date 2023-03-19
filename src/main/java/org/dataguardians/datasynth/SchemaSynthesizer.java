@@ -27,6 +27,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Loads schemas and supports generating records for a given schema.
+ */
 public class SchemaSynthesizer {
 
     protected Schema definedSchema = null;

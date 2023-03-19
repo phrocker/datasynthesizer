@@ -7,6 +7,10 @@ import org.dataguardians.openai.api.chat.Response;
 import org.dataguardians.openai.endpoints.ChatApiEndpointRequest;
 import org.dataguardians.security.TokenProvider;
 
+/**
+ * Data generator base class.
+ * @param <T>
+ */
 public abstract class DataGenerator<T> {
 
     protected final TokenProvider token;

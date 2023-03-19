@@ -19,7 +19,9 @@ import lombok.experimental.SuperBuilder;
  *
  * @since 2023/3/2
  */
-
+/**
+ * Base class for generative requests, defining the necessary methods required to generate a request.
+ */
 @Data
 @SuperBuilder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,5 +37,4 @@ public abstract class BaseGenerativeRequest {
      */
     @JsonProperty(value = "model")
     protected String model;
-
 }
