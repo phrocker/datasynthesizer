@@ -2,15 +2,22 @@ package org.dataguardians.datasynth.code.comment;
 
 import lombok.extern.slf4j.Slf4j;
 import org.dataguardians.datasynth.GeneratorConfiguration;
+import org.dataguardians.datasynth.code.java.JavaDocParser;
+import org.dataguardians.datasynth.code.java.JavaFileVisitor;
 import org.dataguardians.exceptions.HttpException;
 import org.dataguardians.openai.GenerativeAPI;
 import org.dataguardians.security.ApiKey;
 import org.dataguardians.security.TokenProvider;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The CommentGeneratorMain class provides methods for generating comments. This class contains a main method that takes
@@ -21,6 +28,14 @@ import java.util.Date;
 public class CommentGeneratorMain {
 
     private static TokenProvider provider = ApiKey.builder().fromEnv("OPENAI_API_KEY").build();
+
+    private static boolean isClass(String file) throws FileNotFoundException {
+        InputStream inputStream = new FileInputStream(file);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        Stream<String> linesStream = bufferedReader.lines();
+        return !linesStream.filter(a -> a.contains("public class") || a.contains("final class") || a.contains("abstract class"))
+                .collect(Collectors.toList()).isEmpty();
+    }
 
     /**
      * The main method of the CommentGeneratorMain class.
@@ -38,7 +53,27 @@ public class CommentGeneratorMain {
         String filename = args[0];
         String author = args[1];
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        JavaFileVisitor jfr = new JavaFileVisitor(0.5);
+
+        JavaFileVisitor jfr = new JavaFileVisitor((String file)-> {
+            try {
+                // the java doc meeting criteria function evaluates if we have a class header comment block
+                // and at least 50% of the methods have a comment block. If we have both, we skip the file
+                boolean ifMeetsCriteria = JavaDocParser.javaDocsMeetCriteria(file, true,
+                        true, 0.5);
+                if (!ifMeetsCriteria && isClass(file.toString())) {
+                    log.info("Generating comments for file: " + file.toString());
+                    return true;
+                } else {
+                    log.info("Skipping comments for file: " + file.toString());
+                    return false;
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (HttpException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
         Files.walkFileTree(Path.of(filename), jfr);
         log.info("Walking file tree {}", filename);
         final GenerativeAPI chatGPT = new GenerativeAPI(provider);

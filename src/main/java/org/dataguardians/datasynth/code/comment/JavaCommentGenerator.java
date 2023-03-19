@@ -10,6 +10,7 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;
 import lombok.extern.slf4j.Slf4j;
+import org.dataguardians.datasynth.code.java.JavaDocParser;
 import org.dataguardians.exceptions.HttpException;
 
 import java.io.IOException;

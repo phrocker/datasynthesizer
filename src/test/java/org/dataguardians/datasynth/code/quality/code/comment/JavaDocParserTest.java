@@ -1,7 +1,7 @@
 package org.dataguardians.datasynth.code.quality.code.comment;
 
 import org.apache.commons.io.IOUtils;
-import org.dataguardians.datasynth.code.comment.JavaDocParser;
+import org.dataguardians.datasynth.code.java.JavaDocParser;
 import org.junit.Assert;
 import org.junit.Test;
 

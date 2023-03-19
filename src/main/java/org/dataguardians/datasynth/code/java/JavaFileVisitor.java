@@ -1,4 +1,4 @@
-package org.dataguardians.datasynth.code.comment;
+package org.dataguardians.datasynth.code.java;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +14,8 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,21 +46,16 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 @Slf4j
 public class JavaFileVisitor extends SimpleFileVisitor<Path> {
 
-    private final Double minCommentThreshold;
+
 
     List<String> filesToEvaluate = new ArrayList<>();
 
-    public JavaFileVisitor(Double minCommentThreshold) {
-        this.minCommentThreshold = minCommentThreshold;
+    final Function<String,Boolean> suitabilityFunction;
+
+    public JavaFileVisitor(Function<String,Boolean> suitabilityFunction) {
+        this.suitabilityFunction=suitabilityFunction;
     }
 
-    private boolean isClass(String file) throws FileNotFoundException {
-        InputStream inputStream = new FileInputStream(file);
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        Stream<String> linesStream = bufferedReader.lines();
-        return !linesStream.filter(a -> a.contains("public class") || a.contains("final class") || a.contains("abstract class"))
-                .collect(Collectors.toList()).isEmpty();
-    }
 
     /**
      * Invoked for a file visitation when a file is visited.
@@ -74,19 +71,8 @@ public class JavaFileVisitor extends SimpleFileVisitor<Path> {
     public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
         if (attr.isRegularFile()) {
             if (file.toString().endsWith(".java")) {
-                try {
-                    boolean ifMeetsCriteria = JavaDocParser.javaDocsMeetCriteria(file.toAbsolutePath().toString(), true,
-                            true, minCommentThreshold);
-                    if (!ifMeetsCriteria && isClass(file.toString())) {
-                        log.info("Generating comments for file: " + file.toString());
-                        filesToEvaluate.add(file.toString());
-                    } else {
-                        log.info("Skipping comments for file: " + file.toString());
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (HttpException e) {
-                    throw new RuntimeException(e);
+                if (suitabilityFunction.apply(file.toAbsolutePath().toString())) {
+                    filesToEvaluate.add(file.toAbsolutePath().toString());
                 }
             }
         }
@@ -122,7 +108,7 @@ public class JavaFileVisitor extends SimpleFileVisitor<Path> {
      */
     public static void main(String[] args) throws IOException {
         String filename = args[0];
-        JavaFileVisitor visitor = new JavaFileVisitor(0.5);
+        JavaFileVisitor visitor = new JavaFileVisitor( x -> {return true;} );
         Files.walkFileTree(Path.of(filename), visitor);
         System.out.println(visitor.filesToEvaluate);
     }

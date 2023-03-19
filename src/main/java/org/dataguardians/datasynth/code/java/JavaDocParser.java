@@ -1,8 +1,9 @@
-package org.dataguardians.datasynth.code.comment;
+package org.dataguardians.datasynth.code.java;
 
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -10,6 +11,7 @@ import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.SourceRoot;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.dataguardians.datasynth.code.java.ast.ClassEvaluator;
 import org.dataguardians.exceptions.HttpException;
 import java.io.File;
 import java.io.IOException;
@@ -250,5 +252,48 @@ public class JavaDocParser {
             return percentage >= threshold;
         }
         return true;
+    }
+
+    protected static CompilationUnit visit(
+            String filePath) throws IOException, HttpException {
+        SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(JavaDocParser.class).resolve("src/main/java"));
+        CompilationUnit cu = sourceRoot.parse("", filePath);
+        return cu;
+    }
+
+    public static <T,J> CompilationUnit visit(
+            String filePath,
+            ClassEvaluator<T,J> evaluator) throws IOException, HttpException {
+        var cu = visit(filePath);
+        cu.accept(new ModifierVisitor<Void>() {
+
+            @Override
+            public Visitable visit(final MethodDeclaration n, final Void arg) {
+                var ret = super.visit(n, arg);
+
+                evaluator.evaluate(n);
+
+                return ret;
+            }
+
+            @Override
+            public Visitable visit(final FieldDeclaration n, final Void arg) {
+                var ret = super.visit(n, arg);
+
+                evaluator.evaluate(n);
+
+                return ret;
+            }
+
+            @Override
+            public Visitable visit(final ClassOrInterfaceDeclaration n, final Void arg) {
+                var ret = super.visit(n, arg);
+
+                evaluator.evaluate(n);
+
+                return ret;
+            }
+        }, null);
+        return cu;
     }
 }
