@@ -16,6 +16,10 @@ public class MethodType {
     private String methodName;
     private String methodReturnType;
 
+    private String accessModifier;
+
+    private String impl;
+
     @Builder.Default
     private List<ClassType> methodArguments = new ArrayList<>();
 }

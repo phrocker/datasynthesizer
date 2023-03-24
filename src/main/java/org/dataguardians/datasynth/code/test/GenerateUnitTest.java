@@ -1,5 +1,6 @@
 package org.dataguardians.datasynth.code.test;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import org.dataguardians.datasynth.code.java.ast.ClassEvaluator;
@@ -18,6 +19,8 @@ public class GenerateUnitTest {
     public GenerateUnitTest(){
 
     }
+
+
 
     // evaluate the members of the class to produce a context
 
@@ -40,15 +43,19 @@ public class GenerateUnitTest {
 
         List<Function<MethodDeclaration, MethodType>> methodFunctions = new ArrayList<>();
         methodFunctions.add((MethodDeclaration declr) -> {
+            StringBuilder impl = new StringBuilder();
+            declr.getTokenRange().ifPresent(x -> impl.append(x.toString()));
             List<ClassType> arguments = new ArrayList<>();
             declr.getParameters().forEach((parameter) -> {
                 arguments.add(ClassType.builder().variableName(parameter.getNameAsString()).variableType(parameter.getTypeAsString()).build());
             });
-            return MethodType.builder().methodReturnType(declr.getTypeAsString()).methodName(declr.getNameAsString()).methodArguments( arguments).build();
+
+            return MethodType.builder().methodReturnType(declr.getTypeAsString()).methodName(declr.getNameAsString()).methodArguments( arguments).accessModifier(declr.getAccessSpecifier().toString()).impl(impl.toString()).build();
 
         });
 
         ClassEvaluator<MethodType,String> classEval = ClassEvaluator.<MethodType,String>builder().methodFunctions(methodFunctions).classFunctions(classFunctions).build();
+
         JavaDocParser.visit(filename,classEval);
 
         System.out.println(classEval.getTypes());
@@ -56,6 +63,24 @@ public class GenerateUnitTest {
         System.out.println(classEval.getMethodReturns());
 
         System.out.println(classEval.getClassReturns());
+
+        classEval.getMethodReturns().stream().filter(method -> method.getAccessModifier().equals("PUBLIC") ).forEach((method) -> {
+            System.out.println( TestGenerator.generateUnitTestRequest(classEval.getClassReturns().get(0),method) );
+        });
+
+        System.out.println( TestGenerator.generateUnitTestRequest2(classEval.getClassReturns().get(0),classEval.getMethodReturns()));
+
+        /**
+         * Example that can be sent to OpenAI. Generates the most reasonable test. 
+         */
+
+        System.out.println( TestGenerator.generateUnitTestRequest3(classEval.getClassReturns().get(0),classEval.getMethodReturns()) );
+
+
+
+
+
+
     }
 
 
