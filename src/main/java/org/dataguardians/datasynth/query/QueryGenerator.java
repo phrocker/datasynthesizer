@@ -37,8 +37,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class QueryGenerator extends DataGenerator<List<String>> {
 
-    private static final Pattern RESPONSE_REGEX = Pattern.compile("[0-9]+\\. (.+?)+", Pattern.DOTALL);
-
     private final QueryConfiguration queryConfig;
 
     public QueryGenerator(TokenProvider token, GenerativeAPI generator, GeneratorConfiguration config,

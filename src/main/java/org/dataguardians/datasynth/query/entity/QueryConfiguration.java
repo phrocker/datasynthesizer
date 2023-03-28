@@ -38,6 +38,8 @@ public class QueryConfiguration {
 
     private boolean invalidOnly;
 
+    private String query;
+
     /**
      * QueryConfiguration represents the configuration options for a database query. It provides methods for setting
      * various options and modifying the behavior of the query.
