@@ -70,7 +70,7 @@ public class QueryTranslator extends DataGenerator<String> {
         QueryConfiguration queryConfig = new QueryConfiguration();
 
         queryConfig.setQuery("I want to know the number of people who have a salary greater than 1000 whose first name is john");
-        queryConfig.setQueryType(QueryType.LUCENE);
+        queryConfig.setQueryType(QueryType.LUCENE); // can be SQL or JEXl at this point
         List<QueryConfiguration.DataDictionaryDefinition> dict = new ArrayList<>();
         dict.add(QueryConfiguration.DataDictionaryDefinition.builder().type(FieldType.EXACT).fieldName("salary").build());
         dict.add(QueryConfiguration.DataDictionaryDefinition.builder().type(FieldType.EXACT).fieldName("person_name").build());
