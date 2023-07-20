@@ -22,12 +22,12 @@ package com.mapr.synth.samplers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import org.dataguardians.datasynth.GeneratorConfiguration;
-import org.dataguardians.datasynth.ShortTextGenerator;
-import org.dataguardians.exceptions.HttpException;
-import org.dataguardians.openai.GenerativeAPI;
-import org.dataguardians.security.ApiKey;
-import org.dataguardians.security.TokenProvider;
+import com.dataguardians.datasynth.GeneratorConfiguration;
+import com.dataguardians.datasynth.ShortTextGenerator;
+import com.dataguardians.exceptions.HttpException;
+import com.dataguardians.openai.GenerativeAPI;
+import com.dataguardians.security.ApiKey;
+import com.dataguardians.security.TokenProvider;
 
 /**
  * Samples a phone number
