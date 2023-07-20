@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.mahout.math.random.Sampler;
-import org.dataguardians.datasynth.SamplerBase;
+import com.dataguardians.datasynth.SamplerBase;
 
 import java.io.File;
 import java.io.IOException;
